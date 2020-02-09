@@ -36,11 +36,16 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
 
     @Override
     public List<LinkedHashMap> getGameList() {
-        return null;
+        return gameDao.getGameList();
     }
 
     @Override
-    public List<LinkedHashMap> getGameList2() {
-        return gameDao.getGameList2();
+    public LinkedHashMap getGameInfoByGameId(String gameId) {
+        return gameDao.getGameInfoByGameId(gameId);
+    }
+
+    @Override
+    public List<LinkedHashMap> getSongListByGameId(String gameId) {
+        return gameDao.getSongsByGameId(gameId);
     }
 }

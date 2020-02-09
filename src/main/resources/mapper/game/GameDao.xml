@@ -2,15 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.game.dao.GameDao">
-    <select id="getGameList2" resultType="map">
+    <select id="getGameList" resultType="map">
         SELECT
-        t.game_id,
-        t.name_en,
-        t.name_cn,
-        t.name_jp,
-        t.default_lang
+        g.game_id,
+        g.common_name,
+        CASE
+        WHEN isnull( g.other_name ) THEN
+        g.full_name
+        WHEN instr( g.other_name, '//' ) > 0 THEN
+        substring( g.other_name, 1, instr( g.other_name, '//' ) - 1 ) ELSE g.other_name
+        END sub_name
         FROM
-        game t
-        order by t.name_en
+        game g
+        ORDER BY
+        g.common_name
+    </select>
+
+    <select id="getGameInfoByGameId" resultType="java.util.LinkedHashMap">
+        SELECT
+        g.game_id,
+        g.common_name,
+        CASE
+        WHEN isnull( g.other_name ) THEN
+        g.full_name
+        WHEN instr( g.other_name, '//' ) > 0 THEN
+        substring( g.other_name, 1, instr( g.other_name, '//' ) - 1 ) ELSE g.other_name
+        END sub_name,
+        c.company_name developer
+        FROM
+        game g
+        LEFT JOIN company c ON g.developer = c.company_id
+        WHERE
+        g.game_id = #{gameId}
+    </select>
+
+    <select id="getSongsByGameId" resultType="map">
+        SELECT *
+        FROM song s
+        WHERE s.game_id = #{gameId}
+        ORDER BY s.inx
     </select>
 </mapper>

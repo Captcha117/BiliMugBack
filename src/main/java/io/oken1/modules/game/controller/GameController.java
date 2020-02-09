@@ -19,13 +19,8 @@ import io.oken1.common.utils.PageUtils;
 import io.oken1.common.utils.R;
 
 
-/**
- * @author oken1
- * @email /
- * @date 2020-01-16 14:46:31
- */
 @RestController
-@RequestMapping("game/game")
+@RequestMapping("game")
 public class GameController {
     @Autowired
     private GameService gameService;
@@ -33,7 +28,7 @@ public class GameController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping("/listInEdit")
     //@RequiresPermissions("game:game:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = gameService.queryPage(params);
@@ -46,7 +41,7 @@ public class GameController {
      * 信息
      */
     @RequestMapping("/info/{gameId}")
-    @RequiresPermissions("game:game:info")
+    //@RequiresPermissions("game:game:info")
     public R info(@PathVariable("gameId") String gameId) {
         GameEntity game = gameService.getById(gameId);
 
@@ -57,7 +52,7 @@ public class GameController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("game:game:save")
+    //@RequiresPermissions("game:game:save")
     public R save(@RequestBody GameEntity game) {
         gameService.save(game);
 
@@ -68,7 +63,7 @@ public class GameController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("game:game:update")
+    //@RequiresPermissions("game:game:update")
     public R update(@RequestBody GameEntity game) {
         gameService.updateById(game);
 
@@ -79,16 +74,23 @@ public class GameController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("game:game:delete")
+    //@RequiresPermissions("game:game:delete")
     public R delete(@RequestBody String[] gameIds) {
         gameService.removeByIds(Arrays.asList(gameIds));
 
         return R.ok();
     }
 
-    @RequestMapping("/list2")
+    @RequestMapping("/gameList")
     public R gameList() {
-        List<LinkedHashMap> result = gameService.getGameList2();
+        List<LinkedHashMap> result = gameService.getGameList();
         return R.ok().put("result", result);
+    }
+
+    @RequestMapping("/gameInfo")
+    public R gameInfo(String gameId) {
+        LinkedHashMap gameInfo = gameService.getGameInfoByGameId(gameId);
+        List<LinkedHashMap> songList = gameService.getSongListByGameId(gameId);
+        return R.ok().put("gameInfo", gameInfo).put("songList", songList);
     }
 }

@@ -8,17 +8,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author oken1
- * @email /
- * @date 2020-01-16 14:46:31
- */
 public interface GameService extends IService<GameEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
     List<LinkedHashMap> getGameList();
 
-    List<LinkedHashMap> getGameList2();
+    LinkedHashMap getGameInfoByGameId(String gameId);
+
+    List<LinkedHashMap> getSongListByGameId(String gameId);
 }
 

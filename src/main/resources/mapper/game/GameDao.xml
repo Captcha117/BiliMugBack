@@ -6,12 +6,7 @@
         SELECT
         g.game_id,
         g.common_name,
-        CASE
-        WHEN isnull( g.other_name ) THEN
-        g.full_name
-        WHEN instr( g.other_name, '//' ) > 0 THEN
-        substring( g.other_name, 1, instr( g.other_name, '//' ) - 1 ) ELSE g.other_name
-        END sub_name
+        getGameSubName(g.game_id) sub_name
         FROM
         game g
         ORDER BY
@@ -22,12 +17,7 @@
         SELECT
         g.game_id,
         g.common_name,
-        CASE
-        WHEN isnull( g.other_name ) THEN
-        g.full_name
-        WHEN instr( g.other_name, '//' ) > 0 THEN
-        substring( g.other_name, 1, instr( g.other_name, '//' ) - 1 ) ELSE g.other_name
-        END sub_name,
+        getGameSubName(g.game_id) sub_name,
         c.company_name developer
         FROM
         game g

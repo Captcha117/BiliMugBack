@@ -33,8 +33,8 @@ public class VideoController {
 
     @RequestMapping("/getVideosByGameId")
     public R getVideosByGameId(@RequestParam String gameId) {
-        List<LinkedHashMap> videoList = videoService.getVideosByGameId(gameId).subList(0, 20);
-
+        List<LinkedHashMap> videoList = videoService.getVideosByGameId(gameId);
+        videoList = videoList.subList(0, Math.min(videoList.size(), 20));
         return R.ok().put("videoList", videoList);
     }
 

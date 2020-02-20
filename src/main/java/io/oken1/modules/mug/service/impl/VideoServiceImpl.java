@@ -21,4 +21,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoDao, VideoEntity> impleme
     public List<LinkedHashMap> getVideosByGameId(String gameId) {
         return videoDao.getVideosByGameId(gameId);
     }
+
+    @Override
+    public List<LinkedHashMap> getVideosBySongId(String songId) {
+        return videoDao.getVideosBySongId(songId);
+    }
 }

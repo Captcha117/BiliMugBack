@@ -12,11 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.oken1.common.utils.R;
 
 
-/**
- * @author oken1
- * @email /
- * @date 2020-01-16 14:46:31
- */
 @RestController
 @RequestMapping("video")
 public class VideoController {
@@ -30,4 +25,10 @@ public class VideoController {
         return R.ok().put("videoList", videoList);
     }
 
+    @RequestMapping("/getVideosBySongId")
+    public R getVideosBySongId(@RequestParam String songId) {
+        List<LinkedHashMap> videoList = videoService.getVideosBySongId(songId);
+        videoList = videoList.subList(0, Math.min(videoList.size(), 20));
+        return R.ok().put("videoList", videoList);
+    }
 }

@@ -9,5 +9,7 @@ import java.util.List;
 public interface VideoService extends IService<VideoEntity> {
 
     List<LinkedHashMap> getVideosByGameId(String gameId);
+
+    List<LinkedHashMap> getVideosBySongId(String songId);
 }
 

@@ -25,4 +25,14 @@
         ORDER BY
         play DESC
     </select>
+
+    <select id="getVideosBySongId" resultType="map">
+        select
+        *
+        from
+        v_video v
+        where
+        v.type = 'S'
+        and v.content_id = #{songId}
+    </select>
 </mapper>

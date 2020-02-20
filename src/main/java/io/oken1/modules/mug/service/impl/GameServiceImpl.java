@@ -1,4 +1,4 @@
-package io.oken1.modules.game.service.impl;
+package io.oken1.modules.mug.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +13,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.oken1.common.utils.PageUtils;
 import io.oken1.common.utils.Query;
 
-import io.oken1.modules.game.dao.GameDao;
-import io.oken1.modules.game.entity.GameEntity;
-import io.oken1.modules.game.service.GameService;
+import io.oken1.modules.mug.dao.GameDao;
+import io.oken1.modules.mug.entity.GameEntity;
+import io.oken1.modules.mug.service.GameService;
 
 
 @Service("gameService")

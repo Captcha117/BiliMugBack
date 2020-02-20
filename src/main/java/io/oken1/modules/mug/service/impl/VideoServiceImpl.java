@@ -1,9 +1,9 @@
-package io.oken1.modules.video.service.impl;
+package io.oken1.modules.mug.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.oken1.modules.video.dao.VideoDao;
-import io.oken1.modules.video.entity.VideoEntity;
-import io.oken1.modules.video.service.VideoService;
+import io.oken1.modules.mug.dao.VideoDao;
+import io.oken1.modules.mug.entity.VideoEntity;
+import io.oken1.modules.mug.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

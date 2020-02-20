@@ -1,8 +1,7 @@
-package io.oken1.modules.video.dao;
+package io.oken1.modules.mug.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.oken1.modules.game.entity.GameEntity;
-import io.oken1.modules.video.entity.VideoEntity;
+import io.oken1.modules.mug.entity.VideoEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.LinkedHashMap;

@@ -1,6 +1,6 @@
-package io.oken1.modules.game.dao;
+package io.oken1.modules.mug.dao;
 
-import io.oken1.modules.game.entity.GameEntity;
+import io.oken1.modules.mug.entity.GameEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

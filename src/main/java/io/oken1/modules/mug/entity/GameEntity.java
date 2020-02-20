@@ -1,4 +1,4 @@
-package io.oken1.modules.game.entity;
+package io.oken1.modules.mug.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -10,7 +10,7 @@ import lombok.Data;
 
 
 @Data
-@TableName("game")
+@TableName("mug")
 public class GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

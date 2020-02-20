@@ -1,14 +1,13 @@
-package io.oken1.modules.video.entity;
+package io.oken1.modules.mug.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
-@TableName("game")
+@TableName("mug")
 public class VideoEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

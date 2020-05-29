@@ -17,8 +17,8 @@
         s.package_id,
         s.release_date
         FROM
-        song s
-        left join game g on s.game_id = g.game_id
+        mug_song s
+        left join mug_game g on s.game_id = g.game_id
         where
         song_id = #{songId}
     </select>

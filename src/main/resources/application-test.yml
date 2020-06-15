@@ -47,3 +47,6 @@ spring:
 #      url: jdbc:postgresql://localhost:5432/test_security
 #      username: oken1
 #      password: 123456
+
+biz:
+    biliApiUrl: "http://api.bilibili.com"

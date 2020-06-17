@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service("crawlerService")
@@ -29,7 +30,7 @@ public class CrawlerServiceImpl implements CrawlerService {
     @Autowired
     private VideoService videoService;
 
-    private static Gson gson;
+    private static Gson gson = new Gson();
 
     @Override
     public Object crawlVideosByPage(int pageCount) {
@@ -55,12 +56,23 @@ public class CrawlerServiceImpl implements CrawlerService {
             System.out.println(e.getStackTrace());
             return e;
         }
-        return responseInfo;
+        return "success";
     }
 
     public void saveVideos(BiliVideoEntity biliVideo) {
         List<BiliVideoEntity.videoDetail.archives> videoList = biliVideo.getData().getArchives();
         List<VideoEntity> saveList = new ArrayList<>();
+        for (BiliVideoEntity.videoDetail.archives l : videoList
+        ) {
+            BiliVideoEntity.videoDetail.archives.Stat stat = l.getStat();
+            VideoEntity videoEntity = new VideoEntity(l.getAid(), l.getBvid(), l.getTitle(), l.getPubdate(),
+                    l.getCopyright(), l.getVideos(), l.getDuration(), l.getOwner().getMid(), stat.getView(),
+                    stat.getDanmaku(), stat.getReply(), stat.getFavorite(), stat.getCoin(), stat.getShare(),
+                    stat.getLike());
+            videoEntity.setUpdateUser(1L);
+            videoEntity.setUpdateTime(new Date());
+            saveList.add(videoEntity);
+        }
         videoService.saveOrUpdateBatch(saveList);
     }
 }

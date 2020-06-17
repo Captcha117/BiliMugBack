@@ -1,5 +1,6 @@
 package io.oken1.modules.mug.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -16,7 +17,7 @@ public class VideoEntity implements Serializable {
     /**
      * AV号
      */
-    @TableId
+    @TableId(type = IdType.INPUT)
     private Integer aid;
     /**
      * BV号
@@ -91,4 +92,55 @@ public class VideoEntity implements Serializable {
      */
     private Date updateTime;
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getDssq() {
+        return dssq;
+    }
+
+    public void setDssq(String dssq) {
+        this.dssq = dssq;
+    }
+
+    public Long getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(Long updateUser) {
+        this.updateUser = updateUser;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public VideoEntity(Integer aid, String bid, String title, Integer pubTime, Integer copyright, Integer ps,
+                       Integer duration, Integer uid, Integer play, Integer danmu, Integer comment, Integer favorite,
+                       Integer coin, Integer share, Integer iine) {
+        this.aid = aid;
+        this.bid = bid;
+        this.title = title;
+        this.pubTime = pubTime;
+        this.copyright = copyright;
+        this.ps = ps;
+        this.duration = duration;
+        this.uid = uid;
+        this.play = play;
+        this.danmu = danmu;
+        this.comment = comment;
+        this.favorite = favorite;
+        this.coin = coin;
+        this.share = share;
+        this.iine = iine;
+    }
 }

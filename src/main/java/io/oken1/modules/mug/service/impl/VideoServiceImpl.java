@@ -15,7 +15,7 @@ import java.util.List;
 public class VideoServiceImpl extends ServiceImpl<VideoDao, VideoEntity> implements VideoService {
 
     @Autowired
-    VideoDao videoDao;
+    private VideoDao videoDao;
 
     @Override
     public List<LinkedHashMap> getVideosByGameId(String gameId) {

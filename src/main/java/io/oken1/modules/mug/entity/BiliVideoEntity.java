@@ -38,7 +38,7 @@ public class BiliVideoEntity {
             /**
              * 视频AV号
              */
-            public String aid;
+            public Integer aid;
             /**
              * 视频BV号
              */
@@ -46,11 +46,11 @@ public class BiliVideoEntity {
             /**
              * 1=原创 2=搬运
              */
-            public String copyright;
+            public Integer copyright;
             /**
              * 发布unix时间
              */
-            public String pubdate;
+            public Integer pubdate;
             /**
              * ?
              */
@@ -62,11 +62,11 @@ public class BiliVideoEntity {
             /**
              * 时长
              */
-            public String duration;
+            public Integer duration;
             /**
              * 视频分P数
              */
-            public String videos;
+            public Integer videos;
             /**
              * UP主
              **/
@@ -76,11 +76,11 @@ public class BiliVideoEntity {
              */
             public Stat stat;
 
-            public String getAid() {
+            public Integer getAid() {
                 return aid;
             }
 
-            public void setAid(String aid) {
+            public void setAid(Integer aid) {
                 this.aid = aid;
             }
 
@@ -92,19 +92,19 @@ public class BiliVideoEntity {
                 this.bvid = bvid;
             }
 
-            public String getCopyright() {
+            public Integer getCopyright() {
                 return copyright;
             }
 
-            public void setCopyright(String copyright) {
+            public void setCopyright(Integer copyright) {
                 this.copyright = copyright;
             }
 
-            public String getPubdate() {
+            public Integer getPubdate() {
                 return pubdate;
             }
 
-            public void setPubdate(String pubdate) {
+            public void setPubdate(Integer pubdate) {
                 this.pubdate = pubdate;
             }
 
@@ -124,19 +124,19 @@ public class BiliVideoEntity {
                 this.title = title;
             }
 
-            public String getDuration() {
+            public Integer getDuration() {
                 return duration;
             }
 
-            public void setDuration(String duration) {
+            public void setDuration(Integer duration) {
                 this.duration = duration;
             }
 
-            public void setVideos(String videos) {
+            public void setVideos(Integer videos) {
                 this.videos = videos;
             }
 
-            public String getVideos() {
+            public Integer getVideos() {
                 return this.videos;
             }
 
@@ -161,7 +161,7 @@ public class BiliVideoEntity {
                  *AV+标题+时间戳+Excel时间+原创/搬运+分P数+时长+UP主string+视频详情string
                  */
                 return this.getAid() + "	" + this.getTitle() + "	" + this.getPubdate() + "	"
-                        + ((Double.parseDouble(this.getPubdate()) + 28800) / 86400 + 25569) + "	" + this.getCopyright()
+                        + ((this.getPubdate() + 28800) / 86400 + 25569) + "	" + this.getCopyright()
                         + "	" + this.getVideos() + "	" + this.getDuration() + "	" + this.owner.ownerToString()
                         + this.stat.statToString();
             }
@@ -173,7 +173,7 @@ public class BiliVideoEntity {
                 /**
                  * UP主UID
                  */
-                public String mid;
+                public Integer mid;
                 /**
                  * UP主ID
                  */
@@ -183,11 +183,11 @@ public class BiliVideoEntity {
                  */
                 public String face;
 
-                public String getMid() {
+                public Integer getMid() {
                     return mid;
                 }
 
-                public void setMid(String mid) {
+                public void setMid(Integer mid) {
                     this.mid = mid;
                 }
 
@@ -219,109 +219,109 @@ public class BiliVideoEntity {
                 /**
                  * 视频AID
                  */
-                public String aid;
+                public Integer aid;
                 /**
                  * 播放量
                  */
-                public String view;
+                public Integer view;
                 /**
                  * 弹幕
                  */
-                public String danmaku;
+                public Integer danmaku;
                 /**
                  * 评论
                  */
-                public String reply;
+                public Integer reply;
                 /**
                  * 收藏
                  */
-                public String favorite;
+                public Integer favorite;
                 /**
                  * 硬币
                  */
-                public String coin;
+                public Integer coin;
                 /**
                  * 分享
                  */
-                public String share;
+                public Integer share;
                 /**
                  * 赞
                  */
-                public String like;
+                public Integer like;
                 /**
                  * 踩
                  */
-                public String dislike;
+                public Integer dislike;
 
-                public String getAid() {
+                public Integer getAid() {
                     return aid;
                 }
 
-                public void setAid(String aid) {
+                public void setAid(Integer aid) {
                     this.aid = aid;
                 }
 
-                public String getView() {
+                public Integer getView() {
                     return view;
                 }
 
-                public void setView(String view) {
+                public void setView(Integer view) {
                     this.view = view;
                 }
 
-                public String getDanmaku() {
+                public Integer getDanmaku() {
                     return danmaku;
                 }
 
-                public void setDanmaku(String danmaku) {
+                public void setDanmaku(Integer danmaku) {
                     this.danmaku = danmaku;
                 }
 
-                public String getReply() {
+                public Integer getReply() {
                     return reply;
                 }
 
-                public void setReply(String reply) {
+                public void setReply(Integer reply) {
                     this.reply = reply;
                 }
 
-                public String getFavorite() {
+                public Integer getFavorite() {
                     return favorite;
                 }
 
-                public void setFavorite(String favorite) {
+                public void setFavorite(Integer favorite) {
                     this.favorite = favorite;
                 }
 
-                public String getCoin() {
+                public Integer getCoin() {
                     return coin;
                 }
 
-                public void setCoin(String coin) {
+                public void setCoin(Integer coin) {
                     this.coin = coin;
                 }
 
-                public String getShare() {
+                public Integer getShare() {
                     return share;
                 }
 
-                public void setShare(String share) {
+                public void setShare(Integer share) {
                     this.share = share;
                 }
 
-                public String getLike() {
+                public Integer getLike() {
                     return like;
                 }
 
-                public void setLike(String like) {
+                public void setLike(Integer like) {
                     this.like = like;
                 }
 
-                public String getDislike() {
+                public Integer getDislike() {
                     return dislike;
                 }
 
-                public void setDislike(String dislike) {
+                public void setDislike(Integer dislike) {
                     this.dislike = dislike;
                 }
 

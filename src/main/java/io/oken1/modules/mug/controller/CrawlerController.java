@@ -33,7 +33,7 @@ public class CrawlerController {
     })
     @GetMapping("/crawlVideosByPage")
     public R crawlVideosByPage(int pageCount) {
-        Object result = crawlerService.CrawlVideosByPage(pageCount);
+        Object result = crawlerService.crawlVideosByPage(pageCount);
         return R.ok().put("result", result);
     }
 

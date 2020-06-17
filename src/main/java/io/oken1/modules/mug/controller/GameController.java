@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,11 +19,12 @@ import io.oken1.common.utils.PageUtils;
 import io.oken1.common.utils.R;
 
 
+@Api(value = "游戏接口", tags = {"游戏接口"})
 @RestController
-@RequestMapping("game")
+@RequestMapping("/mug/game")
 public class GameController {
     @Autowired
-    private GameService gameService;
+    GameService gameService;
 
     /**
      * 列表

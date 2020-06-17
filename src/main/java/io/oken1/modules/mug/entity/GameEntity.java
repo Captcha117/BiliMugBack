@@ -10,7 +10,7 @@ import lombok.Data;
 
 
 @Data
-@TableName("mug")
+@TableName("mug_game")
 public class GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

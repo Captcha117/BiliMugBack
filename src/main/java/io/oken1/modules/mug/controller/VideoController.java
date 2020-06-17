@@ -12,6 +12,8 @@ import java.util.List;
 import io.oken1.modules.mug.dao.VideoDao;
 import io.oken1.modules.mug.service.VideoService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,18 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 import io.oken1.common.utils.R;
 
 
+@Api(value = "视频接口", tags = {"视频接口"})
 @RestController
-@RequestMapping("video")
-@Api("视频相关接口")
+@RequestMapping("/mug/video")
 public class VideoController {
     @Autowired
-    private VideoService videoService;
+    VideoService videoService;
 
     @Autowired
-    private VideoDao videoDao;
+    VideoDao videoDao;
 
     @GetMapping("/getVideosByGameId")
     @ApiOperation("根据游戏id获取视频信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "gameId", value = "游戏ID", required = true, paramType = "query"),
+    })
     public R getVideosByGameId(@RequestParam String gameId) {
         List<LinkedHashMap> videoList = videoService.getVideosByGameId(gameId);
         videoList = videoList.subList(0, Math.min(videoList.size(), 20));
@@ -42,6 +47,9 @@ public class VideoController {
 
     @GetMapping("/getVideosBySongId")
     @ApiOperation("根据曲目id获取视频信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "songId", value = "曲目ID", required = true, paramType = "query"),
+    })
     public R getVideosBySongId(@RequestParam String songId) {
         List<LinkedHashMap> videoList = videoService.getVideosBySongId(songId);
         videoList = videoList.subList(0, Math.min(videoList.size(), 20));

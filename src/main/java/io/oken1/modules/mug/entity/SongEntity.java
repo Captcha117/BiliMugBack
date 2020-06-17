@@ -7,7 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@TableName("mug")
+@TableName("mug_song")
 public class SongEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -3,7 +3,9 @@ package io.oken1.modules.mug.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import io.oken1.config.BizConfig;
+import io.oken1.modules.mug.entity.VideoEntity;
 import io.oken1.modules.mug.service.CrawlerService;
+import io.oken1.modules.mug.service.VideoService;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,12 +18,15 @@ import org.springframework.stereotype.Service;
 @Service("crawlerService")
 public class CrawlerServiceImpl implements CrawlerService {
     @Autowired
-    BizConfig bizConfig;
+    private BizConfig bizConfig;
+
+    @Autowired
+    private VideoService videoService;
 
     @Override
-    public Object CrawlVideosByPage(int pageCount) {
+    public Object crawlVideosByPage(int pageCount) {
         CloseableHttpClient client = HttpClients.createDefault();
-        String responseInfo = "";
+        Object responseInfo = null;
         try {
             int page;
             for (page = pageCount; page > 0; page--) {
@@ -29,7 +34,7 @@ public class CrawlerServiceImpl implements CrawlerService {
                 HttpGet httpGet = new HttpGet(url);
                 CloseableHttpResponse response = client.execute(httpGet);
                 HttpEntity entity = response.getEntity();
-                responseInfo = EntityUtils.toString(entity);
+                responseInfo = JSON.parse(EntityUtils.toString(entity));
                 if (page % 10 == 0) {
                     Thread.sleep(1000);
                 } else {
@@ -40,6 +45,6 @@ public class CrawlerServiceImpl implements CrawlerService {
             System.out.println(e.getStackTrace());
             return responseInfo;
         }
-        return JSON.parse(responseInfo);
+        return responseInfo;
     }
 }

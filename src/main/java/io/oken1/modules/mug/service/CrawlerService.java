@@ -7,6 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public interface CrawlerService {
-    Object CrawlVideosByPage(int pageCount);
+    Object crawlVideosByPage(int pageCount);
 }
 

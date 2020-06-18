@@ -71,6 +71,10 @@ public class BiliVideoEntity {
              */
             public Integer videos;
             /**
+             * 封面链接
+             */
+            public String pic;
+            /**
              * UP主
              **/
             public Owner owner;
@@ -141,6 +145,14 @@ public class BiliVideoEntity {
 
             public Integer getVideos() {
                 return this.videos;
+            }
+
+            public void setPic(String pic) {
+                this.pic = pic;
+            }
+
+            public String getPic() {
+                return this.pic;
             }
 
             public Owner getOwner() {

@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 
-@Service("videoService")
+@Service("VideoService")
 public class VideoServiceImpl extends ServiceImpl<VideoDao, VideoEntity> implements VideoService {
 
     @Autowired

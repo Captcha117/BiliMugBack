@@ -1,13 +1,13 @@
 package io.oken1.modules.mug.service.impl;
 
 
-import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
-import io.oken1.common.utils.RedisUtils;
 import io.oken1.config.BizConfig;
 import io.oken1.modules.mug.entity.BiliVideoEntity;
+import io.oken1.modules.mug.entity.UploaderEntity;
 import io.oken1.modules.mug.entity.VideoEntity;
 import io.oken1.modules.mug.service.CrawlerService;
+import io.oken1.modules.mug.service.UploaderService;
 import io.oken1.modules.mug.service.VideoService;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -31,22 +31,40 @@ public class CrawlerServiceImpl implements CrawlerService {
     @Autowired
     private VideoService videoService;
 
+    @Autowired
+    private UploaderService uploaderService;
+
     private static Gson gson = new Gson();
 
     @Override
     public Object crawlVideosByPage(int pageCount) {
+        return crawlVideos(1, pageCount);
+    }
+
+    @Override
+    public Object crawlVideosByPage(int startPage, int endPage) {
+        return crawlVideos(startPage, endPage);
+    }
+
+    /**
+     * 视频列表爬虫
+     *
+     * @param startPage 开始页数
+     * @param endPage   结束页数
+     * @return
+     */
+    public Object crawlVideos(int startPage, int endPage) {
         CloseableHttpClient client = HttpClients.createDefault();
-        Object responseInfo = null;
+        int page = endPage;
         try {
-            int page;
-            for (page = pageCount; page > 0; page--) {
+            for (; page >= startPage; page--) {
                 String url = bizConfig.biliApiUrl + "/x/web-interface/newlist?rid=136&pn=" + page + "&ps=20";
                 HttpGet httpGet = new HttpGet(url);
                 CloseableHttpResponse response = client.execute(httpGet);
                 HttpEntity entity = response.getEntity();
                 String str = EntityUtils.toString(entity);
                 BiliVideoEntity biliVideo = gson.fromJson(str, BiliVideoEntity.class);
-                saveVideos(biliVideo);
+                saveData(biliVideo);
                 if (page % 10 == 0) {
                     Thread.sleep(1000);
                 } else {
@@ -55,25 +73,39 @@ public class CrawlerServiceImpl implements CrawlerService {
             }
         } catch (Exception e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
-            return e;
+            return "error occurred at page " + page;
         }
-        return "success";
+        return "success! Total pages: " + (endPage - startPage + 1);
     }
 
-    public void saveVideos(BiliVideoEntity biliVideo) {
+    /**
+     * 保存视频和UP主信息
+     *
+     * @param biliVideo
+     */
+    public void saveData(BiliVideoEntity biliVideo) {
         List<BiliVideoEntity.videoDetail.archives> videoList = biliVideo.getData().getArchives();
-        List<VideoEntity> saveList = new ArrayList<>();
+        List<VideoEntity> saveVideoList = new ArrayList<>();
+        List<UploaderEntity> saveUpList = new ArrayList<>();
         for (BiliVideoEntity.videoDetail.archives l : videoList
         ) {
             BiliVideoEntity.videoDetail.archives.Stat stat = l.getStat();
+            BiliVideoEntity.videoDetail.archives.Owner owner = l.getOwner();
+
             VideoEntity videoEntity = new VideoEntity(l.getAid(), l.getBvid(), l.getTitle(), l.getPubdate(),
                     l.getCopyright(), l.getVideos(), l.getDuration(), l.getOwner().getMid(), stat.getView(),
                     stat.getDanmaku(), stat.getReply(), stat.getFavorite(), stat.getCoin(), stat.getShare(),
-                    stat.getLike());
+                    stat.getLike(), l.getPic());
             videoEntity.setUpdateUser(1L);
             videoEntity.setUpdateTime(new Date());
-            saveList.add(videoEntity);
+
+            UploaderEntity uploaderEntity = new UploaderEntity
+                    (owner.getMid(), owner.getName(), owner.getFace(), new Date());
+
+            saveVideoList.add(videoEntity);
+            saveUpList.add(uploaderEntity);
         }
-        videoService.saveOrUpdateBatch(saveList);
+        videoService.saveOrUpdateBatch(saveVideoList);
+        uploaderService.saveOrUpdateBatch(saveUpList);
     }
 }

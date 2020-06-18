@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface CrawlerService {
     Object crawlVideosByPage(int pageCount);
+
+    Object crawlVideosByPage(int startPage, int endPage);
 }
 

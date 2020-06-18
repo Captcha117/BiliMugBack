@@ -7,10 +7,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Api(value = "爬虫接口", tags = {"爬虫接口"})
@@ -33,7 +30,31 @@ public class CrawlerController {
     })
     @GetMapping("/crawlVideosByPage")
     public R crawlVideosByPage(int pageCount) {
+        if (pageCount < 1) {
+            return R.error();
+        }
         Object result = crawlerService.crawlVideosByPage(pageCount);
+        return R.ok().put("result", result);
+    }
+
+    /**
+     * 批量视频信息
+     *
+     * @param startPage 开始页数
+     * @param endPage   结束页数
+     * @return 视频信息
+     */
+    @ApiOperation("批量视频信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startPage", value = "开始页数", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endPage", value = "结束页数", required = true, paramType = "query"),
+    })
+    @GetMapping("/crawlVideosByPages")
+    public R crawlVideosByPage(int startPage, int endPage) {
+        if (startPage > endPage) {
+            return R.error();
+        }
+        Object result = crawlerService.crawlVideosByPage(startPage, endPage);
         return R.ok().put("result", result);
     }
 
@@ -48,8 +69,7 @@ public class CrawlerController {
             @ApiImplicitParam(name = "id", value = "aid/bid", required = true, paramType = "query"),
     })
     @GetMapping(value = "/crawlVideosById")
-    public R crawlVideoById(String id)
-    {
+    public R crawlVideoById(String id) {
         return R.ok();
     }
 }

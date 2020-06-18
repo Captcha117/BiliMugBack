@@ -2,6 +2,9 @@ package io.oken1.modules.mug.entity;
 
 import java.util.List;
 
+/**
+ * B站视频页实体类
+ */
 public class BiliVideoEntity {
     public videoDetail getData() {
         return data;

@@ -2,14 +2,17 @@ package io.oken1.modules.mug.service.impl;
 
 
 import com.google.gson.Gson;
+import io.oken1.common.utils.ShiroUtils;
 import io.oken1.config.BizConfig;
-import io.oken1.modules.mug.entity.BiliVideoEntity;
+import io.oken1.modules.mug.entity.BiliUploaderEntity;
+import io.oken1.modules.mug.entity.BiliArchiveEntity;
 import io.oken1.modules.mug.entity.UploaderEntity;
 import io.oken1.modules.mug.entity.VideoEntity;
 import io.oken1.modules.mug.service.CrawlerService;
 import io.oken1.modules.mug.service.UploaderService;
 import io.oken1.modules.mug.service.VideoService;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -51,7 +54,7 @@ public class CrawlerServiceImpl implements CrawlerService {
      *
      * @param startPage 开始页数
      * @param endPage   结束页数
-     * @return
+     * @return 爬虫结果
      */
     public Object crawlVideos(int startPage, int endPage) {
         CloseableHttpClient client = HttpClients.createDefault();
@@ -60,11 +63,11 @@ public class CrawlerServiceImpl implements CrawlerService {
             for (; page >= startPage; page--) {
                 String url = bizConfig.biliApiUrl + "/x/web-interface/newlist?rid=136&pn=" + page + "&ps=20";
                 HttpGet httpGet = new HttpGet(url);
-                CloseableHttpResponse response = client.execute(httpGet);
+                HttpResponse response = client.execute(httpGet);
                 HttpEntity entity = response.getEntity();
                 String str = EntityUtils.toString(entity);
-                BiliVideoEntity biliVideo = gson.fromJson(str, BiliVideoEntity.class);
-                saveData(biliVideo);
+                BiliArchiveEntity biliArchive = gson.fromJson(str, BiliArchiveEntity.class);
+                saveData(biliArchive);
                 if (page % 10 == 0) {
                     Thread.sleep(1000);
                 } else {
@@ -79,24 +82,83 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     /**
+     * 根据AV号获取视频信息
+     *
+     * @param id AID
+     * @return
+     */
+    public Object crawlVideoById(int id) {
+        String url = bizConfig.biliApiUrl + "/x/web-interface/archive/stat?aid=" + id;
+        return crawlVideo(url);
+    }
+
+    /**
+     * 根据BV号获取视频信息
+     *
+     * @param id BVID
+     * @return
+     */
+    public Object crawlVideoById(String id) {
+        String url = bizConfig.biliApiUrl + "/x/web-interface/archive/stat?bvid=" + id;
+        return crawlVideo(url);
+    }
+
+    public Object crawlVideo(String url) {
+        try {
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            CloseableHttpResponse response = client.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            String str = EntityUtils.toString(entity);
+            VideoEntity videoEntity = gson.fromJson(str, VideoEntity.class);
+            saveData(videoEntity);
+        } catch (Exception e) {
+            return "error";
+        }
+        return "success!";
+    }
+
+    /**
+     * 用户信息爬虫
+     *
+     * @param id 用户ID
+     * @return 爬虫结果
+     */
+    @Override
+    public Object crawlUploaderById(String id) {
+        try {
+            String url = bizConfig.biliApiUrl + "/x/web-interface/card?mid=" + id;
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            CloseableHttpResponse response = client.execute(httpGet);
+            String str = EntityUtils.toString(response.getEntity());
+            BiliUploaderEntity biliUploaderEntity = gson.fromJson(str, BiliUploaderEntity.class);
+            saveData(biliUploaderEntity);
+        } catch (Exception e) {
+            return "error";
+        }
+        return "success!";
+    }
+
+    /**
      * 保存视频和UP主信息
      *
-     * @param biliVideo
+     * @param biliArchive
      */
-    public void saveData(BiliVideoEntity biliVideo) {
-        List<BiliVideoEntity.videoDetail.archives> videoList = biliVideo.getData().getArchives();
+    public void saveData(BiliArchiveEntity biliArchive) {
+        List<BiliArchiveEntity.VideoDetail.Archives> videoList = biliArchive.getData().getArchives();
         List<VideoEntity> saveVideoList = new ArrayList<>();
         List<UploaderEntity> saveUpList = new ArrayList<>();
-        for (BiliVideoEntity.videoDetail.archives l : videoList
+        for (BiliArchiveEntity.VideoDetail.Archives l : videoList
         ) {
-            BiliVideoEntity.videoDetail.archives.Stat stat = l.getStat();
-            BiliVideoEntity.videoDetail.archives.Owner owner = l.getOwner();
+            BiliArchiveEntity.VideoDetail.Archives.Stat stat = l.getStat();
+            BiliArchiveEntity.VideoDetail.Archives.Owner owner = l.getOwner();
 
             VideoEntity videoEntity = new VideoEntity(l.getAid(), l.getBvid(), l.getTitle(), l.getPubdate(),
                     l.getCopyright(), l.getVideos(), l.getDuration(), l.getOwner().getMid(), stat.getView(),
                     stat.getDanmaku(), stat.getReply(), stat.getFavorite(), stat.getCoin(), stat.getShare(),
                     stat.getLike(), l.getPic());
-            videoEntity.setUpdateUser(1L);
+            videoEntity.setUpdateUser(ShiroUtils.getUserId());
             videoEntity.setUpdateTime(new Date());
 
             UploaderEntity uploaderEntity = new UploaderEntity
@@ -107,5 +169,15 @@ public class CrawlerServiceImpl implements CrawlerService {
         }
         videoService.saveOrUpdateBatch(saveVideoList);
         uploaderService.saveOrUpdateBatch(saveUpList);
+    }
+
+    public void saveData(VideoEntity videoEntity) {
+
+    }
+
+    public void saveData(BiliUploaderEntity biliUploaderEntity) {
+        BiliUploaderEntity.UserData.Card card = biliUploaderEntity.getData().getCard();
+        UploaderEntity uploaderEntity = new UploaderEntity(card.getMid(), card.getName(), card.getFace(), new Date());
+        uploaderService.saveOrUpdate(uploaderEntity);
     }
 }

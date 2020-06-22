@@ -59,7 +59,7 @@ public class CrawlerController {
     }
 
     /**
-     * 批量视频信息
+     * 根据AV号或BV号获取视频信息
      *
      * @param id 总页数
      * @return 视频信息
@@ -71,5 +71,21 @@ public class CrawlerController {
     @GetMapping(value = "/crawlVideosById")
     public R crawlVideoById(String id) {
         return R.ok();
+    }
+
+    /**
+     * 获取UP主信息
+     *
+     * @param id 总页数
+     * @return 视频信息
+     */
+    @ApiOperation("获取UP主信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "mid", required = true, paramType = "query"),
+    })
+    @GetMapping(value = "/crawlUploaderById")
+    public R crawlUploaderById(String id) {
+        Object result = crawlerService.crawlUploaderById(id);
+        return R.ok().put("result", result);
     }
 }

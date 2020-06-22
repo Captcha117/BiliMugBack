@@ -10,5 +10,7 @@ public interface CrawlerService {
     Object crawlVideosByPage(int pageCount);
 
     Object crawlVideosByPage(int startPage, int endPage);
+
+    Object crawlUploaderById(String id);
 }
 

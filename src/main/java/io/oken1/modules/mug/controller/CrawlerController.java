@@ -66,11 +66,12 @@ public class CrawlerController {
      */
     @ApiOperation("根据AV号或BV号获取视频信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "aid/bid", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "id", value = "aid/bvid", required = true, paramType = "query"),
     })
     @GetMapping(value = "/crawlVideosById")
     public R crawlVideoById(String id) {
-        return R.ok();
+        Object result = crawlerService.crawlVideoById(id);
+        return R.ok().put("result", result);
     }
 
     /**

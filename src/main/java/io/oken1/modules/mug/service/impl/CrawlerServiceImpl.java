@@ -82,28 +82,15 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     /**
-     * 根据AV号获取视频信息
+     * 根据视频ID获取视频信息
      *
-     * @param id AID
-     * @return
+     * @param id AID/BVID
+     * @return 爬虫结果
      */
-    public Object crawlVideoById(int id) {
-        String url = bizConfig.biliApiUrl + "/x/web-interface/archive/stat?aid=" + id;
-        return crawlVideo(url);
-    }
-
-    /**
-     * 根据BV号获取视频信息
-     *
-     * @param id BVID
-     * @return
-     */
+    @Override
     public Object crawlVideoById(String id) {
-        String url = bizConfig.biliApiUrl + "/x/web-interface/archive/stat?bvid=" + id;
-        return crawlVideo(url);
-    }
-
-    public Object crawlVideo(String url) {
+        String url = bizConfig.biliApiUrl + "/x/web-interface/archive/stat?";
+        url += (id.contains("BV") ? "bvid=" : "aid=") + id;
         try {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);

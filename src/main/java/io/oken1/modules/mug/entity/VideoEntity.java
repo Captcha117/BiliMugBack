@@ -84,10 +84,6 @@ public class VideoEntity implements Serializable {
      */
     private String tag;
     /**
-     * dssq?
-     */
-    private String dssq;
-    /**
      * 更新人
      */
     private Long updateUser;
@@ -102,14 +98,6 @@ public class VideoEntity implements Serializable {
 
     public void setTag(String tag) {
         this.tag = tag;
-    }
-
-    public String getDssq() {
-        return dssq;
-    }
-
-    public void setDssq(String dssq) {
-        this.dssq = dssq;
     }
 
     public Long getUpdateUser() {

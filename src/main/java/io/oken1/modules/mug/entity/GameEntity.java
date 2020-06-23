@@ -1,5 +1,7 @@
 package io.oken1.modules.mug.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -58,18 +60,22 @@ public class GameEntity implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
     /**
      * 创建人
      */
+    @TableField(fill = FieldFill.INSERT)
     private String createUser;
     /**
      * 更新时间
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
     /**
      * 更新人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateUser;
 
 }

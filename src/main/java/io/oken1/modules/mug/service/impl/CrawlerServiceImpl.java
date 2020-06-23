@@ -4,10 +4,7 @@ package io.oken1.modules.mug.service.impl;
 import com.google.gson.Gson;
 import io.oken1.common.utils.ShiroUtils;
 import io.oken1.config.BizConfig;
-import io.oken1.modules.mug.entity.BiliUploaderEntity;
-import io.oken1.modules.mug.entity.BiliArchiveEntity;
-import io.oken1.modules.mug.entity.UploaderEntity;
-import io.oken1.modules.mug.entity.VideoEntity;
+import io.oken1.modules.mug.entity.*;
 import io.oken1.modules.mug.service.CrawlerService;
 import io.oken1.modules.mug.service.UploaderService;
 import io.oken1.modules.mug.service.VideoService;
@@ -97,8 +94,8 @@ public class CrawlerServiceImpl implements CrawlerService {
             CloseableHttpResponse response = client.execute(httpGet);
             HttpEntity entity = response.getEntity();
             String str = EntityUtils.toString(entity);
-            VideoEntity videoEntity = gson.fromJson(str, VideoEntity.class);
-            saveData(videoEntity);
+            BiliVideoEntity biliVideoEntity = gson.fromJson(str, BiliVideoEntity.class);
+            saveData(biliVideoEntity);
         } catch (Exception e) {
             return "error";
         }
@@ -118,7 +115,8 @@ public class CrawlerServiceImpl implements CrawlerService {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             CloseableHttpResponse response = client.execute(httpGet);
-            String str = EntityUtils.toString(response.getEntity());
+            HttpEntity entity = response.getEntity();
+            String str = EntityUtils.toString(entity);
             BiliUploaderEntity biliUploaderEntity = gson.fromJson(str, BiliUploaderEntity.class);
             saveData(biliUploaderEntity);
         } catch (Exception e) {
@@ -148,8 +146,7 @@ public class CrawlerServiceImpl implements CrawlerService {
             videoEntity.setUpdateUser(ShiroUtils.getUserId());
             videoEntity.setUpdateTime(new Date());
 
-            UploaderEntity uploaderEntity = new UploaderEntity
-                    (owner.getMid(), owner.getName(), owner.getFace(), new Date());
+            UploaderEntity uploaderEntity = new UploaderEntity(owner.getMid(), owner.getName(), owner.getFace());
 
             saveVideoList.add(videoEntity);
             saveUpList.add(uploaderEntity);
@@ -158,13 +155,17 @@ public class CrawlerServiceImpl implements CrawlerService {
         uploaderService.saveOrUpdateBatch(saveUpList);
     }
 
-    public void saveData(VideoEntity videoEntity) {
-
+    public void saveData(BiliVideoEntity biliVideoEntity) {
+        BiliVideoEntity.VideoDetail detail = biliVideoEntity.getData();
+        VideoEntity videoEntity = new VideoEntity(detail.getAid(), detail.getBvid(), detail.getCopyright(),
+                detail.getView(), detail.getDanmaku(), detail.getReply(), detail.getFavorite(), detail.getCoin(),
+                detail.getShare(), detail.getLike());
+        videoService.saveOrUpdate(videoEntity);
     }
 
     public void saveData(BiliUploaderEntity biliUploaderEntity) {
         BiliUploaderEntity.UserData.Card card = biliUploaderEntity.getData().getCard();
-        UploaderEntity uploaderEntity = new UploaderEntity(card.getMid(), card.getName(), card.getFace(), new Date());
+        UploaderEntity uploaderEntity = new UploaderEntity(card.getMid(), card.getName(), card.getFace());
         uploaderService.saveOrUpdate(uploaderEntity);
     }
 }

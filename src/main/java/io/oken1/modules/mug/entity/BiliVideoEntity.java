@@ -26,29 +26,33 @@ public class BiliVideoEntity {
          */
         public Integer copyright;
         /**
-         * 发布unix时间
+         * 播放
          */
-        public Integer pubdate;
+        public Integer view;
         /**
-         * ?
+         * 弹幕
          */
-        public String ctime;
+        public Integer danmaku;
         /**
-         * 标题
+         * 评论
          */
-        public String title;
+        public Integer reply;
         /**
-         * 时长
+         * 收藏
          */
-        public Integer duration;
+        public Integer favorite;
         /**
-         * 视频分P数
+         * 硬币
          */
-        public Integer videos;
+        public Integer coin;
         /**
-         * 封面链接
+         * 分享
          */
-        public String pic;
+        public Integer share;
+        /**
+         * 点赞
+         */
+        public Integer like;
 
         public Integer getAid() {
             return aid;
@@ -74,52 +78,60 @@ public class BiliVideoEntity {
             this.copyright = copyright;
         }
 
-        public Integer getPubdate() {
-            return pubdate;
+        public Integer getView() {
+            return view;
         }
 
-        public void setPubdate(Integer pubdate) {
-            this.pubdate = pubdate;
+        public void setView(Integer view) {
+            this.view = view;
         }
 
-        public String getCtime() {
-            return ctime;
+        public Integer getDanmaku() {
+            return danmaku;
         }
 
-        public void setCtime(String ctime) {
-            this.ctime = ctime;
+        public void setDanmaku(Integer danmaku) {
+            this.danmaku = danmaku;
         }
 
-        public String getTitle() {
-            return title;
+        public Integer getReply() {
+            return reply;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setReply(Integer reply) {
+            this.reply = reply;
         }
 
-        public Integer getDuration() {
-            return duration;
+        public Integer getFavorite() {
+            return favorite;
         }
 
-        public void setDuration(Integer duration) {
-            this.duration = duration;
+        public void setFavorite(Integer favorite) {
+            this.favorite = favorite;
         }
 
-        public Integer getVideos() {
-            return videos;
+        public Integer getCoin() {
+            return coin;
         }
 
-        public void setVideos(Integer videos) {
-            this.videos = videos;
+        public void setCoin(Integer coin) {
+            this.coin = coin;
         }
 
-        public String getPic() {
-            return pic;
+        public Integer getShare() {
+            return share;
         }
 
-        public void setPic(String pic) {
-            this.pic = pic;
+        public void setShare(Integer share) {
+            this.share = share;
+        }
+
+        public Integer getLike() {
+            return like;
+        }
+
+        public void setLike(Integer like) {
+            this.like = like;
         }
     }
 }

@@ -1,8 +1,6 @@
 package io.oken1.modules.mug.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -86,10 +84,12 @@ public class VideoEntity implements Serializable {
     /**
      * 更新人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
     /**
      * 更新时间
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     public String getTag() {
@@ -114,6 +114,23 @@ public class VideoEntity implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public VideoEntity() {
+    }
+
+    public VideoEntity(Integer aid, String bvid, Integer copyright, Integer view, Integer danmaku, Integer reply,
+                       Integer favorite, Integer coin, Integer share, Integer like) {
+        this.aid = aid;
+        this.bid = bvid;
+        this.copyright = copyright;
+        this.play = view;
+        this.danmu = danmaku;
+        this.comment = reply;
+        this.favorite = favorite;
+        this.coin = coin;
+        this.share = share;
+        this.iine = like;
     }
 
     public VideoEntity(Integer aid, String bid, String title, Integer pubTime, Integer copyright, Integer ps,

@@ -17,8 +17,7 @@ import io.oken1.modules.mug.dao.GameDao;
 import io.oken1.modules.mug.entity.GameEntity;
 import io.oken1.modules.mug.service.GameService;
 
-
-@Service("gameService")
+@Service("GameService")
 public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements GameService {
 
     @Autowired

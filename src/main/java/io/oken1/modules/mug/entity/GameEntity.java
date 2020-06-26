@@ -58,6 +58,10 @@ public class GameEntity implements Serializable {
      */
     private String parentId;
     /**
+     * 过滤器排序
+     */
+    private float filterIndex;
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)

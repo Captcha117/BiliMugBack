@@ -7,6 +7,7 @@ import io.oken1.modules.mug.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -26,4 +27,10 @@ public class VideoServiceImpl extends ServiceImpl<VideoDao, VideoEntity> impleme
     public List<LinkedHashMap> getVideosBySongId(String songId) {
         return videoDao.getVideosBySongId(songId);
     }
+
+    @Override
+    public List<LinkedHashMap> getVideosByDates(Date startDate, Date endDate) {
+        return videoDao.getVideosByDates(startDate, endDate);
+    }
+
 }

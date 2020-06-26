@@ -34,8 +34,7 @@
                     k.keyword_index
                 ) z on instr( REPLACE ( v.title, ' ', '' ), z.keyword ) > 0
             where
-                from_unixtime( v.pub_time ) >= date '2019-5-1'
-                and v.aid not in ( select c.aid from mug_video_content c where c.type = 'G' )
+                v.aid not in ( select c.aid from mug_video_content c where c.type = 'G' )
             ) r
         where
             r.row_num = 1
@@ -74,8 +73,7 @@
                     k.keyword_index
                 ) z on instr( REPLACE ( v.title, ' ', '' ), z.keyword ) > 0
             where
-                from_unixtime( v.pub_time ) >= date '2019-5-1'
-                and v.aid not in ( select c.aid from mug_video_content c where c.type = 'G' )
+                v.aid not in ( select c.aid from mug_video_content c where c.type = 'G' )
             ) r
         where
             r.row_num = 1

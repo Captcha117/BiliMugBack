@@ -12,5 +12,7 @@ public interface ContentService extends IService<ContentEntity> {
     Object gameContent();
 
     Object insertGameContent();
+
+    Object updateContent(String aid, String oldContent, String newType, String newContent);
 }
 

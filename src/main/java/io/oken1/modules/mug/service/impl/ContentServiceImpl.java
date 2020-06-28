@@ -31,4 +31,13 @@ public class ContentServiceImpl extends ServiceImpl<ContentDao, ContentEntity> i
         }
         return "success";
     }
+
+    @Override
+    public Object updateContent(String aid, String oldContent, String newType, String newContent) {
+        ContentEntity contentEntity = null;
+        if (contentEntity == null) {
+
+        }
+        return null;
+    }
 }

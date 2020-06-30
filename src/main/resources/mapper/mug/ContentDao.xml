@@ -9,6 +9,7 @@
             r.aid aid,
             'G' type,
             r.game_id content_id,
+            r.keyword keyword,
             current_timestamp() update_time
         from
             (
@@ -35,19 +36,39 @@
                 ) z on instr( REPLACE ( v.title, ' ', '' ), z.keyword ) > 0
             where
                 v.aid not in ( select c.aid from mug_video_content c where c.type = 'G' )
+                and from_unixtime( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
             ) r
         where
             r.row_num = 1
         ]]>
     </select>
 
+    <select id="osuContent" resultType="map">
+        <![CDATA[
+        SELECT
+            upper( REPLACE ( uuid( ), "-", "" ) ) pk_id,
+            v.aid aid,
+            'G' type,
+            '351D8F969DF84121B0A535C8ADFCC3CF' content_id,
+            CURRENT_TIMESTAMP ( ) update_time
+        FROM
+            mug_video v
+        WHERE
+            instr( v.title, "|" ) > 0
+            AND instr( v.title, "%" ) > 0
+            AND v.aid NOT IN ( SELECT c.aid FROM mug_video_content c WHERE c.type = 'G' )
+            AND from_unixtime( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+        ]]>
+    </select>
+
     <insert id="insertGameContent">
         <![CDATA[
-        insert mug_video_content ( pk_id, aid, type, content_id, update_time ) select
+        insert mug_video_content ( pk_id, aid, type, content_id, keyword, update_time ) select
         upper( replace ( uuid( ), "-", "" ) ) pk_id,
         r.aid aid,
         'G' type,
         r.game_id content_id,
+        r.keyword keyword,
         current_timestamp ( ) update_time
         from
             (
@@ -74,9 +95,27 @@
                 ) z on instr( REPLACE ( v.title, ' ', '' ), z.keyword ) > 0
             where
                 v.aid not in ( select c.aid from mug_video_content c where c.type = 'G' )
+                and from_unixtime( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
             ) r
         where
             r.row_num = 1
-        ]]]>
+        ]]>
+    </insert>
+
+    <insert id="insertOsuContent">
+        insert mug_video_content ( pk_id, aid, type, content_id, keyword, update_time ) SELECT
+            upper( REPLACE ( uuid( ), "-", "" ) ) pk_id,
+            v.aid aid,
+            'G' type,
+            '351D8F969DF84121B0A535C8ADFCC3CF' content_id,
+            '|' keyword,
+            CURRENT_TIMESTAMP ( ) update_time
+        FROM
+            mug_video v
+        WHERE
+            instr( v.title, "|" ) > 0
+            AND instr( v.title, "%" ) > 0
+            AND v.aid NOT IN ( SELECT c.aid FROM mug_video_content c WHERE c.type = 'G' )
+            AND from_unixtime( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
     </insert>
 </mapper>

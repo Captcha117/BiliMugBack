@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @Api(value = "视频内容接口", tags = {"视频内容接口"})
 @RestController
 @RequestMapping("/mug/content")
@@ -25,9 +27,12 @@ public class ContentController {
      * @return 分类结果
      */
     @ApiOperation("显示根据游戏分类的结果")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+    })
     @GetMapping("/gameContent")
-    public R gameContent() {
-        Object result = contentService.gameContent();
+    public R gameContent(String startDate) {
+        Object result = contentService.gameContent(startDate);
         return R.ok().put("result", result);
     }
 
@@ -37,9 +42,12 @@ public class ContentController {
      * @return 分类结果
      */
     @ApiOperation("添加根据游戏分类的结果")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+    })
     @GetMapping("/insertGameContent")
-    public R insertGameContent() {
-        Object result = contentService.insertGameContent();
+    public R insertGameContent(String startDate) {
+        Object result = contentService.insertGameContent(startDate);
         return R.ok().put("result", result);
     }
 

@@ -2,7 +2,6 @@ package io.oken1.modules.mug.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.oken1.modules.mug.entity.VideoEntity;
-import sun.awt.image.ImageWatched;
 
 import java.util.Date;
 import java.util.LinkedHashMap;

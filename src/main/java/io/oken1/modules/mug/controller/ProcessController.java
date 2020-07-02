@@ -2,6 +2,7 @@ package io.oken1.modules.mug.controller;
 
 import io.oken1.common.utils.R;
 import io.oken1.modules.mug.service.ContentService;
+import io.oken1.modules.mug.service.DssqService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,12 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
-@Api(value = "视频内容接口", tags = {"视频内容接口"})
+@Api(value = "视频内容处理接口", tags = {"视频内容处理接口"})
 @RestController
-@RequestMapping("/mug/content")
-public class ContentController {
+@RequestMapping("/mug/process")
+public class ProcessController {
     @Autowired
     ContentService contentService;
+
+    @Autowired
+    DssqService dssqService;
 
     /**
      * 视频根据游戏分类
@@ -29,10 +33,14 @@ public class ContentController {
     @ApiOperation("显示根据游戏分类的结果")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
     })
     @GetMapping("/gameContent")
-    public R gameContent(String startDate) {
-        Object result = contentService.gameContent(startDate);
+    public R gameContent(String startDate, String endDate) {
+        if (StringUtils.isBlank(startDate)) {
+            return R.error();
+        }
+        Object result = contentService.gameContent(startDate, endDate);
         return R.ok().put("result", result);
     }
 
@@ -44,10 +52,14 @@ public class ContentController {
     @ApiOperation("添加根据游戏分类的结果")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
     })
     @GetMapping("/insertGameContent")
-    public R insertGameContent(String startDate) {
-        Object result = contentService.insertGameContent(startDate);
+    public R insertGameContent(String startDate, String endDate) {
+        if (StringUtils.isBlank(startDate)) {
+            return R.error();
+        }
+        Object result = contentService.insertGameContent(startDate, endDate);
         return R.ok().put("result", result);
     }
 
@@ -64,15 +76,31 @@ public class ContentController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", value = "视频AV号", required = true, paramType = "query"),
             @ApiImplicitParam(name = "oldContent", value = "旧内容", paramType = "query"),
-            @ApiImplicitParam(name = "newType", value = "新类型", paramType = "query"),
+            @ApiImplicitParam(name = "newType", value = "新类型", required = true, paramType = "query"),
             @ApiImplicitParam(name = "newContent", value = "新内容", required = true, paramType = "query")
     })
-    @GetMapping("/crawlVideosByPage")
-    public R updateComment(String aid, String oldContent, String newType, String newContent) {
+    @GetMapping("/updateContent")
+    public R updateContent(int aid, String oldContent, String newType, String newContent) {
         if (StringUtils.isEmpty(oldContent) && StringUtils.isEmpty(newType)) {
             return R.error();
         }
         Object result = contentService.updateContent(aid, oldContent, newType, newContent);
         return R.ok().put("result", result);
+    }
+
+    /**
+     * 显示dssq分类的结果
+     *
+     * @param startDate 开始日期
+     * @return 显示dssq分类的结果
+     */
+    @ApiOperation("显示dssq分类的结果")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+    })
+    @GetMapping("/updateDssq")
+    public R updateDssq(String startDate) {
+        dssqService.updateDssq(startDate);
+        return null;
     }
 }

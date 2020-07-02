@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("CrawlerService")
 public class CrawlerServiceImpl implements CrawlerService {
@@ -55,9 +56,10 @@ public class CrawlerServiceImpl implements CrawlerService {
      */
     public Object crawlVideos(int startPage, int endPage) {
         CloseableHttpClient client = HttpClients.createDefault();
-        int page = endPage;
+        int page = startPage;
         try {
-            for (; page >= startPage; page--) {
+            for (; page <= endPage; page++) {
+                System.out.println("start:" + page);
                 String url = bizConfig.biliApiUrl + "/x/web-interface/newlist?rid=136&pn=" + page + "&ps=20";
                 HttpGet httpGet = new HttpGet(url);
                 HttpResponse response = client.execute(httpGet);
@@ -65,11 +67,8 @@ public class CrawlerServiceImpl implements CrawlerService {
                 String str = EntityUtils.toString(entity);
                 BiliArchiveEntity biliArchive = gson.fromJson(str, BiliArchiveEntity.class);
                 saveData(biliArchive);
-                if (page % 10 == 0) {
-                    Thread.sleep(1000);
-                } else {
-                    Thread.sleep(600);
-                }
+                System.out.println("end:" + page);
+                Thread.sleep(1010);
             }
         } catch (Exception e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
@@ -152,7 +151,7 @@ public class CrawlerServiceImpl implements CrawlerService {
             saveUpList.add(uploaderEntity);
         }
         videoService.saveOrUpdateBatch(saveVideoList);
-        uploaderService.saveOrUpdateBatch(saveUpList);
+        uploaderService.saveOrUpdateBatch(saveUpList.stream().distinct().collect(Collectors.toList()));
     }
 
     public void saveData(BiliVideoEntity biliVideoEntity) {

@@ -3,7 +3,6 @@
 
 <mapper namespace="io.oken1.modules.mug.dao.ContentDao">
     <select id="gameContent" resultType="map">
-        <![CDATA[
         select
             upper( replace ( uuid( ), "-", "" ) ) pk_id,
             r.aid aid,
@@ -36,15 +35,16 @@
                 ) z on instr( REPLACE ( v.title, ' ', '' ), z.keyword ) > 0
             where
                 v.aid not in ( select c.aid from mug_video_content c where c.type = 'G' )
-                and from_unixtime( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+                and date(from_unixtime( v.pub_time )) >= str_to_date(#{startDate},'%Y-%m-%d')
+                <if test="endDate!=null">
+                     and str_to_date(#{endDate}, '%Y-%m-%d') >= date(from_unixtime( v.pub_time ))
+                </if>
             ) r
         where
             r.row_num = 1
-        ]]>
     </select>
 
     <select id="osuContent" resultType="map">
-        <![CDATA[
         SELECT
             upper( REPLACE ( uuid( ), "-", "" ) ) pk_id,
             v.aid aid,
@@ -57,12 +57,13 @@
             instr( v.title, "|" ) > 0
             AND instr( v.title, "%" ) > 0
             AND v.aid NOT IN ( SELECT c.aid FROM mug_video_content c WHERE c.type = 'G' )
-            AND from_unixtime( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
-        ]]>
+            AND date(from_unixtime( v.pub_time )) >= str_to_date(#{startDate},'%Y-%m-%d')
+            <if test="endDate!=null">
+                and str_to_date(#{endDate}, '%Y-%m-%d') >= date(from_unixtime( v.pub_time ))
+            </if>
     </select>
 
     <insert id="insertGameContent">
-        <![CDATA[
         insert mug_video_content ( pk_id, aid, type, content_id, keyword, update_time ) select
         upper( replace ( uuid( ), "-", "" ) ) pk_id,
         r.aid aid,
@@ -95,11 +96,13 @@
                 ) z on instr( REPLACE ( v.title, ' ', '' ), z.keyword ) > 0
             where
                 v.aid not in ( select c.aid from mug_video_content c where c.type = 'G' )
-                and from_unixtime( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+                and date(from_unixtime( v.pub_time )) >= str_to_date(#{startDate},'%Y-%m-%d')
+                <if test="endDate!=null">
+                    and str_to_date(#{endDate}, '%Y-%m-%d') >= date(from_unixtime( v.pub_time ))
+                </if>
             ) r
         where
             r.row_num = 1
-        ]]>
     </insert>
 
     <insert id="insertOsuContent">
@@ -116,6 +119,13 @@
             instr( v.title, "|" ) > 0
             AND instr( v.title, "%" ) > 0
             AND v.aid NOT IN ( SELECT c.aid FROM mug_video_content c WHERE c.type = 'G' )
-            AND from_unixtime( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+            AND date(from_unixtime( v.pub_time )) >= str_to_date(#{startDate},'%Y-%m-%d')
+            <if test="endDate!=null">
+                and str_to_date(#{endDate}, '%Y-%m-%d') >= date(from_unixtime( v.pub_time ))
+            </if>
     </insert>
+
+    <select id="findContent" resultType="io.oken1.modules.mug.entity.ContentEntity">
+        select * from mug_video_content c where c.aid = #{aid} and c.content_id = #{contentId}
+    </select>
 </mapper>

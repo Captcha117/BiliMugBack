@@ -9,10 +9,10 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 
 public interface ContentService extends IService<ContentEntity> {
-    Object gameContent(String startDate);
+    Object gameContent(String startDate, String endDate);
 
-    Object insertGameContent(String startDate);
+    Object insertGameContent(String startDate, String endDate);
 
-    Object updateContent(String aid, String oldContent, String newType, String newContent);
+    Object updateContent(int aid, String oldContent, String newType, String newContent);
 }
 

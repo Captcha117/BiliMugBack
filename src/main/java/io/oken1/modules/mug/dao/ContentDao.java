@@ -10,11 +10,13 @@ import java.util.List;
 
 @Mapper
 public interface ContentDao extends BaseMapper<ContentEntity> {
-    List<LinkedHashMap> gameContent(String startDate);
+    List<LinkedHashMap> gameContent(String startDate, String endDate);
 
-    List<LinkedHashMap> osuContent(String startDate);
+    List<LinkedHashMap> osuContent(String startDate, String endDate);
 
-    void insertGameContent(String startDate);
+    void insertGameContent(String startDate, String endDate);
 
-    void insertOsuContent(String startDate);
+    void insertOsuContent(String startDate, String endDate);
+
+    ContentEntity findContent(int aid, String contentId);
 }

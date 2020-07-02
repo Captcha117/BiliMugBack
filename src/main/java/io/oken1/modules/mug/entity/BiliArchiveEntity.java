@@ -124,11 +124,11 @@ public class BiliArchiveEntity {
             }
 
             public String getTitle() {
-                return title.replace("\n", "").replace("	", "");
+                return title.replace("\n", "").replace("	", "").replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "");
             }
 
             public void setTitle(String title) {
-                this.title = title;
+                this.title = title.replace("\n", "").replace("	", "").replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "");
             }
 
             public Integer getDuration() {

@@ -10,8 +10,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@TableName("mug_video_content")
-public class ContentEntity implements Serializable {
+@TableName("mug_dssq")
+public class DssqEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,30 +19,35 @@ public class ContentEntity implements Serializable {
      * 主键
      */
     @TableId
-    private String pkId;
+    private Long pkId;
     /**
      * AV号
      */
     private Integer aid;
     /**
-     * 类型
+     * dssq关键词
      */
-    private String type;
+    private String keyword;
     /**
-     * 内容ID
+     * 内容
      */
-    private String contentId;
+    private String conent;
+    /**
+     * 更新人
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Long updateUser;
     /**
      * 更新时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-    public String getPkId() {
+    public Long getPkId() {
         return pkId;
     }
 
-    public void setPkId(String pkId) {
+    public void setPkId(Long pkId) {
         this.pkId = pkId;
     }
 
@@ -54,20 +59,28 @@ public class ContentEntity implements Serializable {
         this.aid = aid;
     }
 
-    public String getType() {
-        return type;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
-    public String getContentId() {
-        return contentId;
+    public String getConent() {
+        return conent;
     }
 
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
+    public void setConent(String conent) {
+        this.conent = conent;
+    }
+
+    public Long getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(Long updateUser) {
+        this.updateUser = updateUser;
     }
 
     public Date getUpdateTime() {

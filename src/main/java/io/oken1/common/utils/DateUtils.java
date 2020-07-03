@@ -155,4 +155,24 @@ public class DateUtils {
         DateTime dateTime = new DateTime(date);
         return dateTime.plusYears(years).toDate();
     }
+
+    /**
+     * Unix时间戳转为时间
+     *
+     * @param unix Unix时间戳
+     * @return Unix时间戳对应的时间
+     */
+    public static Date unixToDate(Long unix) {
+        return new Date(unix * 1000);
+    }
+
+    /**
+     * Unix时间戳转为时间字符串
+     *
+     * @param unix Unix时间戳
+     * @return Unix时间戳对应的时间字符串
+     */
+    public static String unixToString(Long unix) {
+        return format(unixToDate(unix), DATE_TIME_PATTERN);
+    }
 }

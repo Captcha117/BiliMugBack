@@ -50,7 +50,7 @@
         from
         mug_video v
         where
-        from_unixtime( v.pub_time ) < #{date}
+        v.pub_time < #{date}
         group by
         v.uid
         ) z
@@ -99,7 +99,7 @@
         where
         v.dssq is null
         and v.copyright = '1'
-        and from_unixtime( v.pub_time ) < #{date} group by v.uid having sum( 1 ) >= 15
+        and v.pub_time < #{date} group by v.uid having sum( 1 ) >= 15
         ) z
         left join mug_uploader u on z.uid = u.uid
         order by

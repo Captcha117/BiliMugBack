@@ -41,7 +41,7 @@ public class BiliArchiveEntity {
             /**
              * 视频AV号
              */
-            public Integer aid;
+            public Long aid;
             /**
              * 视频BV号
              */
@@ -53,7 +53,7 @@ public class BiliArchiveEntity {
             /**
              * 发布unix时间
              */
-            public Integer pubdate;
+            public Long pubdate;
             /**
              * ?
              */
@@ -83,11 +83,11 @@ public class BiliArchiveEntity {
              */
             public Stat stat;
 
-            public Integer getAid() {
+            public Long getAid() {
                 return aid;
             }
 
-            public void setAid(Integer aid) {
+            public void setAid(Long aid) {
                 this.aid = aid;
             }
 
@@ -107,11 +107,11 @@ public class BiliArchiveEntity {
                 this.copyright = copyright;
             }
 
-            public Integer getPubdate() {
+            public Long getPubdate() {
                 return pubdate;
             }
 
-            public void setPubdate(Integer pubdate) {
+            public void setPubdate(Long pubdate) {
                 this.pubdate = pubdate;
             }
 
@@ -171,16 +171,6 @@ public class BiliArchiveEntity {
                 this.stat = stat;
             }
 
-            public String archivesToString() {
-                /**
-                 *AV+标题+时间戳+Excel时间+原创/搬运+分P数+时长+UP主string+视频详情string
-                 */
-                return this.getAid() + "	" + this.getTitle() + "	" + this.getPubdate() + "	"
-                        + ((this.getPubdate() + 28800) / 86400 + 25569) + "	" + this.getCopyright()
-                        + "	" + this.getVideos() + "	" + this.getDuration() + "	" + this.owner.ownerToString()
-                        + this.stat.statToString();
-            }
-
             /**
              * UP主
              */
@@ -188,7 +178,7 @@ public class BiliArchiveEntity {
                 /**
                  * UP主UID
                  */
-                public Integer mid;
+                public Long mid;
                 /**
                  * UP主ID
                  */
@@ -198,11 +188,11 @@ public class BiliArchiveEntity {
                  */
                 public String face;
 
-                public Integer getMid() {
+                public Long getMid() {
                     return mid;
                 }
 
-                public void setMid(Integer mid) {
+                public void setMid(Long mid) {
                     this.mid = mid;
                 }
 

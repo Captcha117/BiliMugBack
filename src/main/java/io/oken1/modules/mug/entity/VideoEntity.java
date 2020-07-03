@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.io.Serializable;
 import java.util.Date;
 
+import io.oken1.common.utils.DateUtils;
 import lombok.Data;
 
 @Data
@@ -16,7 +17,7 @@ public class VideoEntity implements Serializable {
      * AV号
      */
     @TableId(type = IdType.INPUT)
-    private Integer aid;
+    private Long aid;
     /**
      * BV号
      */
@@ -28,7 +29,7 @@ public class VideoEntity implements Serializable {
     /**
      * 发布时间戳
      */
-    private Integer pubTime;
+    private Date pubTime;
     /**
      * 自制1，搬运2
      */
@@ -44,7 +45,7 @@ public class VideoEntity implements Serializable {
     /**
      * UP主ID
      */
-    private Integer uid;
+    private Long uid;
     /**
      * 播放
      */
@@ -119,7 +120,7 @@ public class VideoEntity implements Serializable {
     public VideoEntity() {
     }
 
-    public VideoEntity(Integer aid, String bvid, Integer copyright, Integer view, Integer danmaku, Integer reply,
+    public VideoEntity(Long aid, String bvid, Integer copyright, Integer view, Integer danmaku, Integer reply,
                        Integer favorite, Integer coin, Integer share, Integer like) {
         this.aid = aid;
         this.bid = bvid;
@@ -133,13 +134,13 @@ public class VideoEntity implements Serializable {
         this.iine = like;
     }
 
-    public VideoEntity(Integer aid, String bid, String title, Integer pubTime, Integer copyright, Integer ps,
-                       Integer duration, Integer uid, Integer play, Integer danmu, Integer comment, Integer favorite,
+    public VideoEntity(Long aid, String bid, String title, Long pubUnixTime, Integer copyright, Integer ps,
+                       Integer duration, Long uid, Integer play, Integer danmu, Integer comment, Integer favorite,
                        Integer coin, Integer share, Integer iine, String folder) {
         this.aid = aid;
         this.bid = bid;
         this.title = title;
-        this.pubTime = pubTime;
+        this.pubTime = DateUtils.unixToDate(pubUnixTime);
         this.copyright = copyright;
         this.ps = ps;
         this.duration = duration;

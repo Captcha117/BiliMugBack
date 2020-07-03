@@ -41,8 +41,9 @@ public class ContentServiceImpl extends ServiceImpl<ContentDao, ContentEntity> i
     }
 
     @Override
-    public Object updateContent(int aid, String oldContent, String newType, String newContent) {
-        ContentEntity contentEntity = null;
+    public Object updateContent(Long aid, String oldContent, String newType, String newContent) {
+        ContentEntity contentEntity = new ContentEntity();
+        // 非空则update
         if (!StringUtils.isBlank(oldContent)) {
             contentEntity = contentDao.findContent(aid, oldContent);
             if (contentEntity == null) {
@@ -54,9 +55,11 @@ public class ContentServiceImpl extends ServiceImpl<ContentDao, ContentEntity> i
                 return "success";
             }
         } else {
+            // 否则add
             contentEntity.setAid(aid);
             contentEntity.setType(newType);
-            contentEntity.setType(newContent);
+            contentEntity.setContentId(newContent);
+            contentEntity.setKeyword("admin");
             saveOrUpdate(contentEntity);
             return "success";
         }

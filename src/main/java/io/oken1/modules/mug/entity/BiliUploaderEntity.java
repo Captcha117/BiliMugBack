@@ -1,7 +1,5 @@
 package io.oken1.modules.mug.entity;
 
-import java.util.List;
-
 public class BiliUploaderEntity {
 
     public UserData data;
@@ -26,11 +24,11 @@ public class BiliUploaderEntity {
         }
 
         public class Card {
-            public Integer getMid() {
+            public Long getMid() {
                 return mid;
             }
 
-            public void setMid(Integer mid) {
+            public void setMid(Long mid) {
                 this.mid = mid;
             }
 
@@ -82,7 +80,7 @@ public class BiliUploaderEntity {
                 this.attention = attention;
             }
 
-            public Integer mid;
+            public Long mid;
             public String name;
             public String sex;
             public String face;

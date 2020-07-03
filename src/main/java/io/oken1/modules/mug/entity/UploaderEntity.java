@@ -15,7 +15,7 @@ public class UploaderEntity implements Serializable {
      * UID
      */
     @TableId(type = IdType.INPUT)
-    private Integer uid;
+    private Long uid;
     /**
      * ID
      */
@@ -30,7 +30,7 @@ public class UploaderEntity implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-    public UploaderEntity(Integer uid, String id, String face) {
+    public UploaderEntity(Long uid, String id, String face) {
         this.uid = uid;
         this.id = id;
         this.face = face;

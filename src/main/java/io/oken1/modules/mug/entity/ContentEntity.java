@@ -19,11 +19,11 @@ public class ContentEntity implements Serializable {
      * 主键
      */
     @TableId
-    private String pkId;
+    private Long pkId;
     /**
      * AV号
      */
-    private Integer aid;
+    private Long aid;
     /**
      * 类型
      */
@@ -33,24 +33,28 @@ public class ContentEntity implements Serializable {
      */
     private String contentId;
     /**
+     * 关键词
+     */
+    private String keyword;
+    /**
      * 更新时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-    public String getPkId() {
+    public Long getPkId() {
         return pkId;
     }
 
-    public void setPkId(String pkId) {
+    public void setPkId(Long pkId) {
         this.pkId = pkId;
     }
 
-    public Integer getAid() {
+    public Long getAid() {
         return aid;
     }
 
-    public void setAid(Integer aid) {
+    public void setAid(Long aid) {
         this.aid = aid;
     }
 
@@ -68,6 +72,14 @@ public class ContentEntity implements Serializable {
 
     public void setContentId(String contentId) {
         this.contentId = contentId;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public Date getUpdateTime() {

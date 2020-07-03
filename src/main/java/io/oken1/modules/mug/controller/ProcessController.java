@@ -1,5 +1,7 @@
 package io.oken1.modules.mug.controller;
 
+import cn.hutool.core.date.DateUtil;
+import io.oken1.common.utils.DateUtils;
 import io.oken1.common.utils.R;
 import io.oken1.modules.mug.service.ContentService;
 import io.oken1.modules.mug.service.DssqService;
@@ -10,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -79,13 +82,32 @@ public class ProcessController {
             @ApiImplicitParam(name = "newType", value = "新类型", required = true, paramType = "query"),
             @ApiImplicitParam(name = "newContent", value = "新内容", required = true, paramType = "query")
     })
-    @GetMapping("/updateContent")
-    public R updateContent(int aid, String oldContent, String newType, String newContent) {
+    @PostMapping("/updateContent")
+    public R updateContent(Long aid, String oldContent, String newType, String newContent) {
         if (StringUtils.isEmpty(oldContent) && StringUtils.isEmpty(newType)) {
             return R.error();
         }
         Object result = contentService.updateContent(aid, oldContent, newType, newContent);
         return R.ok().put("result", result);
+    }
+
+
+    /**
+     * 获取未分类的视频
+     *
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @return 视频信息
+     */
+    @ApiOperation("获取未分类的视频")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "play", value = "最低播放量", required = true, paramType = "query")
+    })
+    @PostMapping("/unclassified")
+    public R unclassifiedVideos(String startDate, String endDate, int play) {
+        return null;
     }
 
     /**

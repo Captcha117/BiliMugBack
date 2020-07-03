@@ -16,7 +16,7 @@ public class BiliVideoEntity {
         /**
          * 视频AV号
          */
-        public Integer aid;
+        public Long aid;
         /**
          * 视频BV号
          */
@@ -54,11 +54,11 @@ public class BiliVideoEntity {
          */
         public Integer like;
 
-        public Integer getAid() {
+        public Long getAid() {
             return aid;
         }
 
-        public void setAid(Integer aid) {
+        public void setAid(Long aid) {
             this.aid = aid;
         }
 

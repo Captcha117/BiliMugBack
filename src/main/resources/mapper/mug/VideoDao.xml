@@ -106,4 +106,23 @@
         z.play_avg desc
         limit 30]]>
     </select>
+
+    <select id="getUnclassified" resultType="io.oken1.modules.mug.entity.VideoEntity">
+        SELECT
+            *
+        FROM
+            mug_video v
+        WHERE
+              v.aid NOT IN ( SELECT c.aid FROM mug_video_content c )
+          and v.play >= #{minPlay}
+          <choose>
+              <when test="endDate!=null">
+                  and date(v.pub_time) >= str_to_date(#{startDate},'%Y-%m-%d')
+                  and str_to_date(#{endDate},'%Y-%m-%d') >= date(v.pub_time)
+              </when>
+              <otherwise>
+                  and date(v.pub_time) = str_to_date(#{startDate},'%Y-%m-%d')
+              </otherwise>
+          </choose>
+    </select>
 </mapper>

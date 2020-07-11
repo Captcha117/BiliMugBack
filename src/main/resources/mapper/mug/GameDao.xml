@@ -4,9 +4,8 @@
 <mapper namespace="io.oken1.modules.mug.dao.GameDao">
     <select id="getGameList" resultType="map">
         SELECT
-        g.game_id,
-        g.common_name,
-        getGameSubName(g.game_id) sub_name
+        g.game_id gameId,
+        g.common_name commonName
         FROM
         mug_game g
         ORDER BY

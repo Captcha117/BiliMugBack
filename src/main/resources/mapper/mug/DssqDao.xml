@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.oken1.modules.mug.dao.DssqDao">
+    <select id="showDssq" resultType="map">
+        SELECT
+            r.aid aid,
+            r.keyword keyword,
+            r.title content,
+            r.content_id
+        FROM
+            (
+                SELECT
+                    v.aid,
+                    v.title,
+                    z.keyword,
+                    row_number ( ) over ( PARTITION BY v.aid, c.content_id ORDER BY v.aid, z.keyword_index ) row_num,
+                    c.content_id
+                FROM
+                    mug_video v
+                        JOIN ( SELECT * FROM mug_keyword k WHERE k.game_id = 'DSSQ' ORDER BY k.keyword_index ) z ON instr( REPLACE ( v.title, ' ', '' ), z.keyword ) > 0
+                        JOIN mug_video_content c ON c.aid = v.aid
+                        AND c.type = 'G'
+                WHERE
+                    date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+                    <if test="endDate!=null">
+                        and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
+                    </if>
+            ) r
+        WHERE
+            r.row_num = 1
+          AND ( r.keyword != '疯狂' OR r.content_id != '6070426AABA7415C9952A23FFA81F5EF' )
+          AND ( r.keyword != '爆炸' OR r.content_id != '1E1F9A2FE9294511B9C2A5AE1B93BE5C' )
+    </select>
+
+    <insert id="insertDssq">
+        INSERT mug_dssq ( aid, keyword, content, update_time ) SELECT
+        r.aid aid,
+        r.keyword keyword,
+        r.title content,
+        current_timestamp ( ) update_time
+        FROM
+            (
+                SELECT
+                    v.aid,
+                    v.title,
+                    z.keyword,
+                    row_number ( ) over ( PARTITION BY v.aid, c.content_id ORDER BY v.aid, z.keyword_index ) row_num,
+                    c.content_id
+                FROM
+                    mug_video v
+                        JOIN ( SELECT * FROM mug_keyword k WHERE k.game_id = 'DSSQ' ORDER BY k.keyword_index ) z ON instr( REPLACE ( v.title, ' ', '' ), z.keyword ) > 0
+                        JOIN mug_video_content c ON c.aid = v.aid
+                        AND c.type = 'G'
+                WHERE
+                    v.aid NOT IN ( SELECT d.aid FROM mug_dssq d )
+                    and date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+                    <if test="endDate!=null">
+                        and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
+                    </if>
+            ) r
+        WHERE
+            r.row_num = 1
+          AND ( r.keyword != '疯狂' OR r.content_id != '6070426AABA7415C9952A23FFA81F5EF' )
+          AND ( r.keyword != '爆炸' OR r.content_id != '1E1F9A2FE9294511B9C2A5AE1B93BE5C' )
+    </insert>
+</mapper>

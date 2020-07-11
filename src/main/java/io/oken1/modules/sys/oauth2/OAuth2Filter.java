@@ -8,6 +8,7 @@ import org.apache.http.HttpStatus;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletRequest;
@@ -22,6 +23,31 @@ import java.io.IOException;
  * @author Mark sunlightcs@gmail.com
  */
 public class OAuth2Filter extends AuthenticatingFilter {
+    @Override
+    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletRequest httpRequest = WebUtils.toHttp(request);
+        HttpServletResponse httpResponse = WebUtils.toHttp(response);
+        if (httpRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
+            setHeader(httpRequest, httpResponse);
+            return true;
+        }
+        return super.preHandle(request, response);
+    }
+
+    /**
+     * 为response设置header，实现跨域
+     */
+    private void setHeader(HttpServletRequest request, HttpServletResponse response) {
+        //跨域的header设置
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "86400");
+        response.setHeader("Access-Control-Allow-Headers", "content-type,x-requested-with,token");
+        //防止乱码，适用于传输JSON数据
+        response.setHeader("Content-Type", "application/json;charset=UTF-8");
+        response.setStatus(HttpStatus.SC_OK);
+    }
 
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {

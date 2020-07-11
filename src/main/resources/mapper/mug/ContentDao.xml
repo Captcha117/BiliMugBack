@@ -27,7 +27,7 @@
                     k.keyword_index
                 from
                     mug_game g
-                    join mug_game_keyword k on g.game_id = k.game_id
+                    join mug_keyword k on g.game_id = k.game_id
                 order by
                     g.filter_index,
                     k.keyword_index
@@ -86,7 +86,7 @@
                     k.keyword_index
                 from
                     mug_game g
-                    join mug_game_keyword k on g.game_id = k.game_id
+                    join mug_keyword k on g.game_id = k.game_id
                 order by
                     g.filter_index,
                     k.keyword_index
@@ -121,7 +121,7 @@
             </if>
     </insert>
 
-    <select id="findContent" resultType="io.oken1.modules.mug.entity.ContentEntity">
+    <select id="getContent" resultType="io.oken1.modules.mug.entity.ContentEntity">
         select * from mug_video_content c where c.aid = #{aid} and c.content_id = #{contentId}
     </select>
 </mapper>

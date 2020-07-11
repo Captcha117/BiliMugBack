@@ -1,8 +1,13 @@
 package io.oken1.modules.mug.controller;
 
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSONArray;
 import io.oken1.common.utils.DateUtils;
 import io.oken1.common.utils.R;
+import io.oken1.modules.mug.dao.VideoDao;
+import io.oken1.modules.mug.entity.ContentEntity;
+import io.oken1.modules.mug.entity.VideoEntity;
 import io.oken1.modules.mug.service.ContentService;
 import io.oken1.modules.mug.service.DssqService;
 import io.swagger.annotations.Api;
@@ -11,12 +16,12 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Api(value = "视频内容处理接口", tags = {"视频内容处理接口"})
 @RestController
@@ -28,6 +33,9 @@ public class ProcessController {
     @Autowired
     DssqService dssqService;
 
+    @Autowired
+    VideoDao videoDao;
+
     /**
      * 视频根据游戏分类
      *
@@ -38,12 +46,12 @@ public class ProcessController {
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
     })
-    @GetMapping("/gameContent")
+    @GetMapping("/showGameContent")
     public R gameContent(String startDate, String endDate) {
         if (StringUtils.isBlank(startDate)) {
             return R.error();
         }
-        Object result = contentService.gameContent(startDate, endDate);
+        Object result = contentService.showGameContent(startDate, endDate);
         return R.ok().put("result", result);
     }
 
@@ -57,7 +65,7 @@ public class ProcessController {
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
     })
-    @GetMapping("/insertGameContent")
+    @PostMapping("/insertGameContent")
     public R insertGameContent(String startDate, String endDate) {
         if (StringUtils.isBlank(startDate)) {
             return R.error();
@@ -91,6 +99,25 @@ public class ProcessController {
         return R.ok().put("result", result);
     }
 
+    /**
+     * 批量更新视频内容
+     *
+     * @param contents 视频内容
+     * @return 视频信息
+     */
+    @ApiOperation("批量更新视频内容")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "contents", value = "视频内容", required = true, paramType = "query"),
+    })
+    @PostMapping("/updateContents")
+    public R updateContents(@RequestBody String contents) {
+        LinkedHashMap data = (LinkedHashMap) JSONUtils.parse(contents);
+        JSONArray jsonArr = JSONArray.parseArray((String) data.get("contents"));
+        List<ContentEntity> list = jsonArr.toJavaList(ContentEntity.class);
+
+        Object result = contentService.saveOrUpdateBatch(list);
+        return R.ok().put("result", result);
+    }
 
     /**
      * 获取未分类的视频
@@ -102,27 +129,54 @@ public class ProcessController {
     @ApiOperation("获取未分类的视频")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "play", value = "最低播放量", required = true, paramType = "query")
+            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
+            @ApiImplicitParam(name = "minPlay", value = "最低播放量", required = true, paramType = "query")
     })
-    @PostMapping("/unclassified")
-    public R unclassifiedVideos(String startDate, String endDate, int play) {
-        return null;
+    @GetMapping("/unclassified")
+    public R getUnclassifiedVideos(String startDate, String endDate, int minPlay) {
+        List<VideoEntity> result = videoDao.getUnclassified(startDate, endDate, minPlay);
+        return R.ok().put("result", result);
     }
 
     /**
      * 显示dssq分类的结果
      *
      * @param startDate 开始日期
+     * @param endDate   结束日期
      * @return 显示dssq分类的结果
      */
     @ApiOperation("显示dssq分类的结果")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
     })
-    @GetMapping("/updateDssq")
-    public R updateDssq(String startDate) {
-        dssqService.updateDssq(startDate);
-        return null;
+    @GetMapping("/showDssq")
+    public R showDssq(String startDate, String endDate) {
+        if (StringUtils.isBlank(startDate)) {
+            return R.error();
+        }
+        Object result = dssqService.showDssq(startDate, endDate);
+        return R.ok().put("result", result);
+    }
+
+    /**
+     * 添加根据dssq分类的结果
+     *
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @return 分类添加结果
+     */
+    @ApiOperation("添加根据dssq分类的结果")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
+    })
+    @PostMapping("/insertDssq")
+    public R insertDssq(String startDate, String endDate) {
+        if (StringUtils.isBlank(startDate)) {
+            return R.error();
+        }
+        Object result = dssqService.insertDssq(startDate, endDate);
+        return R.ok().put("result", result);
     }
 }

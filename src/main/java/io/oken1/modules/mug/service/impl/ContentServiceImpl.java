@@ -20,7 +20,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentDao, ContentEntity> i
     ContentDao contentDao;
 
     @Override
-    public Object gameContent(String startDate, String endDate) {
+    public Object showGameContent(String startDate, String endDate) {
         List<LinkedHashMap> result = new ArrayList<>();
         List<LinkedHashMap> gameResult = contentDao.gameContent(startDate, endDate);
         List<LinkedHashMap> osuResult = contentDao.osuContent(startDate, endDate);
@@ -45,9 +45,10 @@ public class ContentServiceImpl extends ServiceImpl<ContentDao, ContentEntity> i
         ContentEntity contentEntity = new ContentEntity();
         // 非空则update
         if (!StringUtils.isBlank(oldContent)) {
-            contentEntity = contentDao.findContent(aid, oldContent);
-            if (contentEntity == null) {
+            if (contentDao.getContent(aid, oldContent) == null) {
                 return "未找到对应的content";
+            } else if (contentDao.getContent(aid, newContent) == null) {
+                return "content已存在";
             } else {
                 contentEntity.setType(newType);
                 contentEntity.setContentId(newContent);

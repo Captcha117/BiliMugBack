@@ -18,5 +18,5 @@ public interface ContentDao extends BaseMapper<ContentEntity> {
 
     void insertOsuContent(String startDate, String endDate);
 
-    ContentEntity findContent(Long aid, String contentId);
+    ContentEntity getContent(Long aid, String contentId);
 }

@@ -46,6 +46,19 @@ public class DateUtils {
     /**
      * 字符串转换成日期
      * @param strDate 日期字符串
+     */
+    public static Date stringToDate(String strDate) {
+        if (StringUtils.isBlank(strDate)){
+            return null;
+        }
+
+        DateTimeFormatter fmt = DateTimeFormat.forPattern(DATE_PATTERN);
+        return fmt.parseLocalDateTime(strDate).toDate();
+    }
+
+    /**
+     * 字符串转换成日期
+     * @param strDate 日期字符串
      * @param pattern 日期的格式，如：DateUtils.DATE_TIME_PATTERN
      */
     public static Date stringToDate(String strDate, String pattern) {

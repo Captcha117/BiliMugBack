@@ -64,4 +64,20 @@
           AND ( r.keyword != '疯狂' OR r.content_id != '6070426AABA7415C9952A23FFA81F5EF' )
           AND ( r.keyword != '爆炸' OR r.content_id != '1E1F9A2FE9294511B9C2A5AE1B93BE5C' )
     </insert>
+
+    <insert id="insertFolderDssq">
+        insert mug_dssq (aid, keyword, content, update_time) SELECT
+            v.aid,
+            '封面' keyword,
+            v.folder content,
+            CURRENT_TIMESTAMP ( ) update_time
+        FROM
+            mug_video v
+        WHERE
+            v.aid IN
+        <foreach item="aids" index="index" collection="array"
+                 open="(" separator="," close=")">
+            #{aids}
+        </foreach>
+    </insert>
 </mapper>

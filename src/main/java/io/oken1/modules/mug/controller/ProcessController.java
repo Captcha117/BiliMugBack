@@ -5,6 +5,7 @@ import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSONArray;
 import io.oken1.common.utils.DateUtils;
 import io.oken1.common.utils.R;
+import io.oken1.modules.mug.dao.DssqDao;
 import io.oken1.modules.mug.dao.VideoDao;
 import io.oken1.modules.mug.entity.ContentEntity;
 import io.oken1.modules.mug.entity.VideoEntity;
@@ -35,6 +36,9 @@ public class ProcessController {
 
     @Autowired
     VideoDao videoDao;
+
+    @Autowired
+    DssqDao dssqDao;
 
     /**
      * 视频根据游戏分类
@@ -130,10 +134,13 @@ public class ProcessController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
-            @ApiImplicitParam(name = "minPlay", value = "最低播放量", required = true, paramType = "query")
+            @ApiImplicitParam(name = "minPlay", value = "最低播放量", paramType = "query")
     })
     @GetMapping("/unclassified")
-    public R getUnclassifiedVideos(String startDate, String endDate, int minPlay) {
+    public R getUnclassifiedVideos(String startDate, String endDate, Integer minPlay) {
+        if (minPlay == null) {
+            minPlay = 10000;
+        }
         List<VideoEntity> result = videoDao.getUnclassified(startDate, endDate, minPlay);
         return R.ok().put("result", result);
     }
@@ -143,19 +150,40 @@ public class ProcessController {
      *
      * @param startDate 开始日期
      * @param endDate   结束日期
-     * @return 显示dssq分类的结果
+     * @return 显示标题dssq分类的结果
      */
-    @ApiOperation("显示dssq分类的结果")
+    @ApiOperation("显示标题dssq分类的结果")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
     })
-    @GetMapping("/showDssq")
-    public R showDssq(String startDate, String endDate) {
+    @GetMapping("/showTitleDssq")
+    public R showTitleDssq(String startDate, String endDate) {
         if (StringUtils.isBlank(startDate)) {
             return R.error();
         }
-        Object result = dssqService.showDssq(startDate, endDate);
+        Object result = dssqService.showTitleDssq(startDate, endDate);
+        return R.ok().put("result", result);
+    }
+
+    /**
+     * 添加标题dssq
+     *
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @return 分类添加结果
+     */
+    @ApiOperation("添加标题dssq")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
+    })
+    @PostMapping("/insertTitleDssq")
+    public R insertTitleDssq(String startDate, String endDate) {
+        if (StringUtils.isBlank(startDate)) {
+            return R.error();
+        }
+        Object result = dssqService.insertTitleDssq(startDate, endDate);
         return R.ok().put("result", result);
     }
 
@@ -169,14 +197,35 @@ public class ProcessController {
     @ApiOperation("添加根据dssq分类的结果")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
+            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
+            @ApiImplicitParam(name = "updateDate", value = "视频更新开始日期", paramType = "query"),
+            @ApiImplicitParam(name = "minPlay", value = "最低播放量", paramType = "query")
     })
-    @PostMapping("/insertDssq")
-    public R insertDssq(String startDate, String endDate) {
-        if (StringUtils.isBlank(startDate)) {
+    @GetMapping("/unclassifiedDssq")
+    public R unclassifiedDssq(String startDate, String endDate, String updateDate, Integer minPlay) {
+        if (minPlay == null) {
+            minPlay = 3000;
+        }
+        if (minPlay < 3000) {
             return R.error();
         }
-        Object result = dssqService.insertDssq(startDate, endDate);
+        List<VideoEntity> result = videoDao.getUnclassifiedDssq(startDate, endDate, updateDate, minPlay);
         return R.ok().put("result", result);
+    }
+
+    /**
+     * 添加封面dssq
+     *
+     * @param aids aid数组
+     * @return 添加结果
+     */
+    @ApiOperation("添加封面dssq")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "aids", value = "aid数组", required = true, paramType = "query"),
+    })
+    @PostMapping("/insertFolderDssq")
+    public R insertFolderDssq(@RequestBody Long[] aids) {
+        dssqDao.insertFolderDssq(aids);
+        return R.ok();
     }
 }

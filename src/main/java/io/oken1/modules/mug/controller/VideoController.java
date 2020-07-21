@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import io.oken1.common.utils.DateUtils;
 import io.oken1.modules.mug.dao.VideoDao;
 import io.oken1.modules.mug.service.VideoService;
 import io.swagger.annotations.Api;
@@ -55,7 +57,11 @@ public class VideoController {
 
     @GetMapping("/getRank")
     @ApiOperation("获取视频排名")
-    public R getRank() throws IOException {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true, paramType = "query")
+    })
+    public R getRank(String startDate, String endDate) throws IOException {
         File file = new File("D:\\result.txt");
         if (!file.exists()) {
             file.createNewFile();
@@ -63,16 +69,17 @@ public class VideoController {
         FileWriter writer = new FileWriter(file, true);
         BufferedWriter bWriter = new BufferedWriter(writer);
         bWriter.write("date,,name,value" + "\r\n");
-        LocalDate date = LocalDate.of(2019, 1, 1);
-        while (date.getYear() <= 2019) {
-            System.out.println(date.toString());
-            List<HashMap> result = videoDao.getRank(date.plusDays(1).toString());
+        Date queryDate = DateUtils.stringToDate(startDate);
+        Date end = DateUtils.stringToDate(endDate);
+        while (queryDate.getTime() <= end.getTime()) {
+            System.out.println(queryDate.toString());
+            List<HashMap> result = videoDao.getRank(startDate, DateUtils.format(queryDate));
             for (HashMap hashMap : result) {
-                bWriter.write(date.toString() + "," + hashMap.get("uid") + ","
+                bWriter.write(DateUtils.format(queryDate) + "," + hashMap.get("uid") + ","
                         + hashMap.get("id") + "," + hashMap.get("play") + "\r\n");
                 bWriter.flush();
             }
-            date = date.plusDays(1);
+            queryDate = DateUtils.addDateDays(queryDate, 1);
         }
         bWriter.close();
         return R.ok();

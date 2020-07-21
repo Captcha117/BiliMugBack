@@ -5,8 +5,8 @@ import io.oken1.modules.mug.entity.ContentEntity;
 import io.oken1.modules.mug.entity.DssqEntity;
 
 public interface DssqService {
-    Object showDssq(String startDate, String endDate);
+    Object showTitleDssq(String startDate, String endDate);
 
-    Object insertDssq(String startDate, String endDate);
+    Object insertTitleDssq(String startDate, String endDate);
 }
 

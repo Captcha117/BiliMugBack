@@ -38,26 +38,37 @@
 
     <select id="getRank" resultType="map">
         <![CDATA[
-        select
-        u.uid,
-        u.id,
-        z.play
-        from
-        (
-        select
-        v.uid,
-        sum( v.play ) play
-        from
-        mug_video v
-        where
-        v.pub_time < #{date}
-        group by
-        v.uid
-        ) z
-        left join mug_uploader u on z.uid = u.uid
-        order by
-        z.play desc
-        limit 20]]>
+        SELECT
+            r.*
+        FROM
+            (
+                SELECT
+                    z.uid,
+                    u.id,
+                    round( sum( z.play * z.proportion ), 1 ) play,
+                    count( 1 ) count
+                FROM
+                    (
+                        SELECT
+                            v.uid,
+                            v.pub_time,
+                            v.play,
+                            ifnull( f.proportion, 1 ) proportion
+                        FROM
+                            mug_video v
+                                LEFT JOIN mug_play_config f ON datediff( str_to_date(#{date},'%Y-%m-%d'), date( v.pub_time ) ) = f.date_diff
+                        WHERE
+                            date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+                          AND date( v.pub_time ) <= str_to_date(#{date},'%Y-%m-%d')
+                          AND v.copyright = '1'
+                    ) z
+                        LEFT JOIN mug_uploader u ON z.uid = u.uid
+                GROUP BY
+                    z.uid
+            ) r
+        ORDER BY
+            r.play DESC
+        LIMIT 30]]>
     </select>
 
     <select id="getRankWithoutDssq" resultType="map">
@@ -113,16 +124,29 @@
         FROM
             mug_video v
         WHERE
-              v.aid NOT IN ( SELECT c.aid FROM mug_video_content c )
-          and v.play >= #{minPlay}
-          <choose>
-              <when test="endDate!=null">
-                  and date(v.pub_time) >= str_to_date(#{startDate},'%Y-%m-%d')
-                  and str_to_date(#{endDate},'%Y-%m-%d') >= date(v.pub_time)
-              </when>
-              <otherwise>
-                  and date(v.pub_time) = str_to_date(#{startDate},'%Y-%m-%d')
-              </otherwise>
-          </choose>
+            v.aid NOT IN ( SELECT c.aid FROM mug_video_content c )
+        and v.play >= #{minPlay}
+        AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+        <if test="endDate!=null">
+            and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
+        </if>
+    </select>
+
+    <select id="getUnclassifiedDssq" resultType="io.oken1.modules.mug.entity.VideoEntity">
+        SELECT
+            *
+        FROM
+            mug_video v
+        WHERE
+            v.aid NOT IN ( SELECT d.aid FROM mug_dssq d )
+          AND v.aid IN ( SELECT c.aid FROM mug_video_content c )
+          AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+          <if test="endDate!=null">
+              and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
+          </if>
+          <if test="updateDate!=null">
+              and date( v.update_time ) >= str_to_date(#{updateDate},'%Y-%m-%d')
+          </if>
+          AND v.play >= #{minPlay}
     </select>
 </mapper>

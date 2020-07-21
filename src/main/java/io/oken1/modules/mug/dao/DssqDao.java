@@ -9,7 +9,9 @@ import java.util.List;
 
 @Mapper
 public interface DssqDao extends BaseMapper<DssqEntity> {
-    List<LinkedHashMap> showDssq(String startDate, String endDate);
+    List<LinkedHashMap> showTitleDssq(String startDate, String endDate);
 
-    void insertDssq(String startDate, String endDate);
+    void insertTitleDssq(String startDate, String endDate);
+
+    void insertFolderDssq(Long[] aids);
 }

@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.oken1.modules.mug.entity.GameEntity;
 import io.oken1.modules.mug.service.GameService;
@@ -29,7 +28,7 @@ public class GameController {
     /**
      * 列表
      */
-    @RequestMapping("/listInEdit")
+    @GetMapping("/pageList")
     //@RequiresPermissions("mug:mug:list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = gameService.queryPage(params);
@@ -41,7 +40,7 @@ public class GameController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{gameId}")
+    @GetMapping("/info/{gameId}")
     //@RequiresPermissions("mug:mug:info")
     public R info(@PathVariable("gameId") String gameId) {
         GameEntity game = gameService.getById(gameId);
@@ -52,7 +51,7 @@ public class GameController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     //@RequiresPermissions("mug:mug:save")
     public R save(@RequestBody GameEntity game) {
         gameService.save(game);
@@ -63,7 +62,7 @@ public class GameController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
     //@RequiresPermissions("mug:mug:update")
     public R update(@RequestBody GameEntity game) {
         gameService.updateById(game);
@@ -74,7 +73,7 @@ public class GameController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
     //@RequiresPermissions("mug:mug:delete")
     public R delete(@RequestBody String[] gameIds) {
         gameService.removeByIds(Arrays.asList(gameIds));
@@ -82,13 +81,19 @@ public class GameController {
         return R.ok();
     }
 
-    @RequestMapping("/gameList")
+    /**
+     * 获取简要游戏列表
+     *
+     * @return 分类结果
+     */
+    @ApiOperation("获取简要游戏列表")
+    @GetMapping("/gameList")
     public R gameList() {
         List<LinkedHashMap> result = gameService.getGameList();
         return R.ok().put("result", result);
     }
 
-    @RequestMapping("/gameInfo")
+    @GetMapping("/gameInfo")
     public R gameInfo(String gameId) {
         LinkedHashMap gameInfo = gameService.getGameInfoByGameId(gameId);
         List<LinkedHashMap> songList = gameService.getSongListByGameId(gameId);

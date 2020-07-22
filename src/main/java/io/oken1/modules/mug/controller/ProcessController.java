@@ -188,13 +188,13 @@ public class ProcessController {
     }
 
     /**
-     * 添加根据dssq分类的结果
+     * 获取未被分为dssq的视频
      *
      * @param startDate 开始日期
      * @param endDate   结束日期
-     * @return 分类添加结果
+     * @return 获取未分类视频
      */
-    @ApiOperation("添加根据dssq分类的结果")
+    @ApiOperation("获取未被分为dssq的视频")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),

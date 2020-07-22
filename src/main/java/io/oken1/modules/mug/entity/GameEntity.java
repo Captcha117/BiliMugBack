@@ -1,13 +1,11 @@
 package io.oken1.modules.mug.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import io.oken1.common.utils.MyUtils;
 import lombok.Data;
 
 
@@ -19,7 +17,7 @@ public class GameEntity implements Serializable {
     /**
      * 游戏ID
      */
-    @TableId
+    @TableId(type = IdType.ASSIGN_UUID)
     private String gameId;
     /**
      * 常用名称
@@ -30,13 +28,9 @@ public class GameEntity implements Serializable {
      */
     private String fullName;
     /**
-     * 其它名称
+     * 其他名称
      */
     private String otherName;
-    /**
-     * 图标文件名
-     */
-    private String icon;
     /**
      * 开发商
      */
@@ -48,19 +42,27 @@ public class GameEntity implements Serializable {
     /**
      * 发行时间
      */
-    private Date publishTime;
+    private String publishTime;
     /**
-     * 标签
+     * 游戏标签
      */
-    private String tags;
+    private String gameTag;
+    /**
+     * 视频标签
+     */
+    private String videoTag;
     /**
      * 父游戏ID
      */
     private String parentId;
     /**
-     * 过滤器排序
+     * 类音游
      */
-    private float filterIndex;
+    private String similar;
+    /**
+     * 过滤排序
+     */
+    private Float filterIndex;
     /**
      * 创建时间
      */
@@ -70,7 +72,7 @@ public class GameEntity implements Serializable {
      * 创建人
      */
     @TableField(fill = FieldFill.INSERT)
-    private String createUser;
+    private Long createUser;
     /**
      * 更新时间
      */
@@ -80,6 +82,5 @@ public class GameEntity implements Serializable {
      * 更新人
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private String updateUser;
-
+    private Long updateUser;
 }

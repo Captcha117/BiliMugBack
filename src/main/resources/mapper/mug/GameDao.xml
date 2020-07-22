@@ -8,6 +8,7 @@
         g.common_name commonName
         FROM
         mug_game g
+        where g.parent_id is null
         ORDER BY
         g.common_name
     </select>

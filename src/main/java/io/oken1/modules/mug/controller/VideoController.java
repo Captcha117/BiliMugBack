@@ -73,7 +73,8 @@ public class VideoController {
         Date end = DateUtils.stringToDate(endDate);
         while (queryDate.getTime() <= end.getTime()) {
             System.out.println(queryDate.toString());
-            List<HashMap> result = videoDao.getRank(startDate, DateUtils.format(queryDate));
+            Boolean needProportion = DateUtils.addDateDays(queryDate, 5).getTime() < end.getTime();
+            List<HashMap> result = videoDao.getRank(startDate, DateUtils.format(queryDate), needProportion);
             for (HashMap hashMap : result) {
                 bWriter.write(DateUtils.format(queryDate) + "," + hashMap.get("uid") + ","
                         + hashMap.get("id") + "," + hashMap.get("play") + "\r\n");

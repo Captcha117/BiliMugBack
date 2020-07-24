@@ -45,7 +45,7 @@ public class GameController {
     public R info(@PathVariable("gameId") String gameId) {
         GameEntity game = gameService.getById(gameId);
 
-        return R.ok().put("mug", game);
+        return R.ok().put("gameInfo", game);
     }
 
     /**

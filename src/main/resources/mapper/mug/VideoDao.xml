@@ -37,7 +37,6 @@
     </select>
 
     <select id="getRank" resultType="map">
-        <![CDATA[
         SELECT
             r.*
         FROM
@@ -53,14 +52,22 @@
                             v.uid,
                             v.pub_time,
                             v.play,
-                            ifnull( f.proportion, 1 ) proportion
+                        <choose >
+                            <when test="needProportion">
+                                ifnull( f.proportion, 1 ) proportion
+                            </when>
+                            <otherwise>
+                                1 proportion
+                            </otherwise>
+                        </choose>
                         FROM
                             mug_video v
+                            <if test="needProportion">
                                 LEFT JOIN mug_play_config f ON datediff( str_to_date(#{date},'%Y-%m-%d'), date( v.pub_time ) ) = f.date_diff
+                            </if>
                         WHERE
                             date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
-                          AND date( v.pub_time ) <= str_to_date(#{date},'%Y-%m-%d')
-                          AND v.copyright = '1'
+                          AND str_to_date(#{date},'%Y-%m-%d') >= date( v.pub_time )
                     ) z
                         LEFT JOIN mug_uploader u ON z.uid = u.uid
                 GROUP BY
@@ -68,7 +75,7 @@
             ) r
         ORDER BY
             r.play DESC
-        LIMIT 30]]>
+        LIMIT 30
     </select>
 
     <select id="getRankWithoutDssq" resultType="map">

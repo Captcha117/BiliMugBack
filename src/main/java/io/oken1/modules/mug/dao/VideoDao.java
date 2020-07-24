@@ -15,7 +15,7 @@ public interface VideoDao extends BaseMapper<VideoEntity> {
 
     List<LinkedHashMap> getVideosBySongId(String dongId);
 
-    List<HashMap> getRank(String startDate, String date);
+    List<HashMap> getRank(String startDate, String date, Boolean needProportion);
 
     List<HashMap> getRankWithoutDssq(String date);
 

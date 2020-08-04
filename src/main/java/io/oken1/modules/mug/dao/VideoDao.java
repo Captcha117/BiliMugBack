@@ -15,13 +15,15 @@ public interface VideoDao extends BaseMapper<VideoEntity> {
 
     List<LinkedHashMap> getVideosBySongId(String dongId);
 
-    List<HashMap> getRank(String startDate, String date, Boolean needProportion);
+    List<HashMap> getUpRank(String startDate, String date, Boolean needProportion);
+
+    List<HashMap> getGameRank(String startDate, String date);
 
     List<HashMap> getRankWithoutDssq(String date);
 
     List<LinkedHashMap> getVideosByDates(Date startDate, Date endDate);
 
-    List<VideoEntity> getUnclassified(String startDate, String endDate, Integer minPlay);
+    List<LinkedHashMap> getUnclassified(String startDate, String endDate, Integer minPlay);
 
     List<VideoEntity> getUnclassifiedDssq(String startDate, String endDate, String updateDate, Integer minPlay);
 }

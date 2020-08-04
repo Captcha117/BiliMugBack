@@ -14,4 +14,6 @@ public interface DssqDao extends BaseMapper<DssqEntity> {
     void insertTitleDssq(String startDate, String endDate);
 
     void insertFolderDssq(Long[] aids);
+
+    void manualInsertTitleDssq(Long[] aids);
 }

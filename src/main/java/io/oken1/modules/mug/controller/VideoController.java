@@ -55,13 +55,13 @@ public class VideoController {
         return R.ok().put("videoList", videoList);
     }
 
-    @GetMapping("/getRank")
+    @GetMapping("/getUpRank")
     @ApiOperation("获取视频排名")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", required = true, paramType = "query")
     })
-    public R getRank(String startDate, String endDate) throws IOException {
+    public R getUpRank(String startDate, String endDate) throws IOException {
         File file = new File("D:\\result.txt");
         if (!file.exists()) {
             file.createNewFile();
@@ -74,10 +74,40 @@ public class VideoController {
         while (queryDate.getTime() <= end.getTime()) {
             System.out.println(queryDate.toString());
             Boolean needProportion = DateUtils.addDateDays(queryDate, 5).getTime() < end.getTime();
-            List<HashMap> result = videoDao.getRank(startDate, DateUtils.format(queryDate), needProportion);
+            List<HashMap> result = videoDao.getUpRank(startDate, DateUtils.format(queryDate), needProportion);
             for (HashMap hashMap : result) {
                 bWriter.write(DateUtils.format(queryDate) + "," + hashMap.get("uid") + ","
                         + hashMap.get("id") + "," + hashMap.get("play") + "\r\n");
+                bWriter.flush();
+            }
+            queryDate = DateUtils.addDateDays(queryDate, 1);
+        }
+        bWriter.close();
+        return R.ok();
+    }
+
+    @GetMapping("/getGameRank")
+    @ApiOperation("获取视频排名")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true, paramType = "query")
+    })
+    public R getGameRank(String startDate, String endDate) throws IOException {
+        File file = new File("D:\\GameRank.txt");
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        FileWriter writer = new FileWriter(file, true);
+        BufferedWriter bWriter = new BufferedWriter(writer);
+        bWriter.write("date,,name,value" + "\r\n");
+        Date queryDate = DateUtils.stringToDate(startDate);
+        Date end = DateUtils.stringToDate(endDate);
+        while (queryDate.getTime() <= end.getTime()) {
+            System.out.println(queryDate.toString());
+            List<HashMap> result = videoDao.getGameRank(startDate, DateUtils.format(queryDate));
+            for (HashMap hashMap : result) {
+                bWriter.write(DateUtils.format(queryDate) + "," + hashMap.get("game_id") + ","
+                        + hashMap.get("game") + "," + hashMap.get("play") + "\r\n");
                 bWriter.flush();
             }
             queryDate = DateUtils.addDateDays(queryDate, 1);

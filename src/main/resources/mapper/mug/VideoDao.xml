@@ -36,7 +36,7 @@
         and v.content_id = #{songId}
     </select>
 
-    <select id="getRank" resultType="map">
+    <select id="getUpRank" resultType="map">
         SELECT
             r.*
         FROM
@@ -68,6 +68,7 @@
                         WHERE
                             date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
                           AND str_to_date(#{date},'%Y-%m-%d') >= date( v.pub_time )
+                          and v.aid not in (select d.aid from mug_dssq d)
                     ) z
                         LEFT JOIN mug_uploader u ON z.uid = u.uid
                 GROUP BY
@@ -75,6 +76,31 @@
             ) r
         ORDER BY
             r.play DESC
+        LIMIT 30
+    </select>
+
+    <select id="getGameRank" resultType="map">
+        SELECT
+        z.*,
+        g.common_name game
+        FROM
+        (
+        SELECT
+        c.content_id game_id,
+        sum( v.play ) play
+        FROM
+        mug_video v
+        LEFT JOIN mug_video_content c ON v.aid = c.aid
+        WHERE
+        date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+        AND str_to_date(#{date},'%Y-%m-%d') >= date( v.pub_time )
+          and v.aid not in (select d.aid from mug_dssq d)
+        GROUP BY
+        c.content_id
+        ) z
+        JOIN mug_game g ON z.game_id = g.game_id
+        ORDER BY
+        play DESC
         LIMIT 30
     </select>
 
@@ -139,14 +165,15 @@
         </if>
     </select>
 
-    <select id="getUnclassifiedDssq" resultType="io.oken1.modules.mug.entity.VideoEntity">
+    <select id="getUnclassifiedDssq" resultType="map">
         SELECT
-            *
+            v.*,
+            c.content_id
         FROM
             mug_video v
+            left join mug_video_content c on v.aid = c.aid
         WHERE
             v.aid NOT IN ( SELECT d.aid FROM mug_dssq d )
-          AND v.aid IN ( SELECT c.aid FROM mug_video_content c )
           AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
           <if test="endDate!=null">
               and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
@@ -155,5 +182,6 @@
               and date( v.update_time ) >= str_to_date(#{updateDate},'%Y-%m-%d')
           </if>
           AND v.play >= #{minPlay}
+        order by v.play desc
     </select>
 </mapper>

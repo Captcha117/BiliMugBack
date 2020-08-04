@@ -141,7 +141,7 @@ public class ProcessController {
         if (minPlay == null) {
             minPlay = 10000;
         }
-        List<VideoEntity> result = videoDao.getUnclassified(startDate, endDate, minPlay);
+        List<LinkedHashMap> result = videoDao.getUnclassified(startDate, endDate, minPlay);
         return R.ok().put("result", result);
     }
 
@@ -226,6 +226,22 @@ public class ProcessController {
     @PostMapping("/insertFolderDssq")
     public R insertFolderDssq(@RequestBody Long[] aids) {
         dssqDao.insertFolderDssq(aids);
+        return R.ok();
+    }
+
+    /**
+     * 添加封面dssq
+     *
+     * @param aids aid数组
+     * @return 添加结果
+     */
+    @ApiOperation("手动添加标题dssq")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "aids", value = "aid数组", required = true, paramType = "query"),
+    })
+    @PostMapping("/manualInsertTitleDssq")
+    public R manualInsertTitleDssq(@RequestBody Long[] aids) {
+        dssqDao.manualInsertTitleDssq(aids);
         return R.ok();
     }
 }

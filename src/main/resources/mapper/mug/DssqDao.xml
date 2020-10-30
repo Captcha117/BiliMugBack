@@ -36,10 +36,10 @@
 
     <insert id="insertTitleDssq">
         INSERT mug_dssq ( aid, keyword, content, update_time ) SELECT
-        r.aid aid,
-        r.keyword keyword,
-        r.title content,
-        current_timestamp ( ) update_time
+            r.aid aid,
+            r.keyword keyword,
+            r.title content,
+            current_timestamp ( ) update_time
         FROM
             (
                 SELECT
@@ -66,35 +66,27 @@
           AND ( r.keyword != '爆炸' OR r.content_id != '1E1F9A2FE9294511B9C2A5AE1B93BE5C' )
     </insert>
 
-    <insert id="insertFolderDssq">
+    <insert id="manualInsertDssq">
         insert mug_dssq (aid, keyword, content, update_time) SELECT
             v.aid,
-            '封面' keyword,
-            v.folder content,
+            <choose>
+                <when test="type='title'">
+                    '标题' keyword,
+                    v.title content,
+                </when>
+                <otherwise>
+                    '封面' keyword,
+                    v.folder content,
+                </otherwise>
+            </choose>
             CURRENT_TIMESTAMP ( ) update_time
         FROM
             mug_video v
         WHERE
             v.aid IN
-        <foreach item="aids" index="index" collection="array"
-                 open="(" separator="," close=")">
-            #{aids}
-        </foreach>
-    </insert>
-
-    <insert id="manualInsertTitleDssq">
-        insert mug_dssq (aid, keyword, content, update_time) SELECT
-        v.aid,
-        '标题' keyword,
-        v.title content,
-        CURRENT_TIMESTAMP ( ) update_time
-        FROM
-        mug_video v
-        WHERE
-        v.aid IN
-        <foreach item="aids" index="index" collection="array"
-                 open="(" separator="," close=")">
-            #{aids}
-        </foreach>
+                <foreach item="aids" index="index" collection="array"
+                         open="(" separator="," close=")">
+                    #{aids}
+                </foreach>
     </insert>
 </mapper>

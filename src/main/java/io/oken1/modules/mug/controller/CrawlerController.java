@@ -19,12 +19,12 @@ public class CrawlerController {
     CrawlerService crawlerService;
 
     /**
-     * 批量视频信息
+     * 爬取第1~pageCount页的视频信息
      *
      * @param pageCount 总页数
-     * @return 视频信息
+     * @return 视频信息爬取结果
      */
-    @ApiOperation("批量视频信息")
+    @ApiOperation("爬取第1~pageCount页的视频信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageCount", value = "总页数", required = true, paramType = "query"),
     })
@@ -38,13 +38,13 @@ public class CrawlerController {
     }
 
     /**
-     * 批量视频信息
+     * 爬取第startPage~endPage页的视频信息
      *
      * @param startPage 开始页数
      * @param endPage   结束页数
-     * @return 视频信息
+     * @return 视频信息爬取结果
      */
-    @ApiOperation("批量视频信息")
+    @ApiOperation("爬取第startPage~endPage页的视频信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startPage", value = "开始页数", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endPage", value = "结束页数", required = true, paramType = "query"),
@@ -59,10 +59,10 @@ public class CrawlerController {
     }
 
     /**
-     * 根据AV号或BV号获取视频信息
+     * 根据AV号或BV号爬取视频信息
      *
-     * @param id 总页数
-     * @return 视频信息
+     * @param id 视频ID
+     * @return 视频信息爬取结果
      */
     @ApiOperation("根据AV号或BV号获取视频信息")
     @ApiImplicitParams({
@@ -75,10 +75,10 @@ public class CrawlerController {
     }
 
     /**
-     * 获取UP主信息
+     * 根据ID爬取UP主信息
      *
-     * @param id 总页数
-     * @return 视频信息
+     * @param id UP主ID
+     * @return UP主信息爬取结果
      */
     @ApiOperation("获取UP主信息")
     @ApiImplicitParams({

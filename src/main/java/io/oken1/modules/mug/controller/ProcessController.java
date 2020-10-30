@@ -41,11 +41,13 @@ public class ProcessController {
     DssqDao dssqDao;
 
     /**
-     * 视频根据游戏分类
+     * 显示根据游戏自动分类的结果
      *
-     * @return 分类结果
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @return 根据游戏分类的结果
      */
-    @ApiOperation("显示根据游戏分类的结果")
+    @ApiOperation("显示根据游戏自动分类的结果")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
@@ -60,11 +62,13 @@ public class ProcessController {
     }
 
     /**
-     * 视频根据游戏分类
+     * 添加根据游戏自动分类的结果
      *
-     * @return 分类结果
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @return 添加结果
      */
-    @ApiOperation("添加根据游戏分类的结果")
+    @ApiOperation("添加根据游戏自动分类的结果")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
@@ -85,7 +89,7 @@ public class ProcessController {
      * @param oldContent 旧内容
      * @param newType    新类型
      * @param newContent 新内容
-     * @return 视频信息
+     * @return 视频内容更新结果
      */
     @ApiOperation("更新视频内容")
     @ApiImplicitParams({
@@ -107,7 +111,7 @@ public class ProcessController {
      * 批量更新视频内容
      *
      * @param contents 视频内容
-     * @return 视频信息
+     * @return 批量更新视频结果
      */
     @ApiOperation("批量更新视频内容")
     @ApiImplicitParams({
@@ -128,7 +132,7 @@ public class ProcessController {
      *
      * @param startDate 开始日期
      * @param endDate   结束日期
-     * @return 视频信息
+     * @return 未分类的视频信息
      */
     @ApiOperation("获取未分类的视频")
     @ApiImplicitParams({
@@ -146,13 +150,13 @@ public class ProcessController {
     }
 
     /**
-     * 显示dssq分类的结果
+     * 显示标题dssq自动分类的结果
      *
      * @param startDate 开始日期
      * @param endDate   结束日期
-     * @return 显示标题dssq分类的结果
+     * @return 显示标题dssq自动分类的结果
      */
-    @ApiOperation("显示标题dssq分类的结果")
+    @ApiOperation("显示标题dssq自动分类的结果")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
@@ -167,13 +171,13 @@ public class ProcessController {
     }
 
     /**
-     * 添加标题dssq
+     * 自动添加标题dssq
      *
      * @param startDate 开始日期
      * @param endDate   结束日期
-     * @return 分类添加结果
+     * @return 自动添加标题dssq的结果
      */
-    @ApiOperation("添加标题dssq")
+    @ApiOperation("自动添加标题dssq")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query")
@@ -192,7 +196,7 @@ public class ProcessController {
      *
      * @param startDate 开始日期
      * @param endDate   结束日期
-     * @return 获取未分类视频
+     * @return 未被分为dssq的视频
      */
     @ApiOperation("获取未被分为dssq的视频")
     @ApiImplicitParams({
@@ -214,26 +218,26 @@ public class ProcessController {
     }
 
     /**
-     * 添加封面dssq
+     * 手动添加封面dssq
      *
      * @param aids aid数组
-     * @return 添加结果
+     * @return 手动添加封面dssq添加结果
      */
-    @ApiOperation("添加封面dssq")
+    @ApiOperation("手动添加封面dssq")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aids", value = "aid数组", required = true, paramType = "query"),
     })
-    @PostMapping("/insertFolderDssq")
-    public R insertFolderDssq(@RequestBody Long[] aids) {
-        dssqDao.insertFolderDssq(aids);
+    @PostMapping("/manualInsertFolderDssq")
+    public R manualInsertFolderDssq(@RequestBody Long[] aids) {
+        dssqDao.manualInsertDssq(aids, "folder");
         return R.ok();
     }
 
     /**
-     * 添加封面dssq
+     * 添加标题dssq
      *
      * @param aids aid数组
-     * @return 添加结果
+     * @return 标题dssq添加结果
      */
     @ApiOperation("手动添加标题dssq")
     @ApiImplicitParams({
@@ -241,7 +245,7 @@ public class ProcessController {
     })
     @PostMapping("/manualInsertTitleDssq")
     public R manualInsertTitleDssq(@RequestBody Long[] aids) {
-        dssqDao.manualInsertTitleDssq(aids);
+        dssqDao.manualInsertDssq(aids, "title");
         return R.ok();
     }
 }

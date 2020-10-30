@@ -48,11 +48,11 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     /**
-     * 视频列表爬虫
+     * 爬取第startPage~endPage页的视频信息
      *
      * @param startPage 开始页数
      * @param endPage   结束页数
-     * @return 爬虫结果
+     * @return 视频信息爬取结果
      */
     public Object crawlVideos(int startPage, int endPage) {
         CloseableHttpClient client = HttpClients.createDefault();
@@ -78,10 +78,10 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     /**
-     * 根据视频ID获取视频信息
+     * 根据AV号或BV号爬取视频信息
      *
-     * @param id AID/BVID
-     * @return 爬虫结果
+     * @param id 视频ID
+     * @return 视频信息爬取结果
      */
     @Override
     public Object crawlVideoById(String id) {
@@ -102,10 +102,10 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     /**
-     * 用户信息爬虫
+     * 根据ID爬取UP主信息
      *
-     * @param id 用户ID
-     * @return 爬虫结果
+     * @param id UP主ID
+     * @return UP主信息爬取结果
      */
     @Override
     public Object crawlUploaderById(String id) {
@@ -125,7 +125,7 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     /**
-     * 保存视频和UP主信息
+     * 根据页码爬取视频信息时，保存视频和UP主信息
      *
      * @param biliArchive
      */
@@ -154,6 +154,11 @@ public class CrawlerServiceImpl implements CrawlerService {
         uploaderService.saveOrUpdateBatch(saveUpList.stream().distinct().collect(Collectors.toList()));
     }
 
+    /**
+     * 根据AV号或BV号爬取视频信息时，保存视频信息
+     *
+     * @param biliVideoEntity
+     */
     public void saveData(BiliVideoEntity biliVideoEntity) {
         BiliVideoEntity.VideoDetail detail = biliVideoEntity.getData();
         VideoEntity videoEntity = new VideoEntity(detail.getAid(), detail.getBvid(), detail.getCopyright(),
@@ -162,6 +167,11 @@ public class CrawlerServiceImpl implements CrawlerService {
         videoService.saveOrUpdate(videoEntity);
     }
 
+    /**
+     * 根据ID爬取UP主信息时，保存UP主信息
+     *
+     * @param biliUploaderEntity
+     */
     public void saveData(BiliUploaderEntity biliUploaderEntity) {
         BiliUploaderEntity.UserData.Card card = biliUploaderEntity.getData().getCard();
         UploaderEntity uploaderEntity = new UploaderEntity(card.getMid(), card.getName(), card.getFace());

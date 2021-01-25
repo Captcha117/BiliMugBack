@@ -17,8 +17,8 @@ public class GameEntity implements Serializable {
     /**
      * 游戏ID
      */
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String gameId;
+    @TableId
+    private Integer gameId;
     /**
      * 常用名称
      */

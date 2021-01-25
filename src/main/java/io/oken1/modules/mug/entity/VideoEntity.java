@@ -77,7 +77,7 @@ public class VideoEntity implements Serializable {
     /**
      * 封面链接
      */
-    private String folder;
+    private String cover;
     /**
      * 标签
      */
@@ -136,7 +136,7 @@ public class VideoEntity implements Serializable {
 
     public VideoEntity(Long aid, String bid, String title, Long pubUnixTime, Integer copyright, Integer ps,
                        Integer duration, Long uid, Integer play, Integer danmu, Integer comment, Integer favorite,
-                       Integer coin, Integer share, Integer iine, String folder) {
+                       Integer coin, Integer share, Integer iine, String cover) {
         this.aid = aid;
         this.bid = bid;
         this.title = title;
@@ -152,6 +152,6 @@ public class VideoEntity implements Serializable {
         this.coin = coin;
         this.share = share;
         this.iine = iine;
-        this.folder = folder;
+        this.cover = cover;
     }
 }

@@ -13,6 +13,16 @@ public class BiliUploaderEntity {
     }
 
     public class UserData {
+        public String archive_count;
+
+        public String getArchiveCount() {
+            return archive_count;
+        }
+
+        public void setArchiveCount(String archive_count) {
+            this.archive_count = archive_count;
+        }
+
         public Card card;
 
         public Card getCard() {
@@ -22,6 +32,7 @@ public class BiliUploaderEntity {
         public void setCard(Card card) {
             this.card = card;
         }
+
 
         public class Card {
             public Long getMid() {

@@ -13,6 +13,6 @@ public interface ContentService extends IService<ContentEntity> {
 
     Object insertGameContent(String startDate, String endDate);
 
-    Object updateContent(Long aid, String oldContent, String newType, String newContent);
+    Object updateContent(Long aid, Integer oldContent, String newType, Integer newContent);
 }
 

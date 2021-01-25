@@ -31,7 +31,7 @@ public class ContentEntity implements Serializable {
     /**
      * 内容ID
      */
-    private String contentId;
+    private Integer contentId;
     /**
      * 关键词
      */
@@ -41,52 +41,4 @@ public class ContentEntity implements Serializable {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
-    public Long getPkId() {
-        return pkId;
-    }
-
-    public void setPkId(Long pkId) {
-        this.pkId = pkId;
-    }
-
-    public Long getAid() {
-        return aid;
-    }
-
-    public void setAid(Long aid) {
-        this.aid = aid;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
-    }
-
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

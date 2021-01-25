@@ -60,7 +60,7 @@ public class CrawlerServiceImpl implements CrawlerService {
         try {
             for (; page <= endPage; page++) {
                 System.out.println("start:" + page);
-                String url = bizConfig.biliApiUrl + "/x/web-interface/newlist?rid=136&pn=" + page + "&ps=20";
+                String url = bizConfig.biliApiUrl + "/x/web-interface/newlist?rid=136&pn=" + page + "&ps=50";
                 HttpGet httpGet = new HttpGet(url);
                 HttpResponse response = client.execute(httpGet);
                 HttpEntity entity = response.getEntity();
@@ -68,7 +68,7 @@ public class CrawlerServiceImpl implements CrawlerService {
                 BiliArchiveEntity biliArchive = gson.fromJson(str, BiliArchiveEntity.class);
                 saveData(biliArchive);
                 System.out.println("end:" + page);
-                Thread.sleep(1010);
+                Thread.sleep(1500);
             }
         } catch (Exception e) {
             System.out.println(Arrays.toString(e.getStackTrace()));

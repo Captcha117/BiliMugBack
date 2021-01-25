@@ -1,9 +1,7 @@
 package io.oken1.modules.mug.controller;
 
-import cn.hutool.core.date.DateUtil;
 import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSONArray;
-import io.oken1.common.utils.DateUtils;
 import io.oken1.common.utils.R;
 import io.oken1.modules.mug.dao.DssqDao;
 import io.oken1.modules.mug.dao.VideoDao;
@@ -19,8 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -85,25 +81,25 @@ public class ProcessController {
     /**
      * 更新视频内容
      *
-     * @param aid        总页数
-     * @param oldContent 旧内容
-     * @param newType    新类型
-     * @param newContent 新内容
+     * @param aid          总页数
+     * @param oldContentId 旧内容
+     * @param newType      新类型
+     * @param newContentId 新内容
      * @return 视频内容更新结果
      */
     @ApiOperation("更新视频内容")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", value = "视频AV号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "oldContent", value = "旧内容", paramType = "query"),
+            @ApiImplicitParam(name = "oldContentId", value = "旧内容", paramType = "query"),
             @ApiImplicitParam(name = "newType", value = "新类型", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "newContent", value = "新内容", required = true, paramType = "query")
+            @ApiImplicitParam(name = "newContentId", value = "新内容", required = true, paramType = "query")
     })
     @PostMapping("/updateContent")
-    public R updateContent(Long aid, String oldContent, String newType, String newContent) {
-        if (StringUtils.isEmpty(oldContent) && StringUtils.isEmpty(newType)) {
+    public R updateContent(Long aid, Integer oldContentId, String newType, Integer newContentId) {
+        if (oldContentId <= 0 && StringUtils.isEmpty(newType)) {
             return R.error();
         }
-        Object result = contentService.updateContent(aid, oldContent, newType, newContent);
+        Object result = contentService.updateContent(aid, oldContentId, newType, newContentId);
         return R.ok().put("result", result);
     }
 
@@ -227,9 +223,9 @@ public class ProcessController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aids", value = "aid数组", required = true, paramType = "query"),
     })
-    @PostMapping("/manualInsertFolderDssq")
-    public R manualInsertFolderDssq(@RequestBody Long[] aids) {
-        dssqDao.manualInsertDssq(aids, "folder");
+    @PostMapping("/manualInsertCoverDssq")
+    public R manualInsertCoverDssq(@RequestBody Long[] aids) {
+        dssqDao.manualInsertDssq(aids, "cover");
         return R.ok();
     }
 

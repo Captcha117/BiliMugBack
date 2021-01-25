@@ -5,7 +5,8 @@
     <select id="getGameList" resultType="map">
         SELECT
         g.game_id gameId,
-        g.common_name commonName
+        g.common_name commonName,
+        g.other_name otherName
         FROM
         mug_game g
         where g.parent_id is null
@@ -17,7 +18,7 @@
         SELECT
         g.game_id,
         g.common_name,
-        getGameSubName(g.game_id) sub_name,
+        substr(g.other_name,0,LOCATE(',', g.other_name)) sub_name,
         c.company_name developer
         FROM
         mug_game g

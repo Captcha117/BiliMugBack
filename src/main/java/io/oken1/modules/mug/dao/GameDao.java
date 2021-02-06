@@ -13,9 +13,9 @@ public interface GameDao extends BaseMapper<GameEntity> {
 
     List<LinkedHashMap> getGameList();
 
-    LinkedHashMap getGameInfoByGameId(String gameId);
+    LinkedHashMap getGameInfoByGameId(Integer gameId);
 
-    List<LinkedHashMap> getSongsByGameId(String gameId);
+    List<LinkedHashMap> getSongsByGameId(Integer gameId);
 
-    List<LinkedHashMap> getSongBySongId(String songId);
+    List<LinkedHashMap> getSongBySongId(Integer songId);
 }

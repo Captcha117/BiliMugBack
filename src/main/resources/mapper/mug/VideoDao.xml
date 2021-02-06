@@ -3,27 +3,26 @@
 
 <mapper namespace="io.oken1.modules.mug.dao.VideoDao">
     <select id="getVideosByGameId" resultType="map">
-        SELECT
-        v.aid,
-        v.title,
-        v.pub_time,
-        v.copyright,
-        v.uid,
-        v.play,
-        u.id,
-        c.type
-        FROM
-        mug_video v
-        LEFT JOIN mug_video_content c ON v.aid = c.aid
-        LEFT JOIN mug_uploader u ON v.uid = u.uid
-        WHERE
-        ( c.type = 'G' and c.content_id = #{gameId} )
-        or ( c.type = 'S' and c.content_id in ( select s.song_id from mug_song s where s.game_id = #{gameId} ) )
-        or ( c.type = 'C' and c.content_id in ( select c.chart_id from mug_chart c
-        left join mug_song s on s.song_id = c.song_id left join mug_game g on s.game_id = g.game_id
-        where g.game_id = #{gameId} ) )
-        ORDER BY
-        play DESC
+        SELECT v.aid,
+               v.title,
+               v.pub_time,
+               v.copyright,
+               v.uid,
+               v.play,
+               u.id,
+               c.type,
+               v.cover
+        FROM mug_video v
+                 LEFT JOIN mug_video_content c ON v.aid = c.aid
+                 LEFT JOIN mug_uploader u ON v.uid = u.uid
+        WHERE (c.type = 'G' and c.content_id = #{gameId})
+           or (c.type = 'S' and c.content_id in (select s.song_id from mug_song s where s.game_id = #{gameId}))
+           or (c.type = 'C' and c.content_id in (select c.chart_id
+                                                 from mug_chart c
+                                                          left join mug_song s on s.song_id = c.song_id
+                                                          left join mug_game g on s.game_id = g.game_id
+                                                 where g.game_id = #{gameId}))
+        ORDER BY play DESC
     </select>
 
     <select id="getVideosBySongId" resultType="map">
@@ -163,6 +162,7 @@
         <if test="endDate!=null">
             and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
         </if>
+        order by v.play desc
     </select>
 
     <select id="getUnclassifiedDssq" resultType="map">

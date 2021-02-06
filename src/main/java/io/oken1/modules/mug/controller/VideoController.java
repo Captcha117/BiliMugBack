@@ -93,7 +93,7 @@ public class VideoController {
             @ApiImplicitParam(name = "endDate", value = "结束日期", required = true, paramType = "query")
     })
     public R getGameRank(String startDate, String endDate) throws IOException {
-        File file = new File("D:\\GameRank.txt");
+        File file = new File("D:\\GameRank2020.txt");
         if (!file.exists()) {
             file.createNewFile();
         }

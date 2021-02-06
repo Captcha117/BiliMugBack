@@ -94,7 +94,7 @@ public class GameController {
     }
 
     @GetMapping("/gameInfo")
-    public R gameInfo(String gameId) {
+    public R gameInfo(Integer gameId) {
         LinkedHashMap gameInfo = gameService.getGameInfoByGameId(gameId);
         List<LinkedHashMap> songList = gameService.getSongListByGameId(gameId);
         return R.ok().put("gameInfo", gameInfo).put("songList", songList);

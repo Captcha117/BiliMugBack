@@ -8,12 +8,13 @@
         SELECT
         v.aid,
         v.title,
+        v.play,
         z.keyword,
         row_number ( ) over ( PARTITION BY v.aid, c.content_id ORDER BY v.aid, z.keyword_index ) row_num,
         c.content_id
         FROM
         mug_video v
-        JOIN ( SELECT * FROM mug_keyword k WHERE k.game_id = 'DSSQ' ORDER BY k.keyword_index ) z ON instr( REPLACE (
+        JOIN ( SELECT * FROM mug_keyword k WHERE k.game_id = -1 ORDER BY k.keyword_index ) z ON instr( REPLACE (
         v.title, ' ', '' ), z.keyword ) > 0
         JOIN mug_video_content c ON c.aid = v.aid
         AND c.type = 'G'
@@ -35,7 +36,8 @@
         r.aid aid,
         r.keyword keyword,
         r.title content,
-        r.content_id
+        r.content_id,
+        r.play
         <include refid="titleDssqSql"/>
     </select>
 
@@ -52,7 +54,7 @@
         insert mug_dssq (aid, keyword, content, update_time) SELECT
         v.aid,
         <choose>
-            <when test="type='title'">
+            <when test="type=='title'">
                 '标题' keyword,
                 v.title content,
             </when>
@@ -66,9 +68,9 @@
         mug_video v
         WHERE
         v.aid IN
-        <foreach item="aids" index="index" collection="array"
+        <foreach item="aid" index="index" collection="aids"
                  open="(" separator="," close=")">
-            #{aids}
+            #{aid}
         </foreach>
     </insert>
 </mapper>

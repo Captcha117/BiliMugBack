@@ -14,8 +14,8 @@ public interface GameService extends IService<GameEntity> {
 
     List<LinkedHashMap> getGameList();
 
-    LinkedHashMap getGameInfoByGameId(String gameId);
+    LinkedHashMap getGameInfoByGameId(Integer gameId);
 
-    List<LinkedHashMap> getSongListByGameId(String gameId);
+    List<LinkedHashMap> getSongListByGameId(Integer gameId);
 }
 

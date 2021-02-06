@@ -56,7 +56,7 @@
         SELECT
             v.aid aid,
             'G' type,
-            '351D8F969DF84121B0A535C8ADFCC3CF' content_id,
+            48 content_id,
             '|' keyword,
             CURRENT_TIMESTAMP ( ) update_time
         FROM

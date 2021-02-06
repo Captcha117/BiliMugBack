@@ -39,12 +39,12 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
     }
 
     @Override
-    public LinkedHashMap getGameInfoByGameId(String gameId) {
+    public LinkedHashMap getGameInfoByGameId(Integer gameId) {
         return gameDao.getGameInfoByGameId(gameId);
     }
 
     @Override
-    public List<LinkedHashMap> getSongListByGameId(String gameId) {
+    public List<LinkedHashMap> getSongListByGameId(Integer gameId) {
         return gameDao.getSongsByGameId(gameId);
     }
 }

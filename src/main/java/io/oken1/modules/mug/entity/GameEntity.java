@@ -28,6 +28,10 @@ public class GameEntity implements Serializable {
      */
     private String fullName;
     /**
+     *  图标版本
+     */
+    private Integer iconVersion;
+    /**
      * 其他名称
      */
     private String otherName;

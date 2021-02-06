@@ -3,28 +3,23 @@
 
 <mapper namespace="io.oken1.modules.mug.dao.GameDao">
     <select id="getGameList" resultType="map">
-        SELECT
-        g.game_id gameId,
-        g.common_name commonName,
-        g.other_name otherName
-        FROM
-        mug_game g
+        SELECT g.game_id      gameId,
+               g.common_name  commonName,
+               g.other_name   otherName,
+               g.icon_version iconVersion
+        FROM mug_game g
         where g.parent_id is null
-        ORDER BY
-        g.common_name
+        ORDER BY g.common_name
     </select>
 
     <select id="getGameInfoByGameId" resultType="java.util.LinkedHashMap">
-        SELECT
-        g.game_id,
-        g.common_name,
-        substr(g.other_name,0,LOCATE(',', g.other_name)) sub_name,
-        c.company_name developer
-        FROM
-        mug_game g
-        LEFT JOIN mug_company c ON g.developer = c.company_id
-        WHERE
-        g.game_id = #{gameId}
+        SELECT g.game_id,
+               g.common_name,
+               substr(g.other_name, 0, LOCATE(',', g.other_name)) sub_name,
+               c.company_name                                     developer
+        FROM mug_game g
+                 LEFT JOIN mug_company c ON g.developer = c.company_id
+        WHERE g.game_id = #{gameId}
     </select>
 
     <select id="getSongsByGameId" resultType="map">

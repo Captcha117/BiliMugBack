@@ -2,19 +2,18 @@ package io.oken1.modules.mug.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.oken1.modules.mug.dao.ContentDao;
-import io.oken1.modules.mug.entity.ContentEntity;
+import io.oken1.modules.mug.entity.GameContentEntity;
 import io.oken1.modules.mug.service.ContentService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service("ContentService")
-public class ContentServiceImpl extends ServiceImpl<ContentDao, ContentEntity> implements ContentService {
+public class ContentServiceImpl extends ServiceImpl<ContentDao, GameContentEntity> implements ContentService {
 
     @Autowired
     ContentDao contentDao;
@@ -41,27 +40,25 @@ public class ContentServiceImpl extends ServiceImpl<ContentDao, ContentEntity> i
     }
 
     @Override
-    public Object updateContent(Long aid, Integer oldContentId, String newType, Integer newContentId) {
-        ContentEntity contentEntity = new ContentEntity();
+    public Object updateGameContent(Long aid, String oldGameId, String newGameId) {
+        GameContentEntity gameContentEntity = new GameContentEntity();
         // 非空则update
-        if (oldContentId > 0) {
-            if (contentDao.getContent(aid, oldContentId) == null) {
+        if (StringUtils.isNotBlank(oldGameId)) {
+            if (contentDao.getGameContent(aid, oldGameId) == null) {
                 return "未找到对应的content";
-            } else if (contentDao.getContent(aid, newContentId) == null) {
+            } else if (contentDao.getGameContent(aid, newGameId) == null) {
                 return "content已存在";
             } else {
-                contentEntity.setType(newType);
-                contentEntity.setContentId(newContentId);
-                saveOrUpdate(contentEntity);
+                gameContentEntity.setGameId(newGameId);
+                saveOrUpdate(gameContentEntity);
                 return "success";
             }
         } else {
             // 否则add
-            contentEntity.setAid(aid);
-            contentEntity.setType(newType);
-            contentEntity.setContentId(newContentId);
-            contentEntity.setKeyword("admin");
-            saveOrUpdate(contentEntity);
+            gameContentEntity.setAid(aid);
+            gameContentEntity.setGameId(newGameId);
+            gameContentEntity.setKeyword("admin");
+            saveOrUpdate(gameContentEntity);
             return "success";
         }
     }

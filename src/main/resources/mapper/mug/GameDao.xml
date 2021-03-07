@@ -3,29 +3,72 @@
 
 <mapper namespace="io.oken1.modules.mug.dao.GameDao">
     <select id="getGameList" resultType="map">
-        SELECT g.game_id      gameId,
-               g.common_name  commonName,
-               g.other_name   otherName,
-               g.icon_version iconVersion
+        SELECT g.game_id      GameId,
+               g.common_name  CommonName,
+               g.other_name   OtherName,
+               g.icon_id      IconId,
+               g.icon_version IconVersion
         FROM mug_game g
         where g.parent_id is null
         ORDER BY g.common_name
     </select>
 
     <select id="getGameInfoByGameId" resultType="java.util.LinkedHashMap">
-        SELECT g.game_id,
-               g.common_name,
-               substr(g.other_name, 0, LOCATE(',', g.other_name)) sub_name,
-               c.company_name                                     developer
+        SELECT g.game_id                                          GameId,
+               g.common_name                                      CommonName,
+               substr(g.other_name, 0, LOCATE(',', g.other_name)) OtherName,
+               c.company_name                                     Developer
         FROM mug_game g
                  LEFT JOIN mug_company c ON g.developer = c.company_id
         WHERE g.game_id = #{gameId}
     </select>
 
     <select id="getSongsByGameId" resultType="map">
-        SELECT *
+        SELECT song_id      SongId,
+               single_id    SingleId,
+               title        Title,
+               artist       Artist,
+               length       Length,
+               release_date ReleaseDate,
+               bpm          Bpm
         FROM mug_song s
         WHERE s.game_id = #{gameId}
         ORDER BY s.inx
+    </select>
+
+    <select id="getGamePlayData" resultType="map">
+        SELECT
+        <choose>
+            <when test="type = 'D'">
+                v.pub_date
+            </when>
+            <when test="type = 'W'">
+                DATE_FORMAT( v.pub_date, '%v' )
+            </when>
+            <when test="type = 'M'">
+                DATE_FORMAT( v.pub_date, '%y-%m' )
+            </when>
+        </choose> Time,
+               sum(v.play / v.game_count)                AllPlay,
+               sum(IF(v.dssq, 0, v.play / v.game_count)) Play,
+               count(1)                                  AllCount,
+               sum(IF(v.dssq, 0, 1))                     Count
+        FROM v_video v
+        WHERE instr(v.game_id, #{gameId}) > 0
+          AND v.pub_date BETWEEN #{startDate} AND #{endDate}
+        <choose>
+            <when test="type = 'D'">
+                GROUP BY v.pub_date
+                ORDER BY v.pub_date
+            </when>
+            <when test="type = 'W'">
+                GROUP BY DATE_FORMAT( v.pub_date, '%v' )
+                ORDER BY DATE_FORMAT( v.pub_date, '%v' )
+            </when>
+            <when test="type = 'M'">
+                GROUP BY DATE_FORMAT( v.pub_date, '%y-%m' )
+                ORDER BY DATE_FORMAT( v.pub_date, '%y-%m' )
+            </when>
+        </choose>
     </select>
 </mapper>

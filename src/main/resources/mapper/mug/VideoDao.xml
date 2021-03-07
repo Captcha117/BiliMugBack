@@ -3,128 +3,123 @@
 
 <mapper namespace="io.oken1.modules.mug.dao.VideoDao">
     <select id="getVideosByGameId" resultType="map">
-        SELECT v.aid,
-               v.title,
-               v.pub_time,
-               v.copyright,
-               v.uid,
-               v.play,
-               u.id,
-               c.type,
-               v.cover
+        SELECT v.aid       Aid,
+               v.title     Title,
+               v.pub_time  PubTime,
+               v.copyright Copyright,
+               v.uid       Uid,
+               v.play      Play,
+               u.id        Id,
+               u.face      Face,
+               v.cover     Cover
         FROM mug_video v
-                 LEFT JOIN mug_video_content c ON v.aid = c.aid
+                 LEFT JOIN mug_game_content c ON v.aid = c.aid
                  LEFT JOIN mug_uploader u ON v.uid = u.uid
-        WHERE (c.type = 'G' and c.content_id = #{gameId})
-           or (c.type = 'S' and c.content_id in (select s.song_id from mug_song s where s.game_id = #{gameId}))
-           or (c.type = 'C' and c.content_id in (select c.chart_id
-                                                 from mug_chart c
-                                                          left join mug_song s on s.song_id = c.song_id
-                                                          left join mug_game g on s.game_id = g.game_id
-                                                 where g.game_id = #{gameId}))
+        WHERE c.game_id = #{gameId}
         ORDER BY play DESC
     </select>
 
     <select id="getVideosBySongId" resultType="map">
-        select
-        *
-        from
-        v_video v
-        where
-        v.type = 'S'
-        and v.content_id = #{songId}
+        select aid       Aid,
+               bid       Bid,
+               title     Title,
+               pub_time  PubTime,
+               copyright Copyright,
+               uid       Uid,
+               play      Play,
+               cover     Cover,
+               tag,
+               id        Id,
+               type,
+               content_id
+        from v_video v
+        where v.type = 'S'
+          and v.content_id = #{songId}
     </select>
 
     <select id="getUpRank" resultType="map">
         SELECT
-            r.*
+        r.*
         FROM
-            (
-                SELECT
-                    z.uid,
-                    u.id,
-                    round( sum( z.play * z.proportion ), 1 ) play,
-                    count( 1 ) count
-                FROM
-                    (
-                        SELECT
-                            v.uid,
-                            v.pub_time,
-                            v.play,
-                        <choose >
-                            <when test="needProportion">
-                                ifnull( f.proportion, 1 ) proportion
-                            </when>
-                            <otherwise>
-                                1 proportion
-                            </otherwise>
-                        </choose>
-                        FROM
-                            mug_video v
-                            <if test="needProportion">
-                                LEFT JOIN mug_play_config f ON datediff( str_to_date(#{date},'%Y-%m-%d'), date( v.pub_time ) ) = f.date_diff
-                            </if>
-                        WHERE
-                            date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
-                          AND str_to_date(#{date},'%Y-%m-%d') >= date( v.pub_time )
-                          and v.aid not in (select d.aid from mug_dssq d)
-                    ) z
-                        LEFT JOIN mug_uploader u ON z.uid = u.uid
-                GROUP BY
-                    z.uid
-            ) r
+        (
+        SELECT
+        z.uid,
+        u.id,
+        round( sum( z.play * z.proportion ), 1 ) play,
+        count( 1 ) count
+        FROM
+        (
+        SELECT
+        v.uid,
+        v.pub_time,
+        v.play,
+        <choose>
+            <when test="needProportion">
+                ifnull( f.proportion, 1 ) proportion
+            </when>
+            <otherwise>
+                1 proportion
+            </otherwise>
+        </choose>
+        FROM
+        mug_video v
+        <if test="needProportion">
+            LEFT JOIN mug_play_config f ON datediff( str_to_date(#{date},'%Y-%m-%d'), date( v.pub_time ) ) = f.date_diff
+        </if>
+        WHERE
+        date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+        AND str_to_date(#{date},'%Y-%m-%d') >= date( v.pub_time )
+        and v.aid not in (select d.aid from mug_dssq d)
+        ) z
+        LEFT JOIN mug_uploader u ON z.uid = u.uid
+        GROUP BY
+        z.uid
+        ) r
         ORDER BY
-            r.play DESC
+        r.play DESC
         LIMIT 30
     </select>
 
     <select id="getGameRank" resultType="map">
-        SELECT
-        z.*,
-        g.common_name game
-        FROM
-        (
-        SELECT
-        c.content_id game_id,
-        sum( v.play ) play
-        FROM
-        mug_video v
-        LEFT JOIN mug_video_content c ON v.aid = c.aid
-        WHERE
-        date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
-        AND str_to_date(#{date},'%Y-%m-%d') >= date( v.pub_time )
-          and v.aid not in (select d.aid from mug_dssq d)
-        GROUP BY
-        c.content_id
-        ) z
-        JOIN mug_game g ON z.game_id = g.game_id
-        ORDER BY
-        play DESC
+        SELECT z.*,
+               g.common_name game
+        FROM (
+                 SELECT c.game_id,
+                        sum(v.play) play
+                 FROM mug_video v
+                          LEFT JOIN mug_game_content c ON v.aid = c.aid
+                 WHERE date(v.pub_time) >= str_to_date(#{startDate}, '%Y-%m-%d')
+                   AND str_to_date(#{date}, '%Y-%m-%d') >= date(v.pub_time)
+                   and v.aid not in (select d.aid from mug_dssq d)
+                 GROUP BY c.game_id
+             ) z
+                 JOIN mug_game g ON z.game_id = g.game_id
+        ORDER BY play DESC
         LIMIT 30
     </select>
 
     <select id="getRankWithoutDssq" resultType="map">
-<!--        <![CDATA[-->
-<!--        select-->
-<!--        u.uid,-->
-<!--        u.id,-->
-<!--        z.play_nodssq-->
-<!--        from-->
-<!--        (-->
-<!--        select-->
-<!--        v.uid,-->
-<!--        sum( case when v.dssq is null then v.play else 0 end ) play_nodssq-->
-<!--        from-->
-<!--        mug_video v-->
-<!--        where-->
-<!--        from_unixtime( v.pub_time ) < #{date}-->
-<!--        group by-->
-<!--        v.uid-->
-<!--        ) z-->
-<!--        left join mug_uploader u on z.uid = u.uid-->
-<!--        order by-->
-<!--        z.play_nodssq desc-->
-<!--        limit 40]]>-->
+        <!--        <![CDATA[-->
+        <!--        select-->
+        <!--        u.uid,-->
+        <!--        u.id,-->
+        <!--        z.play_nodssq-->
+        <!--        from-->
+        <!--        (-->
+        <!--        select-->
+        <!--        v.uid,-->
+        <!--        sum( case when v.dssq is null then v.play else 0 end ) play_nodssq-->
+        <!--        from-->
+        <!--        mug_video v-->
+        <!--        where-->
+        <!--        from_unixtime( v.pub_time ) < #{date}-->
+        <!--        group by-->
+        <!--        v.uid-->
+        <!--        ) z-->
+        <!--        left join mug_uploader u on z.uid = u.uid-->
+        <!--        order by-->
+        <!--        z.play_nodssq desc-->
+        <!--        limit 40]]>-->
         <![CDATA[
         select
         u.uid,
@@ -152,11 +147,11 @@
 
     <select id="getUnclassified" resultType="io.oken1.modules.mug.entity.VideoEntity">
         SELECT
-            *
+        *
         FROM
-            mug_video v
+        mug_video v
         WHERE
-            v.aid NOT IN ( SELECT c.aid FROM mug_video_content c )
+        v.aid NOT IN ( SELECT c.aid FROM mug_game_content c )
         and v.play >= #{minPlay}
         AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
         <if test="endDate!=null">
@@ -167,21 +162,21 @@
 
     <select id="getUnclassifiedDssq" resultType="map">
         SELECT
-            v.*,
-            c.content_id
+        v.*,
+        c.game_id
         FROM
-            mug_video v
-            left join mug_video_content c on v.aid = c.aid
+        mug_video v
+        left join mug_game_content c on v.aid = c.aid
         WHERE
-            v.aid NOT IN ( SELECT d.aid FROM mug_dssq d )
-          AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
-          <if test="endDate!=null">
-              and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
-          </if>
-          <if test="updateDate!=null">
-              and date( v.update_time ) >= str_to_date(#{updateDate},'%Y-%m-%d')
-          </if>
-          AND v.play >= #{minPlay}
+        v.aid NOT IN ( SELECT d.aid FROM mug_dssq d )
+        AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+        <if test="endDate!=null">
+            and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
+        </if>
+        <if test="updateDate!=null">
+            and date( v.update_time ) >= str_to_date(#{updateDate},'%Y-%m-%d')
+        </if>
+        AND v.play >= #{minPlay}
         order by v.play desc
     </select>
 </mapper>

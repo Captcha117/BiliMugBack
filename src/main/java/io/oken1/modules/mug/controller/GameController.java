@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.oken1.modules.mug.dao.GameDao;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,6 +25,9 @@ import io.oken1.common.utils.R;
 public class GameController {
     @Autowired
     GameService gameService;
+
+    @Autowired
+    GameDao gameDao;
 
     /**
      * 列表
@@ -94,9 +98,15 @@ public class GameController {
     }
 
     @GetMapping("/gameInfo")
-    public R gameInfo(Integer gameId) {
+    public R gameInfo(String gameId) {
         LinkedHashMap gameInfo = gameService.getGameInfoByGameId(gameId);
         List<LinkedHashMap> songList = gameService.getSongListByGameId(gameId);
         return R.ok().put("gameInfo", gameInfo).put("songList", songList);
+    }
+
+    @GetMapping("/gamePlayData")
+    public R gamePlay(String gameId, String type) {
+        List<LinkedHashMap> result = gameService.getGamePlayData(gameId, type);
+        return R.ok().put("result", result);
     }
 }

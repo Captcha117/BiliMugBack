@@ -10,8 +10,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@TableName("mug_video_content")
-public class ContentEntity implements Serializable {
+@TableName("mug_game_content")
+public class GameContentEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,13 +25,9 @@ public class ContentEntity implements Serializable {
      */
     private Long aid;
     /**
-     * 类型
+     * 游戏ID
      */
-    private String type;
-    /**
-     * 内容ID
-     */
-    private Integer contentId;
+    private String gameId;
     /**
      * 关键词
      */

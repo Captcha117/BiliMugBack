@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import io.oken1.common.utils.R;
 import io.oken1.modules.mug.dao.DssqDao;
 import io.oken1.modules.mug.dao.VideoDao;
-import io.oken1.modules.mug.entity.ContentEntity;
+import io.oken1.modules.mug.entity.GameContentEntity;
 import io.oken1.modules.mug.entity.VideoEntity;
 import io.oken1.modules.mug.service.ContentService;
 import io.oken1.modules.mug.service.DssqService;
@@ -79,27 +79,22 @@ public class ProcessController {
     }
 
     /**
-     * 更新视频内容
+     * 更新视频的游戏分类
      *
-     * @param aid          总页数
-     * @param oldContentId 旧内容
-     * @param newType      新类型
-     * @param newContentId 新内容
+     * @param aid       视频AV号
+     * @param oldGameId 旧游戏ID
+     * @param newGameId 新游戏ID
      * @return 视频内容更新结果
      */
-    @ApiOperation("更新视频内容")
+    @ApiOperation("更新视频的游戏分类")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", value = "视频AV号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "oldContentId", value = "旧内容", paramType = "query"),
-            @ApiImplicitParam(name = "newType", value = "新类型", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "newContentId", value = "新内容", required = true, paramType = "query")
+            @ApiImplicitParam(name = "oldGameId", value = "旧游戏ID", paramType = "query"),
+            @ApiImplicitParam(name = "newGameId", value = "新游戏ID", required = true, paramType = "query")
     })
-    @PostMapping("/updateContent")
-    public R updateContent(Long aid, Integer oldContentId, String newType, Integer newContentId) {
-        if (oldContentId <= 0 && StringUtils.isEmpty(newType)) {
-            return R.error();
-        }
-        Object result = contentService.updateContent(aid, oldContentId, newType, newContentId);
+    @PostMapping("/updateGameContent")
+    public R updateGameContent(Long aid, String oldGameId, String newGameId) {
+        Object result = contentService.updateGameContent(aid, oldGameId, newGameId);
         return R.ok().put("result", result);
     }
 
@@ -117,7 +112,7 @@ public class ProcessController {
     public R updateContents(@RequestBody String contents) {
         LinkedHashMap data = (LinkedHashMap) JSONUtils.parse(contents);
         JSONArray jsonArr = JSONArray.parseArray((String) data.get("contents"));
-        List<ContentEntity> list = jsonArr.toJavaList(ContentEntity.class);
+        List<GameContentEntity> list = jsonArr.toJavaList(GameContentEntity.class);
 
         Object result = contentService.saveOrUpdateBatch(list);
         return R.ok().put("result", result);

@@ -13,9 +13,9 @@ public class SongEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId
-    private Integer songId;
+    private String songId;
 
-    private Integer gameId;
+    private String gameId;
 
     private Integer singleId;
 

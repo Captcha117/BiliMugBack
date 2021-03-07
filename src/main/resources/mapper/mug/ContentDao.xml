@@ -5,8 +5,7 @@
     <sql id="gameContentSql">
         select
             r.aid aid,
-            'G' type,
-            r.game_id content_id,
+            r.game_id game_id,
             r.keyword keyword,
             current_timestamp() update_time
         from
@@ -33,7 +32,7 @@
                     k.keyword_index
                 ) z on instr( REPLACE ( v.title, ' ', '' ), z.keyword ) > 0
             where
-                v.aid not in ( select c.aid from mug_video_content c where c.type = 'G' )
+                v.aid not in ( select c.aid from mug_game_content c )
                 and date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
                 <if test="endDate!=null">
                      and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
@@ -48,15 +47,14 @@
     </select>
 
     <insert id="insertGameContent">
-        insert mug_video_content ( aid, type, content_id, keyword, update_time )
+        insert mug_game_content ( aid, game_id, keyword, update_time )
         <include refid="gameContentSql"/>
     </insert>
 
     <sql id="osuContentSql">
         SELECT
             v.aid aid,
-            'G' type,
-            48 content_id,
+            'B21EDFD3' game_id,
             '|' keyword,
             CURRENT_TIMESTAMP ( ) update_time
         FROM
@@ -64,7 +62,7 @@
         WHERE
             instr( v.title, "|" ) > 0
             AND instr( v.title, "%" ) > 0
-            AND v.aid NOT IN ( SELECT c.aid FROM mug_video_content c WHERE c.type = 'G' )
+            AND v.aid NOT IN ( SELECT c.aid FROM mug_game_content c )
             AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
             <if test="endDate!=null">
                 and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
@@ -77,11 +75,11 @@
 
 
     <insert id="insertOsuContent">
-        insert mug_video_content ( aid, type, content_id, keyword, update_time )
+        insert mug_game_content ( aid, game_id, keyword, update_time )
         <include refid="osuContentSql"/>
     </insert>
 
-    <select id="getContent" resultType="io.oken1.modules.mug.entity.ContentEntity">
-        select * from mug_video_content c where c.aid = #{aid} and c.content_id = #{contentId}
+    <select id="getContent" resultType="io.oken1.modules.mug.entity.GameContentEntity">
+        select * from mug_game_content c where c.aid = #{aid} and c.game_id = #{gameId}
     </select>
 </mapper>

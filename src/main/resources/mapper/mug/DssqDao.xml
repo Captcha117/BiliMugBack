@@ -10,14 +10,13 @@
         v.title,
         v.play,
         z.keyword,
-        row_number ( ) over ( PARTITION BY v.aid, c.content_id ORDER BY v.aid, z.keyword_index ) row_num,
-        c.content_id
+        row_number ( ) over ( PARTITION BY v.aid, c.game_id ORDER BY v.aid, z.keyword_index ) row_num,
+        c.game_id
         FROM
         mug_video v
         JOIN ( SELECT * FROM mug_keyword k WHERE k.game_id = -1 ORDER BY k.keyword_index ) z ON instr( REPLACE (
         v.title, ' ', '' ), z.keyword ) > 0
-        JOIN mug_video_content c ON c.aid = v.aid
-        AND c.type = 'G'
+        JOIN mug_game_content c ON c.aid = v.aid
         WHERE
         v.aid NOT IN ( SELECT d.aid FROM mug_dssq d )
         and date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
@@ -27,8 +26,8 @@
         ) r
         WHERE
         r.row_num = 1
-        AND ( r.keyword != '疯狂' OR r.content_id != 20 )
-        AND ( r.keyword != '爆炸' OR r.content_id != 26 )
+        AND ( r.keyword != '疯狂' OR r.content_id != '21ed4aa7' )
+        AND ( r.keyword != '爆炸' OR r.content_id != '21ed6c17' )
     </sql>
 
     <select id="showTitleDssq" resultType="map">
@@ -36,7 +35,7 @@
         r.aid aid,
         r.keyword keyword,
         r.title content,
-        r.content_id,
+        r.game_id,
         r.play
         <include refid="titleDssqSql"/>
     </select>

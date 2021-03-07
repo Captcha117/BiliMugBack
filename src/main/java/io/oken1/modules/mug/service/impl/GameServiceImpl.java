@@ -1,8 +1,10 @@
 package io.oken1.modules.mug.service.impl;
 
+import io.oken1.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +41,32 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
     }
 
     @Override
-    public LinkedHashMap getGameInfoByGameId(Integer gameId) {
+    public LinkedHashMap getGameInfoByGameId(String gameId) {
         return gameDao.getGameInfoByGameId(gameId);
     }
 
     @Override
-    public List<LinkedHashMap> getSongListByGameId(Integer gameId) {
+    public List<LinkedHashMap> getSongListByGameId(String gameId) {
         return gameDao.getSongsByGameId(gameId);
+    }
+
+    @Override
+    public List<LinkedHashMap> getGamePlayData(String gameId, String type) {
+        Date end = new Date();
+        Date start;
+        switch (type) {
+            default:
+            case "D":
+                start = DateUtils.addDateDays(end, -80);
+                break;
+            case "W":
+                start = DateUtils.addDateDays(end, -42 - end.getDay());
+                break;
+            case "M":
+                start = DateUtils.addDateMonths(end, -6);
+                break;
+        }
+        List<LinkedHashMap> result = gameDao.getGamePlayData(gameId, DateUtils.format(start), DateUtils.format(end), type);
+        return result;
     }
 }

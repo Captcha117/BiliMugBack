@@ -14,7 +14,7 @@
         c.game_id
         FROM
         mug_video v
-        JOIN ( SELECT * FROM mug_keyword k WHERE k.game_id = -1 ORDER BY k.keyword_index ) z ON instr( REPLACE (
+        JOIN ( SELECT * FROM mug_keyword k WHERE k.game_id is null ORDER BY k.keyword_index ) z ON instr( REPLACE (
         v.title, ' ', '' ), z.keyword ) > 0
         JOIN mug_game_content c ON c.aid = v.aid
         WHERE

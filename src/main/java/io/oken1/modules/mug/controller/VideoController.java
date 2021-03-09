@@ -39,8 +39,9 @@ public class VideoController {
             @ApiImplicitParam(name = "gameId", value = "游戏ID", required = true, paramType = "query"),
     })
     public R getVideosByGameId(@RequestParam String gameId) {
-        List<LinkedHashMap> videoList = videoService.getVideosByGameId(gameId);
-        videoList = videoList.subList(0, Math.min(videoList.size(), 20));
+        List<LinkedHashMap> videoList = videoDao.getVideosByGameId(gameId,
+                DateUtils.format(DateUtils.addDateMonths(new Date(), -6)),
+                DateUtils.format(new Date()));
         return R.ok().put("videoList", videoList);
     }
 

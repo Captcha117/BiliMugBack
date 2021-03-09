@@ -11,7 +11,7 @@ import java.util.List;
 
 @Mapper
 public interface VideoDao extends BaseMapper<VideoEntity> {
-    List<LinkedHashMap> getVideosByGameId(String gameId);
+    List<LinkedHashMap> getVideosByGameId(String gameId, String startDate, String endDate);
 
     List<LinkedHashMap> getVideosBySongId(String dongId);
 

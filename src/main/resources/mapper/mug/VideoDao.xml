@@ -16,7 +16,14 @@
                  LEFT JOIN mug_game_content c ON v.aid = c.aid
                  LEFT JOIN mug_uploader u ON v.uid = u.uid
         WHERE c.game_id = #{gameId}
+        <if test="startDate != null">
+            AND date(v.pub_time) >= str_to_date(#{startDate}, '%Y-%m-%d' )
+        </if>
+        <if test="endDate != null">
+            AND str_to_date(#{endDate}, '%Y-%m-%d' ) >= date(v.pub_time)
+        </if>
         ORDER BY play DESC
+        LIMIT 20
     </select>
 
     <select id="getVideosBySongId" resultType="map">

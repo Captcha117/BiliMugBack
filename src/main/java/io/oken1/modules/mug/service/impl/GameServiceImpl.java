@@ -60,7 +60,7 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
                 start = DateUtils.addDateDays(end, -80);
                 break;
             case "W":
-                start = DateUtils.addDateDays(end, -42 - end.getDay());
+                start = DateUtils.addDateDays(end, -80 - end.getDay());
                 break;
             case "M":
                 start = DateUtils.addDateMonths(end, -6);

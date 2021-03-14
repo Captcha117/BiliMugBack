@@ -1,13 +1,11 @@
 package io.oken1.modules.mug.service.impl;
 
 import io.oken1.common.utils.DateUtils;
+import io.oken1.modules.mug.dao.SongDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -24,6 +22,9 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
 
     @Autowired
     private GameDao gameDao;
+
+    @Autowired
+    private SongDao songDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -47,7 +48,17 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
 
     @Override
     public List<LinkedHashMap> getSongListByGameId(String gameId) {
-        return gameDao.getSongsByGameId(gameId);
+        List<LinkedHashMap> list = songDao.getSongsByGameId(gameId);
+        for (LinkedHashMap l : list
+        ) {
+            List<HashMap> charts = (List<HashMap>) l.get("Charts");
+            for (HashMap c : charts
+            ) {
+                l.put(c.get("DifficultyName").toString(), c.get("Level").toString());
+            }
+            l.remove("Charts");
+        }
+        return list;
     }
 
     @Override

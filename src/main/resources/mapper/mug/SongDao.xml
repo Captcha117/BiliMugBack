@@ -2,24 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.mug.dao.SongDao">
+
+    <resultMap id="SongInfo" type="java.util.LinkedHashMap">
+        <result column="SongId" property="SongId"/>
+        <result column="SingleId" property="SingleId"/>
+        <result column="Title" property="Title"/>
+        <result column="Artist" property="Artist"/>
+        <result column="Length" property="Length"/>
+        <result column="ReleaseDate" property="ReleaseDate"/>
+        <result column="Bpm" property="Bpm"/>
+        <collection property="Charts" select="getChartsBySongId" javaType="java.util.List" column="{songId=songId}">
+            <result column="ChartId" property="ChartId"/>
+            <result column="DifficultyName" property="DifficultyName"/>
+            <result column="Level" property="Level"/>
+        </collection>
+    </resultMap>
+
+    <!--游戏曲目-->
+    <select id="getSongsByGameId" resultMap="SongInfo">
+        SELECT song_id      SongId,
+               single_id    SingleId,
+               title        Title,
+               artist       Artist,
+               length       Length,
+               release_date ReleaseDate,
+               bpm          Bpm
+        FROM mug_song s
+        WHERE s.game_id = #{gameId}
+        ORDER BY s.inx
+    </select>
+
+    <select id="getChartsBySongId" resultType="map">
+        SELECT c.chart_id        ChartId,
+               c.level           Level,
+               d.difficulty_name DifficultyName
+        FROM mug_chart AS c
+                 LEFT JOIN mug_difficulty d ON c.difficulty_id = d.difficulty_id
+        WHERE c.song_id = #{songId}
+          AND c.usable = 1
+        ORDER BY d.inx
+    </select>
+
+
     <select id="getSongInfo" resultType="java.util.LinkedHashMap">
-        SELECT
-        s.song_id,
-        s.game_id,
-        g.common_name game_name,
-        s.title,
-        getSongSubName ( s.other_title ) other_title,
-        s.artist,
-        s.bpm,
-        s.length,
-        s.single_id,
-        s.style_id,
-        s.package_id,
-        s.release_date
-        FROM
-        mug_song s
-        left join mug_game g on s.game_id = g.game_id
-        where
-        song_id = #{songId}
+        SELECT s.song_id      SongId,
+               s.game_id      GameId,
+               g.common_name  GameName,
+               s.title        Title,
+               s.other_title  OtherName,
+               s.artist       Artist,
+               s.bpm          Bpm,
+               s.length       Length,
+               s.single_id    SingleId,
+               s.style_id     StyleId,
+               s.package_id   PackageId,
+               s.release_date ReleaseDate
+        FROM mug_song s
+                 left join mug_game g on s.game_id = g.game_id
+        where song_id = #{songId}
     </select>
 </mapper>

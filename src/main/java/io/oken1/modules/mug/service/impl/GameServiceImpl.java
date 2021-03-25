@@ -48,7 +48,7 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
 
     @Override
     public List<LinkedHashMap> getSongListByGameId(String gameId) {
-        List<LinkedHashMap> list = songDao.getSongsByGameId(gameId);
+        List<LinkedHashMap> list = songDao.getSongListByGameId(gameId);
         for (LinkedHashMap l : list
         ) {
             List<HashMap> charts = (List<HashMap>) l.get("Charts");
@@ -68,13 +68,13 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
         switch (type) {
             default:
             case "D":
-                start = DateUtils.addDateDays(end, -80);
+                start = DateUtils.addDateMonths(end, -1);
                 break;
             case "W":
-                start = DateUtils.addDateDays(end, -80 - end.getDay());
+                start = DateUtils.addDateDays(end, -84 - end.getDay());
                 break;
             case "M":
-                start = DateUtils.addDateMonths(end, -6);
+                start = DateUtils.addDateMonths(end, -12);
                 break;
         }
         List<LinkedHashMap> result = gameDao.getGamePlayData(gameId, DateUtils.format(start), DateUtils.format(end), type);

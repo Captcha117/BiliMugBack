@@ -6,6 +6,7 @@ import io.swagger.models.auth.In;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @TableName("mug_song")
@@ -17,7 +18,17 @@ public class SongEntity implements Serializable {
 
     private String gameId;
 
-    private Integer singleId;
+    private String singleId;
 
-    private String title;
+    private String songTitleEn;
+    private String songTitleJp;
+    private String songTitleCn;
+    private String songAlias;
+    private String songArtist;
+    private String songLength;
+    private String songStyle;
+    private String gameVersion;
+    private Date releaseDate;
+    private String SongBpm;
+    private String SongInx;
 }

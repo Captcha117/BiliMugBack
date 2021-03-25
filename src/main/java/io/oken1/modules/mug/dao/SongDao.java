@@ -9,7 +9,9 @@ import java.util.List;
 
 @Mapper
 public interface SongDao extends BaseMapper<SongEntity> {
-    List<LinkedHashMap> getSongsByGameId(String gameId);
+    List<LinkedHashMap> getSongListByGameId(String gameId);
+
+    List<SongEntity> getBriefSongListByGameId(String gameId);
 
     LinkedHashMap getSongInfo(String songId);
 }

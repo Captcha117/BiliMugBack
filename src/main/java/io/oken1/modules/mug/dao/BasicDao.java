@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface BasicDao {
-    List<LinkedHashMap> getSnsList();
+    List<LinkedHashMap> getAllSnsList();
 }

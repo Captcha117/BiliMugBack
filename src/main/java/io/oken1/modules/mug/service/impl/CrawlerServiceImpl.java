@@ -68,7 +68,7 @@ public class CrawlerServiceImpl implements CrawlerService {
                 BiliArchiveEntity biliArchive = gson.fromJson(str, BiliArchiveEntity.class);
                 saveData(biliArchive);
                 System.out.println("end:" + page);
-                Thread.sleep(1500);
+                Thread.sleep((long) (1500 + Math.random() * 200));
             }
         } catch (Exception e) {
             System.out.println(Arrays.toString(e.getStackTrace()));

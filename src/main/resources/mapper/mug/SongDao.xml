@@ -19,17 +19,17 @@
     </resultMap>
 
     <!--游戏曲目-->
-    <select id="getSongsByGameId" resultMap="SongInfo">
-        SELECT song_id      SongId,
-               single_id    SingleId,
-               title        Title,
-               artist       Artist,
-               length       Length,
-               release_date ReleaseDate,
-               bpm          Bpm
+    <select id="getSongListByGameId" resultMap="SongInfo">
+        SELECT song_id       SongId,
+               single_id     SingleId,
+               song_title_en Title,
+               song_artist   Artist,
+               song_length   Length,
+               release_date  ReleaseDate,
+               song_bpm      Bpm
         FROM mug_song s
         WHERE s.game_id = #{gameId}
-        ORDER BY s.inx
+        ORDER BY s.song_inx
     </select>
 
     <select id="getChartsBySongId" resultType="map">
@@ -43,20 +43,26 @@
         ORDER BY d.inx
     </select>
 
+    <select id="getBriefSongListByGameId" resultType="io.oken1.modules.mug.entity.SongEntity">
+        SELECT s.*
+        FROM mug_song s
+        WHERE s.game_id = #{gameId}
+        ORDER BY s.song_inx
+    </select>
+
 
     <select id="getSongInfo" resultType="java.util.LinkedHashMap">
-        SELECT s.song_id      SongId,
-               s.game_id      GameId,
-               g.common_name  GameName,
-               s.title        Title,
-               s.other_title  OtherName,
-               s.artist       Artist,
-               s.bpm          Bpm,
-               s.length       Length,
-               s.single_id    SingleId,
-               s.style_id     StyleId,
-               s.package_id   PackageId,
-               s.release_date ReleaseDate
+        SELECT s.song_id       SongId,
+               s.game_id       GameId,
+               g.common_name   GameName,
+               s.song_title_en TitleEn,
+               s.song_title_jp TitleJp,
+               s.song_artist   Artist,
+               s.song_bpm      Bpm,
+               s.song_length   Length,
+               s.single_id     SingleId,
+               s.song_style    StyleId,
+               s.release_date  ReleaseDate
         FROM mug_song s
                  left join mug_game g on s.game_id = g.game_id
         where song_id = #{songId}

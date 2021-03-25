@@ -23,9 +23,9 @@ public class BasicController {
      *
      * @return SNS信息表
      */
-    @GetMapping("/snsList")
-    public R getSnsList() {
-        List<LinkedHashMap> result = basicDao.getSnsList();
-        return R.ok().put("snsList", result);
+    @GetMapping("/allSnsList")
+    public R getAllSnsList() {
+        List<LinkedHashMap> result = basicDao.getAllSnsList();
+        return R.ok().put("allSnsList", result);
     }
 }

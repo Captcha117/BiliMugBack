@@ -26,8 +26,8 @@
         ) r
         WHERE
         r.row_num = 1
-        AND ( r.keyword != '疯狂' OR r.content_id != '21ed4aa7' )
-        AND ( r.keyword != '爆炸' OR r.content_id != '21ed6c17' )
+        AND ( r.keyword != '疯狂' OR r.game_id != '21ed4aa7' )
+        AND ( r.keyword != '爆炸' OR r.game_id != '21ed6c17' )
     </sql>
 
     <select id="showTitleDssq" resultType="map">

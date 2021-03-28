@@ -16,11 +16,14 @@
 
     <!--游戏信息-->
     <select id="getGameInfoByGameId" resultType="java.util.LinkedHashMap">
-        SELECT g.game_id                                         GameId,
-               g.common_name                                     CommonName,
-               left(g.other_name, LOCATE(',', g.other_name) - 1) OtherName,
-               g.icon_version                                    IconVersion,
-               c.company_name                                    Developer
+        SELECT g.game_id                               GameId,
+               g.common_name                           CommonName,
+               LEFT(g.other_name,
+                    IF(LOCATE(',', g.other_name) = 0,
+                       length(g.other_name),
+                       LOCATE(',', g.other_name) - 1)) OtherName,
+               g.icon_version                          IconVersion,
+               c.company_name                          Developer
         FROM mug_game g
                  LEFT JOIN mug_company c ON g.developer = c.company_id
         WHERE g.game_id = #{gameId}
@@ -33,7 +36,7 @@
                 DATE_FORMAT( v.pub_date, '%m月%d日' )
             </when>
             <when test='type == "W"'>
-                DATE_FORMAT( v.pub_date, '%y年%v周' )
+                DATE_FORMAT( v.pub_date, '%x年%v周' )
             </when>
             <when test='type == "M"'>
                 DATE_FORMAT( v.pub_date, '%y年%m月' )
@@ -53,8 +56,8 @@
                 ORDER BY DATE_FORMAT( v.pub_date, '%m月%d日' )
             </when>
             <when test='type == "W"'>
-                GROUP BY DATE_FORMAT( v.pub_date, '%y年%v周' )
-                ORDER BY DATE_FORMAT( v.pub_date, '%y年%v周' )
+                GROUP BY DATE_FORMAT( v.pub_date, '%x年%v周' )
+                ORDER BY DATE_FORMAT( v.pub_date, '%x年%v周' )
             </when>
             <when test='type == "M"'>
                 GROUP BY DATE_FORMAT( v.pub_date, '%y年%m月' )

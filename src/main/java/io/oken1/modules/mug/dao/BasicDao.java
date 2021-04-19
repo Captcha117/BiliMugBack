@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface BasicDao {
     List<LinkedHashMap> getAllSnsList();
+
+    List<LinkedHashMap> getAllCompanyList();
 }

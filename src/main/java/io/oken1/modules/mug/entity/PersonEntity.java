@@ -30,7 +30,7 @@ public class PersonEntity implements Serializable {
     /**
      *  人物国家/地区
      */
-    private String personNation;
+    private String personRegion;
     /**
      * 人物描述
      */

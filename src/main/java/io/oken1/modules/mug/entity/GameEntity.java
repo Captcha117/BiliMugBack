@@ -17,7 +17,7 @@ public class GameEntity implements Serializable {
     /**
      * 游戏ID
      */
-    @TableId
+    @TableId(type = IdType.INPUT)
     private String gameId;
     /**
      * 常用名称
@@ -28,7 +28,7 @@ public class GameEntity implements Serializable {
      */
     private String fullName;
     /**
-     *  图标版本
+     * 图标版本
      */
     private Integer iconVersion;
     /**

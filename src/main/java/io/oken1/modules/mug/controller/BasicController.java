@@ -28,4 +28,15 @@ public class BasicController {
         List<LinkedHashMap> result = basicDao.getAllSnsList();
         return R.ok().put("allSnsList", result);
     }
+
+    /**
+     * 获取公司信息表
+     *
+     * @return 公司信息表
+     */
+    @GetMapping("/allCompanyList")
+    public R getAllCompanyList() {
+        List<LinkedHashMap> result = basicDao.getAllCompanyList();
+        return R.ok().put("allCompanyList", result);
+    }
 }

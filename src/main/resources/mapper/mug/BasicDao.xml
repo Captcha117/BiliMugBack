@@ -12,4 +12,10 @@
         FROM tb_sns_type s
         ORDER BY s.inx
     </select>
+
+    <select id="getAllCompanyList" resultType="map">
+        select c.company_id, company_name, company_alias, company_region, company_address
+        from mug_company c
+        order by c.company_name
+    </select>
 </mapper>

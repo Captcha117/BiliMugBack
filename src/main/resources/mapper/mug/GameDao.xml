@@ -7,7 +7,6 @@
         SELECT g.game_id      GameId,
                g.common_name  CommonName,
                g.other_name   OtherName,
-               g.icon_id      IconId,
                g.icon_version IconVersion
         FROM mug_game g
         where g.parent_id is null

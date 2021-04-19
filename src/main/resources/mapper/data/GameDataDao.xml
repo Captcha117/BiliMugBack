@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.oken1.modules.data.dao.GameDataDao">
+    <select id="getGameList" resultType="map">
+        SELECT g.game_id GameId,
+               common_name CommonName,
+               full_name FullName,
+               other_name OtherName,
+               icon_version IconVersion,
+               developer Developer,
+               c1.company_name DeveloperName,
+               publisher Publisher,
+               c2.company_name PublisherName,
+               publish_time PublishTime,
+               game_tag GameTag,
+               video_tag VideoTag,
+               parent_id ParentId,
+               similar Similar,
+               filter_index FilterIndex,
+               create_user CreateUser,
+               create_time CreateTime,
+               update_user UpdateUser,
+               update_time UpdateTime,
+               z.keyword Keyword
+        FROM mug_game g
+                 LEFT JOIN (SELECT game_id, group_concat(k.keyword) keyword FROM mug_keyword k GROUP BY k.game_id) z
+                           ON g.game_id = z.game_id
+                 LEFT JOIN mug_company c1 ON g.developer = c1.company_id
+                 LEFT JOIN mug_company c2 ON g.publisher = c2.company_id
+    </select>
+</mapper>

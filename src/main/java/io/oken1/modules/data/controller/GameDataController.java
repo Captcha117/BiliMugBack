@@ -4,6 +4,7 @@ import io.oken1.common.utils.PageUtils;
 import io.oken1.common.utils.R;
 import io.oken1.modules.data.dao.GameDataDao;
 import io.oken1.modules.data.entity.GameDataEntity;
+import io.oken1.modules.mug.entity.CompanyEntity;
 import io.oken1.modules.mug.service.GameService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,17 @@ public class GameDataController {
      */
     @GetMapping("/game/list")
     //@RequiresPermissions("mug:mug:list")
-    public R list() {
+    public R gameList() {
         List<GameDataEntity> result = gameDatadao.getGameList();
+        return R.ok().put("result", result);
+    }
+
+    /**
+     * mug_company列表
+     */
+    @RequestMapping("/company/list")
+    public R companyList() {
+        List<CompanyEntity> result = gameDatadao.getCompanyList();
         return R.ok().put("result", result);
     }
 }

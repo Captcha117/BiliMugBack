@@ -3,30 +3,42 @@
 
 <mapper namespace="io.oken1.modules.data.dao.GameDataDao">
     <select id="getGameList" resultType="map">
-        SELECT g.game_id GameId,
-               common_name CommonName,
-               full_name FullName,
-               other_name OtherName,
-               icon_version IconVersion,
-               developer Developer,
+        SELECT g.game_id       GameId,
+               g.common_name   CommonName,
+               g.full_name     FullName,
+               g.other_name    OtherName,
+               g.icon_version  IconVersion,
+               g.developer     Developer,
                c1.company_name DeveloperName,
-               publisher Publisher,
+               g.publisher     Publisher,
                c2.company_name PublisherName,
-               publish_time PublishTime,
-               game_tag GameTag,
-               video_tag VideoTag,
-               parent_id ParentId,
-               similar Similar,
-               filter_index FilterIndex,
-               create_user CreateUser,
-               create_time CreateTime,
-               update_user UpdateUser,
-               update_time UpdateTime,
-               z.keyword Keyword
+               g.publish_time  PublishTime,
+               g.game_tag      GameTag,
+               g.video_tag     VideoTag,
+               g.parent_id     ParentId,
+               g2.common_name  ParentName,
+               g.similar       Similar,
+               g.filter_index  FilterIndex,
+               g.create_user   CreateUser,
+               g.create_time   CreateTime,
+               g.update_user   UpdateUser,
+               g.update_time   UpdateTime,
+               z.keyword       Keyword
         FROM mug_game g
                  LEFT JOIN (SELECT game_id, group_concat(k.keyword) keyword FROM mug_keyword k GROUP BY k.game_id) z
                            ON g.game_id = z.game_id
+                 LEFT JOIN mug_game g2 on g.parent_id = g2.game_id
                  LEFT JOIN mug_company c1 ON g.developer = c1.company_id
                  LEFT JOIN mug_company c2 ON g.publisher = c2.company_id
+    </select>
+
+    <select id="getCompanyList" resultType="map">
+        select c.company_id    CompanyId,
+               company_name    CompanyName,
+               company_alias   CompanyAlias,
+               company_region  CompanyRegion,
+               company_address CompanyAddress
+        from mug_company c
+        order by c.company_name
     </select>
 </mapper>

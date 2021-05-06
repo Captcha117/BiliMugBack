@@ -1,5 +1,6 @@
 package io.oken1.modules.mug.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -13,7 +14,7 @@ public class CompanyEntity implements Serializable {
     /**
      * 公司ID
      */
-    @TableId
+    @TableId(type = IdType.INPUT)
     private String companyId;
     /**
      * 公司名称

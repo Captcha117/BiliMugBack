@@ -31,62 +31,6 @@ public class GameController {
     GameDetailDao gameDetailDao;
 
     /**
-     * 列表
-     */
-    @GetMapping("/pageList")
-    //@RequiresPermissions("mug:mug:list")
-    public R list(@RequestParam Map<String, Object> params) {
-        PageUtils page = gameService.queryPage(params);
-
-        return R.ok().put("page", page);
-    }
-
-
-    /**
-     * 信息
-     */
-    @GetMapping("/info/{gameId}")
-    //@RequiresPermissions("mug:mug:info")
-    public R info(@PathVariable("gameId") String gameId) {
-        GameEntity game = gameService.getById(gameId);
-
-        return R.ok().put("gameInfo", game);
-    }
-
-    /**
-     * 保存
-     */
-    @PostMapping("/save")
-    //@RequiresPermissions("mug:mug:save")
-    public R save(@RequestBody GameEntity game) {
-        gameService.save(game);
-
-        return R.ok();
-    }
-
-    /**
-     * 修改
-     */
-    @PostMapping("/update")
-    //@RequiresPermissions("mug:mug:update")
-    public R update(@RequestBody GameEntity game) {
-        gameService.updateById(game);
-
-        return R.ok();
-    }
-
-    /**
-     * 删除
-     */
-    @PostMapping("/delete")
-    //@RequiresPermissions("mug:mug:delete")
-    public R delete(@RequestBody String[] gameIds) {
-        gameService.removeByIds(Arrays.asList(gameIds));
-
-        return R.ok();
-    }
-
-    /**
      * 获取简要游戏列表
      *
      * @return 分类结果

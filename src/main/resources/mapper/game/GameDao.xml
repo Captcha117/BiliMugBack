@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.oken1.modules.game.dao.GameDao">
+    <!--游戏列表-->
+    <select id="getGameList" resultType="map">
+        SELECT g.game_id      GameId,
+               g.common_name  CommonName,
+               g.other_name   OtherName,
+               g.icon_version IconVersion
+        FROM mug_game g
+        where g.parent_id is null
+        ORDER BY g.common_name
+    </select>
+
+    <!--游戏信息-->
+    <select id="getGameInfoByGameId" resultType="java.util.LinkedHashMap">
+        SELECT g.game_id                               GameId,
+               g.common_name                           CommonName,
+               LEFT(g.other_name,
+                    IF(LOCATE(',', g.other_name) = 0,
+                       length(g.other_name),
+                       LOCATE(',', g.other_name) - 1)) OtherName,
+               g.icon_version                          IconVersion,
+               c.company_name                          Developer
+        FROM mug_game g
+                 LEFT JOIN mug_company c ON g.developer = c.company_id
+        WHERE g.game_id = #{gameId}
+    </select>
+
+    <select id="getGamePlayData" resultType="map">
+        SELECT
+        <choose>
+            <when test='type == "D"'>
+                DATE_FORMAT( v.pub_date, '%m月%d日' )
+            </when>
+            <when test='type == "W"'>
+                DATE_FORMAT( v.pub_date, '%x年%v周' )
+            </when>
+            <when test='type == "M"'>
+                DATE_FORMAT( v.pub_date, '%y年%m月' )
+            </when>
+        </choose>
+        Time,
+        sum(v.play / v.game_count) AllPlay,
+        sum(IF(v.dssq, 0, v.play / v.game_count)) Play,
+        count(1) AllCount,
+        sum(IF(v.dssq, 0, 1)) Count
+        FROM v_video v
+        WHERE instr(v.game_id, #{gameId}) > 0
+        AND v.pub_date BETWEEN #{startDate} AND #{endDate}
+        <choose>
+            <when test='type == "D"'>
+                GROUP BY DATE_FORMAT( v.pub_date, '%m月%d日' )
+                ORDER BY DATE_FORMAT( v.pub_date, '%m月%d日' )
+            </when>
+            <when test='type == "W"'>
+                GROUP BY DATE_FORMAT( v.pub_date, '%x年%v周' )
+                ORDER BY DATE_FORMAT( v.pub_date, '%x年%v周' )
+            </when>
+            <when test='type == "M"'>
+                GROUP BY DATE_FORMAT( v.pub_date, '%y年%m月' )
+                ORDER BY DATE_FORMAT( v.pub_date, '%y年%m月' )
+            </when>
+        </choose>
+    </select>
+
+    <!--后台配置list-->
+    <select id="getGameConfigList" resultType="map">
+        SELECT g.game_id       GameId,
+               g.common_name   CommonName,
+               g.full_name     FullName,
+               g.other_name    OtherName,
+               g.icon_version  IconVersion,
+               g.developer     Developer,
+               c1.company_name DeveloperName,
+               g.publisher     Publisher,
+               c2.company_name PublisherName,
+               g.publish_time  PublishTime,
+               g.game_tag      GameTag,
+               g.video_tag     VideoTag,
+               g.parent_id     ParentId,
+               g2.common_name  ParentName,
+               g.similar       Similar,
+               g.filter_index  FilterIndex,
+               g.create_user   CreateUser,
+               g.create_time   CreateTime,
+               g.update_user   UpdateUser,
+               g.update_time   UpdateTime,
+               z.keyword       Keyword
+        FROM mug_game g
+                 LEFT JOIN (SELECT game_id, group_concat(k.keyword) keyword FROM mug_keyword k GROUP BY k.game_id) z
+                           ON g.game_id = z.game_id
+                 LEFT JOIN mug_game g2 on g.parent_id = g2.game_id
+                 LEFT JOIN mug_company c1 ON g.developer = c1.company_id
+                 LEFT JOIN mug_company c2 ON g.publisher = c2.company_id
+    </select>
+</mapper>

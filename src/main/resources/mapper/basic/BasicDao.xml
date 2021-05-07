@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.oken1.modules.basic.dao.BasicDao">
+    <select id="getAllSnsList" resultType="map">
+        SELECT s.sns_type    SnsType,
+               s.sns_cn      SnsCn,
+               s.sns_en      SnsEn,
+               s.sns_jp      SnsJp,
+               s.default_url DefaultUrl,
+               s.icon        Icon
+        FROM tb_sns_type s
+        ORDER BY s.inx
+    </select>
+
+    <select id="getAllCompanyList" resultType="map">
+        select c.company_id, company_name, company_alias, company_region, company_address
+        from mug_company c
+        order by c.company_name
+    </select>
+</mapper>

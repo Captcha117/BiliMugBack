@@ -1,8 +1,7 @@
 package io.oken1.modules.game.dao;
 
-import io.oken1.modules.game.entity.GameDataEntity;
-import io.oken1.modules.game.entity.GameEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.oken1.modules.game.entity.GameEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.LinkedHashMap;
@@ -21,5 +20,5 @@ public interface GameDao extends BaseMapper<GameEntity> {
     /**
      * game后台配置表
      */
-    List<GameDataEntity> getGameConfigList();
+    List<LinkedHashMap> getGameConfigList();
 }

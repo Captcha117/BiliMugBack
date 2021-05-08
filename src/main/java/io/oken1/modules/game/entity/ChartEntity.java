@@ -30,9 +30,9 @@ public class ChartEntity implements Serializable {
     /**
      * 等级
      */
-    private String level;
+    private String chartLevel;
     /**
      * 是否可用
      */
-    private Integer usable;
+    private Integer chartUsable;
 }

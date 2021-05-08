@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.game.dao.VersionDao">
+    <select id="getVersionConfigListByGameId" resultType="map">
+        select v.pk_id      PkId,
+               game_id      GameId,
+               version_no   VersionNo,
+               version_info VersionInfo,
+               version_date VersionDate
+        from mug_version v
+        where v.game_id = #{gameId}
+        order by v.version_date, version_no
+    </select>
 </mapper>

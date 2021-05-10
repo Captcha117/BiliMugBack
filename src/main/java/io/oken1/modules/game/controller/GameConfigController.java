@@ -190,9 +190,16 @@ public class GameConfigController {
     @Autowired
     VersionDao versionDao;
 
+    @GetMapping("/version/list")
+    //@RequiresPermissions("mug:mug:list")
+    public R versionList() {
+        List<LinkedHashMap> result = versionDao.getVersionConfigList();
+        return R.ok().put("result", result);
+    }
+
     @GetMapping("/version/list/{gameId}")
     //@RequiresPermissions("mug:mug:list")
-    public R versionList(@PathVariable("gameId") String gameId) {
+    public R versionListByGameId(@PathVariable("gameId") String gameId) {
         List<VersionEntity> result = versionDao.getVersionConfigListByGameId(gameId);
         return R.ok().put("result", result);
     }

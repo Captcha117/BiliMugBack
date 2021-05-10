@@ -2,12 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.game.dao.VersionDao">
+    <select id="getVersionConfigList" resultType="map">
+        select g.game_id      GameId,
+               g.common_name  GameName,
+               z.total        VersionCount,
+               z.version_no   LatestVersionNo,
+               z.version_date LatestVersionDate
+        from mug_game g
+                 left join (
+            select v.game_id,
+                   count(1)            total,
+                   max(v.version_no)   version_no,
+                   max(v.version_date) version_date
+            from mug_version v
+            group by v.game_id
+        ) z on g.game_id = z.game_id
+    </select>
     <select id="getVersionConfigListByGameId" resultType="map">
-        select v.pk_id      PkId,
-               game_id      GameId,
-               version_no   VersionNo,
-               version_info VersionInfo,
-               version_date VersionDate
+        select v.version_id   VersionId,
+               v.game_id      GameId,
+               v.version_no   VersionNo,
+               v.version_info VersionInfo,
+               v.version_date VersionDate
         from mug_version v
         where v.game_id = #{gameId}
         order by v.version_date, version_no

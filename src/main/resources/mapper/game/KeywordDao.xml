@@ -2,8 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.game.dao.KeywordDao">
+    <select id="getKeywordConfigList" resultType="map">
+        select g.game_id      GameId,
+               g.common_name  GameName,
+               g.filter_index FilterIndex,
+               z.total        Total
+        from mug_game g
+                 left join (select k.game_id, count(1) total from mug_keyword k group by k.game_id) z
+                           on g.game_id = z.game_id
+        where g.parent_id is null
+        order by g.filter_index
+    </select>
     <select id="getKeywordConfigListByGameId" resultType="map">
-        select k.pk_id         PkId,
+        select k.keyword_id    KeywordId,
                k.game_id       GameId,
                k.keyword       Keyword,
                k.keyword_index KeywordIndex

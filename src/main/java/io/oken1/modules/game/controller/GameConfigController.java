@@ -1,6 +1,7 @@
 package io.oken1.modules.game.controller;
 
 import io.oken1.common.utils.R;
+import io.oken1.common.utils.ShiroUtils;
 import io.oken1.modules.game.dao.*;
 import io.oken1.modules.game.entity.*;
 import io.oken1.modules.game.service.*;
@@ -236,9 +237,16 @@ public class GameConfigController {
     @Autowired
     KeywordDao keywordDao;
 
+    @GetMapping("/keyword/list")
+    //@RequiresPermissions("mug:mug:list")
+    public R keywordList() {
+        List<LinkedHashMap> result = keywordDao.getKeywordConfigList();
+        return R.ok().put("result", result);
+    }
+
     @GetMapping("/keyword/list/{gameId}")
     //@RequiresPermissions("mug:mug:list")
-    public R keywordList(@PathVariable("gameId") String gameId) {
+    public R keywordListByGameId(@PathVariable("gameId") String gameId) {
         List<KeywordEntity> result = keywordDao.getKeywordConfigListByGameId(gameId);
         return R.ok().put("result", result);
     }
@@ -252,18 +260,66 @@ public class GameConfigController {
     @PostMapping("/keyword/save")
     public R keywordSave(@RequestBody KeywordEntity keyword) {
         keywordService.save(keyword);
+        keyword.setUpdateUser(ShiroUtils.getUserId());
         return R.ok();
     }
 
     @PostMapping("/keyword/update")
     public R keywordUpdate(@RequestBody KeywordEntity keyword) {
         keywordService.updateById(keyword);
+        keyword.setUpdateUser(ShiroUtils.getUserId());
         return R.ok();
     }
 
     @PostMapping("/keyword/delete")
     public R keywordDelete(@RequestBody String[] keywordIds) {
         keywordService.removeByIds(Arrays.asList(keywordIds));
+
+        return R.ok();
+    }
+    //endregion
+
+    //region mug_package
+    @Autowired
+    PackageService packageService;
+    @Autowired
+    PackageDao packageDao;
+
+    @GetMapping("/package/list")
+    //@RequiresPermissions("mug:mug:list")
+    public R packageList() {
+        List<LinkedHashMap> result = packageDao.getPackageConfigList();
+        return R.ok().put("result", result);
+    }
+
+    @GetMapping("/package/list/{gameId}")
+    //@RequiresPermissions("mug:mug:list")
+    public R packageListByGameId(@PathVariable("gameId") String gameId) {
+        List<PackageEntity> result = packageDao.getPackageConfigListByGameId(gameId);
+        return R.ok().put("result", result);
+    }
+
+    @GetMapping("/package/info/{packageId}")
+    public R packageInfo(@PathVariable("packageId") String packageId) {
+        PackageEntity packageEntity = packageService.getById(packageId);
+        return R.ok().put("packageInfo", packageEntity);
+    }
+
+    @PostMapping("/package/save")
+    public R packageSave(@RequestBody PackageEntity packageEntity) {
+        packageService.save(packageEntity);
+        return R.ok();
+    }
+
+    @PostMapping("/package/update")
+    public R packageUpdate(@RequestBody PackageEntity packageEntity) {
+        packageService.updateById(packageEntity);
+        return R.ok();
+    }
+
+    @PostMapping("/package/delete")
+    public R packageDelete(@RequestBody String[] packageIds) {
+        packageService.removeByIds(Arrays.asList(packageIds));
 
         return R.ok();
     }

@@ -2,4 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.game.dao.PackageDao">
+    <select id="getPackageConfigList" resultType="map">
+        select g.game_id     GameId,
+               g.common_name GameName,
+               z.total       Total
+        from mug_game g
+                 left join (select p.game_id, count(1) total from mug_package p group by p.game_id) z
+                           on g.game_id = z.game_id
+        order by g.filter_index
+    </select>
+    <select id="getPackageConfigListByGameId" resultType="map">
+        select p.package_id    PackageId,
+               p.game_id       GameId,
+               p.package_name  PackageName,
+               p.package_price PackagePrice,
+               p.release_date  ReleaseDate,
+               p.description   Description,
+               p.remarks       Remarks
+        from mug_package p
+        where p.game_id = #{gameId}
+        order by p.release_date
+    </select>
 </mapper>

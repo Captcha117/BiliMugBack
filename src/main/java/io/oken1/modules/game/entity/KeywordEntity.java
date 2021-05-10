@@ -17,7 +17,7 @@ public class KeywordEntity implements Serializable {
      * 主键
      */
     @TableId
-    private Integer pkId;
+    private Integer keywordId;
     /**
      * 游戏ID
      */
@@ -34,7 +34,7 @@ public class KeywordEntity implements Serializable {
      * 更新人
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Integer updateUser;
+    private Long updateUser;
     /**
      * 更新时间
      */

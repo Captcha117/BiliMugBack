@@ -3,11 +3,11 @@
 
 <mapper namespace="io.oken1.modules.game.dao.VersionDao">
     <select id="getVersionConfigList" resultType="map">
-        select g.game_id      GameId,
-               g.common_name  GameName,
-               z.total        VersionCount,
-               z.version_no   LatestVersionNo,
-               z.version_date LatestVersionDate
+        select g.game_id,
+               g.common_name  game_name,
+               z.total        version_count,
+               z.version_no   latest_version_no,
+               z.version_date latest_version_date
         from mug_game g
                  left join (
             select v.game_id,
@@ -18,12 +18,12 @@
             group by v.game_id
         ) z on g.game_id = z.game_id
     </select>
-    <select id="getVersionConfigListByGameId" resultType="map">
-        select v.version_id   VersionId,
-               v.game_id      GameId,
-               v.version_no   VersionNo,
-               v.version_info VersionInfo,
-               v.version_date VersionDate
+    <select id="getVersionConfigListByGameId" resultType="io.oken1.modules.game.entity.VersionEntity">
+        select v.version_id,
+               v.game_id,
+               v.version_no,
+               v.version_info,
+               v.version_date
         from mug_version v
         where v.game_id = #{gameId}
         order by v.version_date, version_no

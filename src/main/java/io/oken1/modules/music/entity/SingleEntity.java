@@ -9,55 +9,35 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@TableName("mug_song")
-public class SongEntity implements Serializable {
+@TableName("mug_single")
+public class SingleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
      * 曲目ID
      */
     @TableId(type = IdType.INPUT)
-    private String songId;
-    /**
-     * 所属游戏ID
-     */
-    private String gameId;
-    /**
-     * 所属单曲ID
-     */
     private String singleId;
     /**
      * 英文曲名
      */
-    private String songTitleEn;
+    private String singleTitleEn;
     /**
      * 日文曲名
      */
-    private String songTitleJp;
+    private String singleTitleJp;
     /**
      * 中文曲名
      */
-    private String songTitleCn;
+    private String singleTitleCn;
     /**
      * 曲目别名
      */
-    private String songAlias;
+    //private String songAlias;
     /**
-     * 游戏内标注的艺术家
+     * 艺术家
      */
-    private String songArtist;
-    /**
-     * 时长
-     */
-    private String songLength;
-    /**
-     * 曲风
-     */
-    private String songStyle;
-    /**
-     * 收录版本
-     */
-    private String gameVersion;
+    private String singleArtist;
     /**
      * 收录日期
      */
@@ -65,9 +45,5 @@ public class SongEntity implements Serializable {
     /**
      * BPM
      */
-    private String SongBpm;
-    /**
-     * 排序
-     */
-    private String SongInx;
+    private String singleBpm;
 }

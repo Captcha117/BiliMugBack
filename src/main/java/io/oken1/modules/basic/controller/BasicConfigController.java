@@ -2,8 +2,11 @@ package io.oken1.modules.basic.controller;
 
 import io.oken1.common.utils.R;
 import io.oken1.modules.basic.dao.CompanyDao;
+import io.oken1.modules.basic.dao.SnsTypeDao;
 import io.oken1.modules.basic.entity.CompanyEntity;
+import io.oken1.modules.basic.entity.SnsTypeEntity;
 import io.oken1.modules.basic.service.CompanyService;
+import io.oken1.modules.basic.service.SnsTypeService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +14,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 
-@Api(value = "公司", tags = {"公司"})
+@Api(value = "基础数据配置", tags = {"基础数据配置"})
 @RestController
 @RequestMapping("/config")
 public class BasicConfigController {
+    //region mug_company
     @Autowired
     CompanyService companyService;
     @Autowired
     CompanyDao companyDao;
 
-    //region mug_company
     @RequestMapping("/company/list")
     public R companyList() {
         List<CompanyEntity> result = companyDao.getCompanyConfigList();
@@ -35,25 +38,65 @@ public class BasicConfigController {
     }
 
     @PostMapping("/company/save")
-    //@RequiresPermissions("mug:mug:save")
     public R companySave(@RequestBody CompanyEntity company) {
         companyService.save(company);
         return R.ok();
     }
 
     @PostMapping("/company/update")
-    //@RequiresPermissions("mug:mug:update")
     public R companyUpdate(@RequestBody CompanyEntity company) {
         companyService.updateById(company);
         return R.ok();
     }
 
     @PostMapping("/company/delete")
-    //@RequiresPermissions("mug:mug:delete")
     public R companyDelete(@RequestBody String[] companyIds) {
         companyService.removeByIds(Arrays.asList(companyIds));
 
         return R.ok();
     }
+    //endregion
+
+    //region tb_sns_type
+    @Autowired
+    SnsTypeService snsTypeService;
+    @Autowired
+    SnsTypeDao snsTypeDao;
+
+    @RequestMapping("/snsType/list")
+    public R snsTypeList() {
+        List<SnsTypeEntity> result = snsTypeDao.getSnsTypeConfigList();
+        return R.ok().put("result", result);
+    }
+
+    @GetMapping("/snsType/info/{snsType}")
+    //@RequiresPermissions("mug:mug:info")
+    public R snsTypeInfo(@PathVariable("snsType") String snsType) {
+        SnsTypeEntity snsTypeEntity = snsTypeService.getById(snsType);
+        return R.ok().put("snsTypeInfo", snsTypeEntity);
+    }
+
+    @PostMapping("/snsType/save")
+    public R snsTypeSave(@RequestBody SnsTypeEntity snsType) {
+        snsTypeService.save(snsType);
+        return R.ok();
+    }
+
+    @PostMapping("/snsType/update")
+    public R snsTypeUpdate(@RequestBody SnsTypeEntity snsType) {
+        snsTypeService.updateById(snsType);
+        return R.ok();
+    }
+
+    @PostMapping("/snsType/delete")
+    public R snsTypeDelete(@RequestBody String[] snsTypeIds) {
+        snsTypeService.removeByIds(Arrays.asList(snsTypeIds));
+
+        return R.ok();
+    }
+    //endregion
+
+    //region mug_sns
+
     //endregion
 }

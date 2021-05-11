@@ -2,12 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.basic.dao.CompanyDao">
-    <select id="getCompanyConfigList" resultType="map">
-        select c.company_id    CompanyId,
-               company_name    CompanyName,
-               company_alias   CompanyAlias,
-               company_region  CompanyRegion,
-               company_address CompanyAddress
+    <select id="getCompanyConfigList" resultType="io.oken1.modules.basic.entity.CompanyEntity">
+        select c.*
         from mug_company c
         order by c.company_name
     </select>

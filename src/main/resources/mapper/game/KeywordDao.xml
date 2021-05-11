@@ -3,10 +3,10 @@
 
 <mapper namespace="io.oken1.modules.game.dao.KeywordDao">
     <select id="getKeywordConfigList" resultType="map">
-        select g.game_id      GameId,
-               g.common_name  GameName,
-               g.filter_index FilterIndex,
-               z.total        Total
+        select g.game_id,
+               g.common_name game_name,
+               g.filter_index,
+               z.total
         from mug_game g
                  left join (select k.game_id, count(1) total from mug_keyword k group by k.game_id) z
                            on g.game_id = z.game_id
@@ -14,10 +14,10 @@
         order by g.filter_index
     </select>
     <select id="getKeywordConfigListByGameId" resultType="map">
-        select k.keyword_id    KeywordId,
-               k.game_id       GameId,
-               k.keyword       Keyword,
-               k.keyword_index KeywordIndex
+        select k.keyword_id,
+               k.game_id,
+               k.keyword,
+               k.keyword_index
         from mug_keyword k
         where k.game_id = #{gameId}
         order by k.keyword_index

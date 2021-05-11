@@ -3,22 +3,17 @@
 
 <mapper namespace="io.oken1.modules.game.dao.DifficultyDao">
     <select id="getDifficultyConfigList" resultType="map">
-        select g.game_id     GameId,
-               g.common_name GameName,
-               z.difficulty  Difficulty
+        select g.game_id,
+               g.common_name game_name,
+               z.difficulty
         from mug_game g
                  left join (select d.game_id, GROUP_CONCAT(d.difficulty_name order by d.inx) difficulty
                             from mug_difficulty d
                             group by d.game_id) z on g.game_id = z.game_id
     </select>
 
-    <select id="getDifficultyConfigListByGameId" resultType="map">
-        select d.difficulty_id   DifficultyId,
-               d.game_id         GameId,
-               d.difficulty_name DifficultyName,
-               d.difficulty_abbr DifficultyAbbr,
-               d.color           Color,
-               d.inx             Inx
+    <select id="getDifficultyConfigListByGameId" resultType="io.oken1.modules.game.entity.DifficultyEntity">
+        select d.*
         from mug_difficulty d
         where d.game_id = #{gameId}
         order by d.inx

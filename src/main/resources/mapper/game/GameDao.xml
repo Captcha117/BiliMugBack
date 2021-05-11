@@ -4,10 +4,10 @@
 <mapper namespace="io.oken1.modules.game.dao.GameDao">
     <!--游戏列表-->
     <select id="getGameList" resultType="map">
-        SELECT g.game_id      GameId,
-               g.common_name  CommonName,
-               g.other_name   OtherName,
-               g.icon_version IconVersion
+        SELECT g.game_id,
+               g.common_name,
+               g.other_name,
+               g.icon_version
         FROM mug_game g
         where g.parent_id is null
         ORDER BY g.common_name
@@ -15,14 +15,14 @@
 
     <!--游戏信息-->
     <select id="getGameInfoByGameId" resultType="java.util.LinkedHashMap">
-        SELECT g.game_id                               GameId,
-               g.common_name                           CommonName,
+        SELECT g.game_id,
+               g.common_name,
                LEFT(g.other_name,
                     IF(LOCATE(',', g.other_name) = 0,
                        length(g.other_name),
-                       LOCATE(',', g.other_name) - 1)) OtherName,
-               g.icon_version                          IconVersion,
-               c.company_name                          Developer
+                       LOCATE(',', g.other_name) - 1)) other_name,
+               g.icon_version,
+               c.company_name                          developer
         FROM mug_game g
                  LEFT JOIN mug_company c ON g.developer = c.company_id
         WHERE g.game_id = #{gameId}
@@ -67,27 +67,27 @@
 
     <!--后台配置list-->
     <select id="getGameConfigList" resultType="map">
-        SELECT g.game_id       GameId,
-               g.common_name   CommonName,
-               g.full_name     FullName,
-               g.other_name    OtherName,
-               g.icon_version  IconVersion,
-               g.developer     Developer,
-               c1.company_name DeveloperName,
-               g.publisher     Publisher,
-               c2.company_name PublisherName,
-               g.publish_time  PublishTime,
-               g.game_tag      GameTag,
-               g.video_tag     VideoTag,
-               g.parent_id     ParentId,
-               g2.common_name  ParentName,
-               g.similar       Similar,
-               g.filter_index  FilterIndex,
-               g.create_user   CreateUser,
-               g.create_time   CreateTime,
-               g.update_user   UpdateUser,
-               g.update_time   UpdateTime,
-               z.keyword       Keyword
+        SELECT g.game_id,
+               g.common_name,
+               g.full_name,
+               g.other_name,
+               g.icon_version,
+               g.developer,
+               c1.company_name developer_name,
+               g.publisher,
+               c2.company_name publisher_name,
+               g.publish_time,
+               g.game_tag,
+               g.video_tag,
+               g.parent_id,
+               g2.common_name  parent_name,
+               g.similar,
+               g.filter_index,
+               g.create_user,
+               g.create_time,
+               g.update_user,
+               g.update_time,
+               z.keyword
         FROM mug_game g
                  LEFT JOIN (SELECT game_id, group_concat(k.keyword) keyword FROM mug_keyword k GROUP BY k.game_id) z
                            ON g.game_id = z.game_id

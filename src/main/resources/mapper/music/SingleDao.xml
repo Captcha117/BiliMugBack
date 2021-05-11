@@ -34,12 +34,12 @@
 
     <select id="getChartsBySongId" resultType="map">
         SELECT c.chart_id        ChartId,
-               c.chart_level     ChartLevel,
+               c.level           Level,
                d.difficulty_name DifficultyName
-        FROM mug_chart c
+        FROM mug_chart AS c
                  LEFT JOIN mug_difficulty d ON c.difficulty_id = d.difficulty_id
         WHERE c.song_id = #{songId}
-          AND c.chart_usable = 1
+          AND c.usable = 1
         ORDER BY d.inx
     </select>
 
@@ -66,14 +66,5 @@
         FROM mug_song s
                  left join mug_game g on s.game_id = g.game_id
         where song_id = #{songId}
-    </select>
-
-    <select id="getSongConfigList" resultType="map">
-        select g.game_id     GameId,
-               g.common_name GameName,
-               z.total       SongCount
-        from mug_game g
-                 left join (select s.game_id, count(1) total from mug_song s group by s.game_id) z
-                           on g.game_id = z.game_id
     </select>
 </mapper>

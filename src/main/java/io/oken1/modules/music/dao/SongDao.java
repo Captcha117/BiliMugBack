@@ -14,4 +14,11 @@ public interface SongDao extends BaseMapper<SongEntity> {
     List<SongEntity> getBriefSongListByGameId(String gameId);
 
     LinkedHashMap getSongInfo(String songId);
+
+    /**
+     * 后台配置数据
+     */
+    List<LinkedHashMap> getSongConfigList();
+
+    //List<SongEntity> getSongConfigListByGameId(String gameId);
 }

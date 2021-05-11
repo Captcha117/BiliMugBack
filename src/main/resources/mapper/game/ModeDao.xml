@@ -3,8 +3,8 @@
 
 <mapper namespace="io.oken1.modules.game.dao.ModeDao">
     <select id="getModeConfigList" resultType="map">
-        select g.game_id     GameId,
-               g.common_name GameName,
+        select g.game_id,
+               g.common_name game_name,
                z.mode Mode
         from
             mug_game g
@@ -12,11 +12,8 @@
         on g.game_id = z.game_id
     </select>
 
-    <select id="getModeConfigListByGameId" resultType="map">
-        select m.mode_id   ModeId,
-               m.game_id   GameId,
-               m.mode_name ModeName,
-               m.inx       Inx
+    <select id="getModeConfigListByGameId" resultType="io.oken1.modules.game.entity.ModeEntity">
+        select m.*
         from mug_mode m
         where m.game_id = #{gameId}
         order by m.inx

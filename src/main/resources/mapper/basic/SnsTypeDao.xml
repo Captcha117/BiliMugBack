@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.oken1.modules.basic.dao.SnsTypeDao">
+    <select id="getSnsTypeConfigList" resultType="io.oken1.modules.basic.entity.SnsTypeEntity">
+        select s.sns_type_id,
+               s.sns_cn,
+               s.sns_en,
+               s.sns_jp,
+               s.default_url,
+               s.icon,
+               s.inx
+        from tb_sns_type s
+        order by s.inx
+    </select>
+</mapper>

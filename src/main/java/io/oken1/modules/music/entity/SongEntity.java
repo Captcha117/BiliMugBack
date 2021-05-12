@@ -3,7 +3,9 @@ package io.oken1.modules.music.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -39,10 +41,6 @@ public class SongEntity implements Serializable {
      */
     private String songTitleCn;
     /**
-     * 曲目别名
-     */
-    private String songAlias;
-    /**
      * 游戏内标注的艺术家
      */
     private String songArtist;
@@ -51,16 +49,14 @@ public class SongEntity implements Serializable {
      */
     private String songLength;
     /**
-     * 曲风
-     */
-    private String songStyle;
-    /**
      * 收录版本
      */
     private String gameVersion;
     /**
      * 收录日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd" , timezone = "GMT+8")
     private Date releaseDate;
     /**
      * BPM

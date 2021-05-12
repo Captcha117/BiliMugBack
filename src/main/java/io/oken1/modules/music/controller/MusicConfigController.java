@@ -36,7 +36,7 @@ public class MusicConfigController {
     @GetMapping("/song/list/{gameId}")
     //@RequiresPermissions("mug:mug:list")
     public R songListByGameId(@PathVariable("gameId") String gameId) {
-        List<SongEntity> result = songDao.getBriefSongListByGameId(gameId);
+        List<SongEntity> result = songDao.getSongConfigListByGameId(gameId);
         return R.ok().put("result", result);
     }
 
@@ -103,5 +103,12 @@ public class MusicConfigController {
 
         return R.ok();
     }
+
+    @GetMapping("/single/search/{search}")
+    public R singleSearch(@PathVariable("search") String search) {
+        List<SingleEntity> singleList = singleDao.searchSingle(search);
+        return R.ok().put("singleList", singleList);
+    }
+
     //endregion
 }

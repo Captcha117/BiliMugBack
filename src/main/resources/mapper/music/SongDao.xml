@@ -61,7 +61,6 @@
                s.song_bpm      Bpm,
                s.song_length   Length,
                s.single_id     SingleId,
-               s.song_style    StyleId,
                s.release_date  ReleaseDate
         FROM mug_song s
                  left join mug_game g on s.game_id = g.game_id
@@ -69,11 +68,19 @@
     </select>
 
     <select id="getSongConfigList" resultType="map">
-        select g.game_id     GameId,
-               g.common_name GameName,
-               z.total       SongCount
+        select g.game_id,
+               g.common_name game_name,
+               z.song_count
         from mug_game g
-                 left join (select s.game_id, count(1) total from mug_song s group by s.game_id) z
+                 left join (select s.game_id, count(1) song_count from mug_song s group by s.game_id) z
                            on g.game_id = z.game_id
+    </select>
+    <select id="getSongConfigListByGameId" resultType="io.oken1.modules.music.entity.SongEntity">
+        SELECT s.*,
+               nullif(g.single_title_jp, nullif(g.single_title_en, g.single_title_cn)) single_title
+        FROM mug_song s
+                 left join mug_single g on s.single_id = g.single_id
+        WHERE s.game_id = #{gameId}
+        ORDER BY s.song_inx
     </select>
 </mapper>

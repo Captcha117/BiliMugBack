@@ -31,15 +31,15 @@ public class SingleEntity implements Serializable {
      */
     private String singleTitleCn;
     /**
-     * 曲目别名
+     * 单曲别名
      */
-    //private String songAlias;
+    private String singleAlias;
     /**
      * 艺术家
      */
     private String singleArtist;
     /**
-     * 收录日期
+     * 发布日期
      */
     private Date releaseDate;
     /**

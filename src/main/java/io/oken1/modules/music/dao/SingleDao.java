@@ -8,5 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface SingleDao extends BaseMapper<SingleEntity> {
+    List<SingleEntity> getSingleList();
+
     List<SingleEntity> searchSingle(String search);
 }

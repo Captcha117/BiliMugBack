@@ -75,11 +75,13 @@
                  left join (select s.game_id, count(1) song_count from mug_song s group by s.game_id) z
                            on g.game_id = z.game_id
     </select>
-    <select id="getSongConfigListByGameId" resultType="io.oken1.modules.music.entity.SongEntity">
+    <select id="getSongConfigListByGameId" resultType="map">
         SELECT s.*,
-               nullif(g.single_title_jp, nullif(g.single_title_en, g.single_title_cn)) single_title
+               ifnull(g.single_title_jp, ifnull(g.single_title_en, g.single_title_cn)) single_title,
+               v.version_no
         FROM mug_song s
                  left join mug_single g on s.single_id = g.single_id
+                 left join mug_version v on s.game_version = v.version_id
         WHERE s.game_id = #{gameId}
         ORDER BY s.song_inx
     </select>

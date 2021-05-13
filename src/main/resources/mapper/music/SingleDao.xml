@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.music.dao.SingleDao">
+    <select id="getSingleList" resultType="io.oken1.modules.music.entity.SingleEntity">
+        select *
+        from mug_single limit 100
+    </select>
     <select id="searchSingle" resultType="io.oken1.modules.music.entity.SingleEntity">
         select *
         from mug_single s

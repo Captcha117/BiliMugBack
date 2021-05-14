@@ -1,10 +1,11 @@
 package io.oken1.modules.person.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
-
-import lombok.Data;
 
 
 @Data
@@ -15,7 +16,7 @@ public class PersonEntity implements Serializable {
     /**
      * 人物ID
      */
-    @TableId
+    @TableId(type = IdType.INPUT)
     private String personId;
     /**
      * 人物名称

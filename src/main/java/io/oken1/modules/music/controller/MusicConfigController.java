@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 
-@Api(value = "音乐", tags = {"音乐"})
+@Api(value = "音乐数据配置", tags = {"音乐数据配置"})
 @RestController
 @RequestMapping("/config")
 public class MusicConfigController {

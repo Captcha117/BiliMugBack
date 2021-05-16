@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Api(value = "人物数据配置", tags = {"人物数据配置"})
@@ -24,7 +25,7 @@ public class PersonConfigController {
     @GetMapping("/person/list")
     //@RequiresPermissions("mug:mug:list")
     public R personList() {
-        List<PersonEntity> personList = personDao.getPersonConfigList();
+        List<LinkedHashMap> personList = personDao.getPersonConfigList();
         return R.ok().put("personList", personList);
     }
 
@@ -55,7 +56,7 @@ public class PersonConfigController {
 
     @GetMapping("/person/search/{search}")
     public R singleSearch(@PathVariable("search") String search) {
-        List<PersonEntity> personList = personDao.searchPerson(search);
+        List<LinkedHashMap> personList = personDao.searchPerson(search);
         return R.ok().put("personList", personList);
     }
     //endregion

@@ -2,10 +2,13 @@ package io.oken1.modules.basic.controller;
 
 import io.oken1.common.utils.R;
 import io.oken1.modules.basic.dao.CompanyDao;
+import io.oken1.modules.basic.dao.NationDao;
 import io.oken1.modules.basic.dao.SnsTypeDao;
 import io.oken1.modules.basic.entity.CompanyEntity;
+import io.oken1.modules.basic.entity.NationEntity;
 import io.oken1.modules.basic.entity.SnsTypeEntity;
 import io.oken1.modules.basic.service.CompanyService;
+import io.oken1.modules.basic.service.NationService;
 import io.oken1.modules.basic.service.SnsTypeService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,5 +101,44 @@ public class BasicConfigController {
 
     //region mug_sns
 
+    //endregion
+
+    //region tb_region
+    @Autowired
+    NationService nationService;
+    @Autowired
+    NationDao nationDao;
+
+    @RequestMapping("/nation/list")
+    public R nationList() {
+        List<NationEntity> result = nationDao.getNationConfigList();
+        return R.ok().put("result", result);
+    }
+
+    @GetMapping("/nation/info/{nation}")
+    //@RequiresPermissions("mug:mug:info")
+    public R nationInfo(@PathVariable("nation") String nation) {
+        NationEntity nationEntity = nationService.getById(nation);
+        return R.ok().put("nationInfo", nationEntity);
+    }
+
+    @PostMapping("/nation/save")
+    public R nationSave(@RequestBody NationEntity nation) {
+        nationService.save(nation);
+        return R.ok();
+    }
+
+    @PostMapping("/nation/update")
+    public R nationUpdate(@RequestBody NationEntity nation) {
+        nationService.updateById(nation);
+        return R.ok();
+    }
+
+    @PostMapping("/nation/delete")
+    public R nationDelete(@RequestBody String[] nationIds) {
+        nationService.removeByIds(Arrays.asList(nationIds));
+
+        return R.ok();
+    }
     //endregion
 }

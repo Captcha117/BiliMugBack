@@ -2,13 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.person.dao.PersonDao">
-    <select id="getPersonConfigList" resultType="io.oken1.modules.person.entity.PersonEntity">
-        select *
-        from mug_person limit 100
-    </select>
-    <select id="searchPerson" resultType="io.oken1.modules.person.entity.PersonEntity">
-        select *
+    <select id="getPersonConfigList" resultType="map">
+        select p.*, n.nation_name_abbr nation_cn
         from mug_person p
+                 left join tb_nation n on p.person_region = n.nation_code
+        limit 100
+    </select>
+    <select id="searchPerson" resultType="map">
+        select *, n.nation_name_abbr nation_cn
+        from mug_person p
+                 left join tb_nation n on p.person_region = n.nation_code
         where instr(p.person_name, #{search}) > 0
            or instr(p.person_alias, #{search}) > 0
     </select>

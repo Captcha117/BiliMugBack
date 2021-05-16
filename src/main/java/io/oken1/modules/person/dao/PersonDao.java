@@ -4,11 +4,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.oken1.modules.person.entity.PersonEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Mapper
 public interface PersonDao extends BaseMapper<PersonEntity> {
-    List<PersonEntity> getPersonConfigList();
+    List<LinkedHashMap> getPersonConfigList();
 
-    List<PersonEntity> searchPerson(String search);
+    List<LinkedHashMap> searchPerson(String search);
 }

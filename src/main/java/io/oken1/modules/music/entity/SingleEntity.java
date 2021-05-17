@@ -41,6 +41,10 @@ public class SingleEntity implements Serializable {
      */
     private String singleArtist;
     /**
+     * 时长
+     */
+    private String singleLength;
+    /**
      * 发布日期
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")

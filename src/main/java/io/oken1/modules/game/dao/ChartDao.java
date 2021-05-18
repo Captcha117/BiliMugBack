@@ -9,5 +9,5 @@ import java.util.List;
 
 @Mapper
 public interface ChartDao extends BaseMapper<ChartEntity> {
-    List<LinkedHashMap> getChartConfigListByGameId(String gameId);
+    List<LinkedHashMap> getChartConfigListBySongId(String songId);
 }

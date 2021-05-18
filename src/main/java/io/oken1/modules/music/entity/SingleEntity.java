@@ -54,4 +54,12 @@ public class SingleEntity implements Serializable {
      * BPM
      */
     private String singleBpm;
+    /**
+     * 演职人员
+     */
+    private String singleCast;
+    /**
+     * 歌词
+     */
+    private String singleLyric;
 }

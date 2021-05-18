@@ -77,11 +77,15 @@
     </select>
     <select id="getSongConfigListByGameId" resultType="map">
         SELECT s.*,
-               ifnull(g.single_title_jp, ifnull(g.single_title_en, g.single_title_cn)) single_title,
-               v.version_no
+               ifnull(g.single_title_jp, ifnull(g.single_title_en, g.single_title_cn))
+                       single_title,
+               v.version_no,
+               z.total chart_count
         FROM mug_song s
                  left join mug_single g on s.single_id = g.single_id
                  left join mug_version v on s.game_version = v.version_id
+                 left join (select c.song_id, count(1) total from mug_chart c group by c.song_id) z
+                           on s.song_id = z.song_id
         WHERE s.game_id = #{gameId}
         ORDER BY s.song_inx
     </select>

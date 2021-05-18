@@ -153,9 +153,9 @@ public class GameConfigController {
     @Autowired
     ChartDao chartDao;
 
-    @GetMapping("/chart/list/{gameId}")
-    public R chartListByGameId(@PathVariable("gameId") String gameId) {
-        List<LinkedHashMap> result = chartDao.getChartConfigListByGameId(gameId);
+    @GetMapping("/chart/list/{songId}")
+    public R chartListByGameId(@PathVariable("songId") String songId) {
+        List<LinkedHashMap> result = chartDao.getChartConfigListBySongId(songId);
         return R.ok().put("result", result);
     }
 

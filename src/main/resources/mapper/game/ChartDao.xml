@@ -2,22 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.game.dao.ChartDao">
-    <select id="getChartConfigListByGameId" resultType="map">
-        select c.chart_id        ChartId,
-               c.song_id         SongId,
-               s.song_title_cn   SongTitleCn,
-               s.song_title_en   SongTitleEn,
-               s.song_title_jp   SongTitleJp,
-               c.mode_id         ModeId,
-               m.mode_name       ModeName,
-               c.difficulty_id   DifficultyId,
-               d.difficulty_name DifficultyName,
-               c.chart_level     ChartLevel,
-               c.chart_usable    ChartUsable
+    <select id="getSongConfigListByGameId" resultType="map">
+
+    </select>
+    <select id="getChartConfigListBySongId" resultType="map">
+        select c.chart_id,
+               c.song_id,
+               s.song_title_cn,
+               s.song_title_en,
+               s.song_title_jp,
+               c.mode_id,
+               m.mode_name,
+               c.difficulty_id,
+               d.difficulty_name,
+               c.chart_level,
+               c.chart_usable
         from mug_chart c
                  left join mug_song s on c.song_id = s.song_id
                  left join mug_mode m on c.mode_id = m.mode_id
                  left join mug_difficulty d on c.difficulty_id = d.difficulty_id
-        where s.game_id = #{gameId}
+        where s.song_id = #{songId}
     </select>
 </mapper>

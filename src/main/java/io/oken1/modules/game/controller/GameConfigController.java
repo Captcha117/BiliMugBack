@@ -165,15 +165,22 @@ public class GameConfigController {
         return R.ok().put("chartInfo", chart);
     }
 
+    @GetMapping("/chart/attribute/{gameId}")
+    public R chartAttribute(@PathVariable("gameId") String gameId) {
+        List<ModeEntity> mode = modeDao.getModeConfigListByGameId(gameId);
+        List<DifficultyEntity> difficulty = difficultyDao.getDifficultyConfigListByGameId(gameId);
+        return R.ok().put("modeList", mode).put("difficultyList", difficulty);
+    }
+
     @PostMapping("/chart/save")
-    public R chartSave(@RequestBody ChartEntity chart) {
-        chartService.save(chart);
+    public R chartSave(@RequestBody List<ChartEntity> chart) {
+        chartService.saveBatch(chart);
         return R.ok();
     }
 
     @PostMapping("/chart/update")
-    public R chartUpdate(@RequestBody ChartEntity chart) {
-        chartService.updateById(chart);
+    public R chartUpdate(@RequestBody List<ChartEntity> chart) {
+        chartService.updateBatchById(chart);
         return R.ok();
     }
 

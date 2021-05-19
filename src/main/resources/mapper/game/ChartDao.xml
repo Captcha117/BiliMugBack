@@ -22,5 +22,6 @@
                  left join mug_mode m on c.mode_id = m.mode_id
                  left join mug_difficulty d on c.difficulty_id = d.difficulty_id
         where s.song_id = #{songId}
+        order by m.inx, d.inx
     </select>
 </mapper>

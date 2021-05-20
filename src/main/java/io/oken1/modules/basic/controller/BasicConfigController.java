@@ -3,18 +3,22 @@ package io.oken1.modules.basic.controller;
 import io.oken1.common.utils.R;
 import io.oken1.modules.basic.dao.CompanyDao;
 import io.oken1.modules.basic.dao.NationDao;
+import io.oken1.modules.basic.dao.SnsDao;
 import io.oken1.modules.basic.dao.SnsTypeDao;
 import io.oken1.modules.basic.entity.CompanyEntity;
 import io.oken1.modules.basic.entity.NationEntity;
+import io.oken1.modules.basic.entity.SnsEntity;
 import io.oken1.modules.basic.entity.SnsTypeEntity;
 import io.oken1.modules.basic.service.CompanyService;
 import io.oken1.modules.basic.service.NationService;
+import io.oken1.modules.basic.service.SnsService;
 import io.oken1.modules.basic.service.SnsTypeService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Api(value = "基础数据配置", tags = {"基础数据配置"})
@@ -100,7 +104,42 @@ public class BasicConfigController {
     //endregion
 
     //region mug_sns
+    @Autowired
+    SnsService snsService;
+    @Autowired
+    SnsDao snsDao;
 
+    @RequestMapping("/sns/list")
+    public R snsList() {
+        List<LinkedHashMap> result = snsDao.getSnsConfigList();
+        return R.ok().put("result", result);
+    }
+
+    @GetMapping("/sns/info/{sns}")
+    //@RequiresPermissions("mug:mug:info")
+    public R snsInfo(@PathVariable("sns") String sns) {
+        SnsEntity snsEntity = snsService.getById(sns);
+        return R.ok().put("snsInfo", snsEntity);
+    }
+
+    @PostMapping("/sns/save")
+    public R snsSave(@RequestBody SnsEntity sns) {
+        snsService.save(sns);
+        return R.ok();
+    }
+
+    @PostMapping("/sns/update")
+    public R snsUpdate(@RequestBody SnsEntity sns) {
+        snsService.updateById(sns);
+        return R.ok();
+    }
+
+    @PostMapping("/sns/delete")
+    public R snsDelete(@RequestBody String[] snsIds) {
+        snsService.removeByIds(Arrays.asList(snsIds));
+
+        return R.ok();
+    }
     //endregion
 
     //region tb_region

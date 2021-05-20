@@ -27,7 +27,7 @@ public class PersonEntity implements Serializable {
      */
     private String personAlias;
     /**
-     *  人物国家/地区
+     * 人物国家/地区
      */
     private String personRegion;
     /**

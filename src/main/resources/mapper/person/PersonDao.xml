@@ -3,13 +3,13 @@
 
 <mapper namespace="io.oken1.modules.person.dao.PersonDao">
     <select id="getPersonConfigList" resultType="map">
-        select p.*, n.nation_name_abbr nation_cn
+        select p.*, n.nation_name_abbr region
         from mug_person p
                  left join tb_nation n on p.person_region = n.nation_code
         limit 100
     </select>
     <select id="searchPerson" resultType="map">
-        select *, n.nation_name_abbr nation_cn
+        select *, n.nation_name_abbr region
         from mug_person p
                  left join tb_nation n on p.person_region = n.nation_code
         where instr(p.person_name, #{search}) > 0

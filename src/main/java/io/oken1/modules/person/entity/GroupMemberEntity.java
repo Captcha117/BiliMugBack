@@ -1,7 +1,9 @@
 package io.oken1.modules.person.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,14 +25,18 @@ public class GroupMemberEntity implements Serializable {
     /**
      * 人物ID
      */
-    private String person_id;
+    private String personId;
     /**
      * 入队时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd" , timezone = "GMT+8")
     private Date joinDate;
     /**
      * 离队时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd" , timezone = "GMT+8")
     private Date leaveDate;
     /**
      * 备注

@@ -2,4 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.person.dao.GroupMemberDao">
+    <select id="getGroupMemberConfigList" resultType="map">
+        select g.group_id, g.group_name, z.member_count
+        from mug_group g
+                 left join (select m.group_id, count(1) member_count from mug_group_member m group by m.group_id) z
+                           on g.group_id = z.group_id
+    </select>
+    <select id="getGroupMemberConfigListByGroupId" resultType="map">
+        select m.pk_id,
+               m.group_id,
+               m.person_id,
+               p.person_name,
+               p.person_region,
+               m.join_date,
+               m.leave_date,
+               m.remark
+        from mug_group_member m
+                 left join mug_person p on m.person_id = p.person_id
+        where m.group_id = #{groupId}
+    </select>
 </mapper>

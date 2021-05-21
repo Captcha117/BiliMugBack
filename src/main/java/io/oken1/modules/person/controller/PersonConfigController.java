@@ -2,11 +2,14 @@ package io.oken1.modules.person.controller;
 
 import io.oken1.common.utils.R;
 import io.oken1.modules.person.dao.GroupDao;
+import io.oken1.modules.person.dao.GroupMemberDao;
 import io.oken1.modules.person.dao.PersonDao;
 import io.oken1.modules.person.dao.UploaderDao;
 import io.oken1.modules.person.entity.GroupEntity;
+import io.oken1.modules.person.entity.GroupMemberEntity;
 import io.oken1.modules.person.entity.PersonEntity;
 import io.oken1.modules.person.entity.UploaderEntity;
+import io.oken1.modules.person.service.GroupMemberService;
 import io.oken1.modules.person.service.GroupService;
 import io.oken1.modules.person.service.PersonService;
 import io.oken1.modules.person.service.UploaderService;
@@ -158,5 +161,47 @@ public class PersonConfigController {
     //endregion
 
     //region mug_group_member
+    @Autowired
+    GroupMemberService groupMemberService;
+    @Autowired
+    GroupMemberDao groupMemberDao;
+
+    @GetMapping("/groupMember/list")
+    //@RequiresPermissions("mug:mug:list")
+    public R groupMemberList() {
+        List<LinkedHashMap> groupList = groupMemberDao.getGroupMemberConfigList();
+        return R.ok().put("groupList", groupList);
+    }
+
+    @GetMapping("/groupMember/list/{groupId}")
+    public R groupMemberListByGroupId(@PathVariable("groupId") String groupId) {
+        List<LinkedHashMap> groupMemberList = groupMemberDao.getGroupMemberConfigListByGroupId(groupId);
+        return R.ok().put("groupMemberList", groupMemberList);
+    }
+
+    @GetMapping("/groupMember/info/{pkId}")
+    public R groupMemberInfo(@PathVariable("pkId") Integer pkId) {
+        GroupMemberEntity groupMemberEntity = groupMemberService.getById(pkId);
+        return R.ok().put("groupMemberInfo", groupMemberEntity);
+    }
+
+    @PostMapping("/groupMember/save")
+    public R groupMemberSave(@RequestBody GroupMemberEntity groupMemberEntity) {
+        groupMemberService.save(groupMemberEntity);
+        return R.ok();
+    }
+
+    @PostMapping("/groupMember/update")
+    public R groupMemberUpdate(@RequestBody GroupMemberEntity groupMemberEntity) {
+        groupMemberService.updateById(groupMemberEntity);
+        return R.ok();
+    }
+
+    @PostMapping("/groupMember/delete")
+    public R groupMemberDelete(@RequestBody String[] groupMemberIds) {
+        groupMemberService.removeByIds(Arrays.asList(groupMemberIds));
+
+        return R.ok();
+    }
     //endregion
 }

@@ -3,17 +3,17 @@
 
 <mapper namespace="io.oken1.modules.game.dao.GameDetailDao">
     <select id="getPackageListByGameId" resultType="map">
-        select p.game_id                           GameId,
-               p.package_id                        PackageId,
-               p.package_name                      PackageName,
-               p.package_price                     PackagePrice,
-               p.release_date                      ReleaseDate,
-               p.description                       Description,
+        select p.game_id,
+               p.package_id,
+               p.package_name,
+               p.package_price,
+               p.release_date,
+               p.description,
                (select count(1)
                 from mug_package_detail d
-                where d.package_id = p.package_id) SongCount,
-               g.common_name                       CommonName,
-               g.icon_version                      IconVersion
+                where d.package_id = p.package_id) song_count,
+               g.common_name,
+               g.icon_version
         from mug_package p
                  left join mug_game g on p.game_id = g.game_id
         where p.game_id = #{gameId}
@@ -21,29 +21,29 @@
     </select>
 
     <select id="getVersionListByGameId" resultType="map">
-        select v.version_no   VersionNo,
-               v.version_info VersionInfo,
-               v.version_date VersionDate
+        select v.version_no,
+               v.version_info,
+               v.version_date
         from mug_version v
         where v.game_id = #{gameId}
         order by v.version_date desc
     </select>
 
     <select id="getSnsListByGameId" resultType="map">
-        SELECT s.sns_type SnsType,
-               s.sns_url  Url
-        FROM mug_sns AS s
-                 LEFT JOIN tb_sns_type AS t ON s.sns_type = t.sns_type
+        SELECT s.sns_type,
+               s.sns_url
+        FROM mug_sns s
+                 LEFT JOIN tb_sns_type t ON s.sns_type = t.sns_type_id
         WHERE s.item_type = 'G'
           AND s.item_id = #{gameId}
         ORDER BY t.inx
     </select>
 
     <select id="getDifficultyListByGameId" resultType="map">
-        SELECT d.difficulty_id   DifficultyId,
-               d.difficulty_name DifficultyName,
-               d.difficulty_abbr DifficultyAbbr,
-               d.color           Color
+        SELECT d.difficulty_id,
+               d.difficulty_name,
+               d.difficulty_abbr,
+               d.color
         FROM mug_difficulty d
         WHERE d.game_id = #{gameId}
         ORDER BY d.inx

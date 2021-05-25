@@ -1,21 +1,19 @@
 package io.oken1.modules.game.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.oken1.common.utils.DateUtils;
+import io.oken1.common.utils.PageUtils;
+import io.oken1.common.utils.Query;
+import io.oken1.modules.game.dao.GameDao;
+import io.oken1.modules.game.entity.GameEntity;
+import io.oken1.modules.game.service.GameService;
 import io.oken1.modules.music.dao.SongDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.oken1.common.utils.PageUtils;
-import io.oken1.common.utils.Query;
-
-import io.oken1.modules.game.dao.GameDao;
-import io.oken1.modules.game.entity.GameEntity;
-import io.oken1.modules.game.service.GameService;
 
 @Service("GameService")
 public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements GameService {
@@ -51,12 +49,12 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
         List<LinkedHashMap> list = songDao.getSongListByGameId(gameId);
         for (LinkedHashMap l : list
         ) {
-            List<HashMap> charts = (List<HashMap>) l.get("Charts");
+            List<HashMap> charts = (List<HashMap>) l.get("charts");
             for (HashMap c : charts
             ) {
-                l.put(c.get("DifficultyName").toString(), c.get("Level").toString());
+                l.put(c.get("difficultyName"), c.get("chartLevel"));
             }
-            l.remove("Charts");
+            l.remove("charts");
         }
         return list;
     }

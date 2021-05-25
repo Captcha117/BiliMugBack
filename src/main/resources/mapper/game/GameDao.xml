@@ -76,7 +76,7 @@
                c1.company_name developer_name,
                g.publisher,
                c2.company_name publisher_name,
-               g.publish_time,
+               g.publish_date,
                g.game_tag,
                g.video_tag,
                g.parent_id,
@@ -95,4 +95,11 @@
                  LEFT JOIN mug_company c1 ON g.developer = c1.company_id
                  LEFT JOIN mug_company c2 ON g.publisher = c2.company_id
     </select>
+    <update id="gameFilterIndexIncrease">
+        update mug_game g
+        set g.filter_index = g.filter_index + 1
+        where g.game_id != #{gameId}
+          and g.parent_id is null
+          and g.filter_index >= #{index}
+    </update>
 </mapper>

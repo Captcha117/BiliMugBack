@@ -60,6 +60,7 @@ mybatis-plus:
     banner: false
   #原生配置
   configuration:
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
     cache-enabled: false
     call-setters-on-nulls: true

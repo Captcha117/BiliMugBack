@@ -35,7 +35,7 @@ public class PackageEntity implements Serializable {
      * 发布日期
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd" , timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date releaseDate;
     /**
      * 描述

@@ -22,4 +22,13 @@
         where k.game_id = #{gameId}
         order by k.keyword_index
     </select>
+    <update id="keywordIndexIncrease">
+        update mug_keyword k
+        set k.keyword_index = k.keyword_index + 1
+        where k.game_id = #{gameId}
+        <if test="keywordId != null">
+            and k.keyword_id != #{keywordId}
+        </if>
+        and k.keyword_index >= #{index}
+    </update>
 </mapper>

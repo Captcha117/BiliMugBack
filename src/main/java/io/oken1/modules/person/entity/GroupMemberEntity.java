@@ -1,5 +1,6 @@
 package io.oken1.modules.person.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class GroupMemberEntity implements Serializable {
     /**
      * 主键
      */
+    @TableId
     private Integer pkId;
     /**
      * 团队ID

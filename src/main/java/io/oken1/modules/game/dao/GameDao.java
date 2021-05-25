@@ -21,4 +21,6 @@ public interface GameDao extends BaseMapper<GameEntity> {
      * game后台配置表
      */
     List<LinkedHashMap> getGameConfigList();
+
+    void gameFilterIndexIncrease(String gameId, Integer index);
 }

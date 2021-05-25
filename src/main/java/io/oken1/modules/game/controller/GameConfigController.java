@@ -36,14 +36,20 @@ public class GameConfigController {
         return R.ok().put("gameInfo", game);
     }
 
-    @PostMapping("/game/save")
-    public R gameSave(@RequestBody GameEntity game) {
+    @PostMapping("/game/save/{increase}")
+    public R gameSave(@RequestBody GameEntity game, @PathVariable Boolean increase) {
+        if (increase && game.getFilterIndex() > 0) {
+            gameDao.gameFilterIndexIncrease(game.getGameId(), game.getFilterIndex());
+        }
         gameService.save(game);
         return R.ok();
     }
 
-    @PostMapping("/game/update")
-    public R gameUpdate(@RequestBody GameEntity game) {
+    @PostMapping("/game/update/{increase}")
+    public R gameUpdate(@RequestBody GameEntity game, @PathVariable Boolean increase) {
+        if (increase && game.getFilterIndex() > 0) {
+            gameDao.gameFilterIndexIncrease(game.getGameId(), game.getFilterIndex());
+        }
         gameService.updateById(game);
         return R.ok();
     }
@@ -264,15 +270,21 @@ public class GameConfigController {
         return R.ok().put("keywordInfo", keyword);
     }
 
-    @PostMapping("/keyword/save")
-    public R keywordSave(@RequestBody KeywordEntity keyword) {
+    @PostMapping("/keyword/save/{increase}")
+    public R keywordSave(@RequestBody KeywordEntity keyword, @PathVariable Boolean increase) {
+        if (increase) {
+            keywordDao.keywordIndexIncrease(keyword.getGameId(), keyword.getKeywordId(), keyword.getKeywordIndex());
+        }
         keywordService.save(keyword);
         keyword.setUpdateUser(ShiroUtils.getUserId());
         return R.ok();
     }
 
-    @PostMapping("/keyword/update")
-    public R keywordUpdate(@RequestBody KeywordEntity keyword) {
+    @PostMapping("/keyword/update/{increase}")
+    public R keywordUpdate(@RequestBody KeywordEntity keyword, @PathVariable Boolean increase) {
+        if (increase) {
+            keywordDao.keywordIndexIncrease(keyword.getGameId(), keyword.getKeywordId(), keyword.getKeywordIndex());
+        }
         keywordService.updateById(keyword);
         keyword.setUpdateUser(ShiroUtils.getUserId());
         return R.ok();

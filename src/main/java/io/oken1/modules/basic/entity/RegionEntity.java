@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("tb_nation")
-public class NationEntity {
+@TableName("tb_region")
+public class RegionEntity {
     private static final long serialVersionUID = 1L;
     /**
      * 主键
@@ -18,23 +18,23 @@ public class NationEntity {
     /**
      * 二字码
      */
-    private String nationCode;
+    private String regionCode;
     /**
      * 三字码
      */
-    private String nation3Code;
+    private String region3Code;
     /**
      * 中文名称
      */
-    private String nationNameCn;
+    private String regionNameCn;
     /**
      * 中文缩写
      */
-    private String nationNameAbbr;
+    private String regionNameAbbr;
     /**
      * 英文名称
      */
-    private String nationNameEn;
+    private String regionNameEn;
     /**
      * 大洲
      */

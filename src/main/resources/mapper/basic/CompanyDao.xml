@@ -2,9 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.basic.dao.CompanyDao">
-    <select id="getCompanyConfigList" resultType="io.oken1.modules.basic.entity.CompanyEntity">
-        select c.*
+    <select id="getCompanyConfigList" resultType="map">
+        select c.*, r.region_name_abbr region
         from mug_company c
+                 left join tb_region r on c.company_region = r.region_code
         order by c.company_name
     </select>
 </mapper>

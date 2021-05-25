@@ -1,7 +1,9 @@
 package io.oken1.modules.game.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -42,9 +44,11 @@ public class GameEntity implements Serializable {
      */
     private String publisher;
     /**
-     * 发行时间
+     * 发行日期
      */
-    private String publishTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date publishDate;
     /**
      * 游戏标签
      */
@@ -64,7 +68,7 @@ public class GameEntity implements Serializable {
     /**
      * 过滤排序
      */
-    private Float filterIndex;
+    private Integer filterIndex;
     /**
      * 创建时间
      */

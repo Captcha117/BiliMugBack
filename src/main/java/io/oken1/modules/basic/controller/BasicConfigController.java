@@ -2,15 +2,15 @@ package io.oken1.modules.basic.controller;
 
 import io.oken1.common.utils.R;
 import io.oken1.modules.basic.dao.CompanyDao;
-import io.oken1.modules.basic.dao.NationDao;
+import io.oken1.modules.basic.dao.RegionDao;
 import io.oken1.modules.basic.dao.SnsDao;
 import io.oken1.modules.basic.dao.SnsTypeDao;
 import io.oken1.modules.basic.entity.CompanyEntity;
-import io.oken1.modules.basic.entity.NationEntity;
+import io.oken1.modules.basic.entity.RegionEntity;
 import io.oken1.modules.basic.entity.SnsEntity;
 import io.oken1.modules.basic.entity.SnsTypeEntity;
 import io.oken1.modules.basic.service.CompanyService;
-import io.oken1.modules.basic.service.NationService;
+import io.oken1.modules.basic.service.RegionService;
 import io.oken1.modules.basic.service.SnsService;
 import io.oken1.modules.basic.service.SnsTypeService;
 import io.swagger.annotations.Api;
@@ -33,7 +33,7 @@ public class BasicConfigController {
 
     @RequestMapping("/company/list")
     public R companyList() {
-        List<CompanyEntity> result = companyDao.getCompanyConfigList();
+        List<LinkedHashMap> result = companyDao.getCompanyConfigList();
         return R.ok().put("result", result);
     }
 
@@ -83,14 +83,14 @@ public class BasicConfigController {
         return R.ok().put("snsTypeInfo", snsTypeEntity);
     }
 
-    @PostMapping("/snsType/save")
-    public R snsTypeSave(@RequestBody SnsTypeEntity snsType) {
+    @PostMapping("/snsType/save/{increase}")
+    public R snsTypeSave(@RequestBody SnsTypeEntity snsType, @PathVariable Boolean increase) {
         snsTypeService.save(snsType);
         return R.ok();
     }
 
-    @PostMapping("/snsType/update")
-    public R snsTypeUpdate(@RequestBody SnsTypeEntity snsType) {
+    @PostMapping("/snsType/update/{increase}")
+    public R snsTypeUpdate(@RequestBody SnsTypeEntity snsType, @PathVariable Boolean increase) {
         snsTypeService.updateById(snsType);
         return R.ok();
     }
@@ -144,38 +144,38 @@ public class BasicConfigController {
 
     //region tb_region
     @Autowired
-    NationService nationService;
+    RegionService regionService;
     @Autowired
-    NationDao nationDao;
+    RegionDao regionDao;
 
-    @RequestMapping("/nation/list")
-    public R nationList() {
-        List<NationEntity> result = nationDao.getNationConfigList();
+    @RequestMapping("/region/list")
+    public R regionList() {
+        List<RegionEntity> result = regionDao.getRegionConfigList();
         return R.ok().put("result", result);
     }
 
-    @GetMapping("/nation/info/{nation}")
+    @GetMapping("/region/info/{region}")
     //@RequiresPermissions("mug:mug:info")
-    public R nationInfo(@PathVariable("nation") String nation) {
-        NationEntity nationEntity = nationService.getById(nation);
-        return R.ok().put("nationInfo", nationEntity);
+    public R regionInfo(@PathVariable("region") String region) {
+        RegionEntity regionEntity = regionService.getById(region);
+        return R.ok().put("regionInfo", regionEntity);
     }
 
-    @PostMapping("/nation/save")
-    public R nationSave(@RequestBody NationEntity nation) {
-        nationService.save(nation);
+    @PostMapping("/region/save")
+    public R regionSave(@RequestBody RegionEntity region) {
+        regionService.save(region);
         return R.ok();
     }
 
-    @PostMapping("/nation/update")
-    public R nationUpdate(@RequestBody NationEntity nation) {
-        nationService.updateById(nation);
+    @PostMapping("/region/update")
+    public R regionUpdate(@RequestBody RegionEntity region) {
+        regionService.updateById(region);
         return R.ok();
     }
 
-    @PostMapping("/nation/delete")
-    public R nationDelete(@RequestBody String[] nationIds) {
-        nationService.removeByIds(Arrays.asList(nationIds));
+    @PostMapping("/region/delete")
+    public R regionDelete(@RequestBody String[] regionIds) {
+        regionService.removeByIds(Arrays.asList(regionIds));
 
         return R.ok();
     }

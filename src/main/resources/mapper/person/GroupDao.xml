@@ -3,14 +3,14 @@
 
 <mapper namespace="io.oken1.modules.person.dao.GroupDao">
     <select id="getGroupConfigList" resultType="map">
-        select g.*, n.nation_name_abbr region
+        select g.*, r.region_name_abbr region
         from mug_group g
-                 left join tb_nation n on g.group_region = n.nation_code limit 100
+                 left join tb_region r on g.group_region = r.region_code limit 100
     </select>
     <select id="searchGroup" resultType="map">
-        select *, n.nation_name_abbr region
+        select *, r.region_name_abbr region
         from mug_group g
-                 left join tb_nation n on g.group_region = n.nation_code
+                 left join tb_region r on g.group_region = r.region_code
         where instr(g.group_name, #{search}) > 0
            or instr(g.group_alias, #{search}) > 0
     </select>

@@ -34,6 +34,6 @@ public class VersionEntity implements Serializable {
      * 版本日期
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd" , timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date versionDate;
 }

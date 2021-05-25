@@ -12,4 +12,6 @@ public interface KeywordDao extends BaseMapper<KeywordEntity> {
     List<LinkedHashMap> getKeywordConfigList();
 
     List<KeywordEntity> getKeywordConfigListByGameId(String gameId);
+
+    void keywordIndexIncrease(String gameId, Integer keywordId, Integer index);
 }

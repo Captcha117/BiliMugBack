@@ -13,8 +13,7 @@
         <result column="bpm" property="bpm"/>
         <collection property="charts" select="getChartsBySongId" javaType="java.util.List" column="{songId=song_id}">
             <result column="chartId" property="chart_id"/>
-            <result column="difficultyName" property="difficulty_name"/>
-            <result column="modeName" property="mode_name"/>
+            <result column="difficultyId" property="difficulty_id"/>
             <result column="chartLevel" property="chart_level"/>
         </collection>
     </resultMap>
@@ -30,20 +29,16 @@
                song_bpm      bpm
         FROM mug_song s
         WHERE s.game_id = #{gameId}
-        ORDER BY s.song_inx
+        ORDER BY s.song_inx, s.song_title_en
     </select>
 
     <select id="getChartsBySongId" resultType="map">
         SELECT c.chart_id,
                c.chart_level,
-               d.difficulty_name,
-               m.mode_name
+               c.difficulty_id
         FROM mug_chart c
-                 LEFT JOIN mug_mode m ON c.mode_id = m.mode_id
-                 LEFT JOIN mug_difficulty d ON c.difficulty_id = d.difficulty_id
         WHERE c.song_id = #{songId}
           AND c.chart_usable = 1
-        ORDER BY d.inx
     </select>
 
     <select id="getBriefSongListByGameId" resultType="io.oken1.modules.music.entity.SongEntity">

@@ -20,10 +20,6 @@ public class ChartEntity implements Serializable {
      */
     private String songId;
     /**
-     * 模式ID
-     */
-    private Integer modeId;
-    /**
      * 难度ID
      */
     private Integer difficultyId;
@@ -31,6 +27,10 @@ public class ChartEntity implements Serializable {
      * 等级
      */
     private String chartLevel;
+    /**
+     * 设计者
+     */
+    private String chartDesigner;
     /**
      * 是否可用
      */

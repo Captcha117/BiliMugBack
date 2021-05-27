@@ -107,52 +107,6 @@ public class GameConfigController {
     }
     //endregion
 
-    //region mug_mode
-    @Autowired
-    ModeService modeService;
-    @Autowired
-    ModeDao modeDao;
-
-    @GetMapping("/mode/list")
-    //@RequiresPermissions("mug:mug:list")
-    public R modeList() {
-        List<LinkedHashMap> result = modeDao.getModeConfigList();
-        return R.ok().put("result", result);
-    }
-
-    @GetMapping("/mode/list/{gameId}")
-    public R modeListByGameId(@PathVariable("gameId") String gameId) {
-        List<ModeEntity> result = modeDao.getModeConfigListByGameId(gameId);
-        return R.ok().put("result", result);
-    }
-
-    @GetMapping("/mode/info/{modeId}")
-    public R modeInfo(@PathVariable("modeId") String modeId) {
-        ModeEntity mode = modeService.getById(modeId);
-        return R.ok().put("modeInfo", mode);
-    }
-
-    @PostMapping("/mode/save")
-    public R modeSave(@RequestBody ModeEntity mode) {
-        modeService.save(mode);
-        return R.ok();
-    }
-
-    @PostMapping("/mode/update")
-    public R modeUpdate(@RequestBody ModeEntity mode) {
-        modeService.updateById(mode);
-        return R.ok();
-    }
-
-    @PostMapping("/mode/delete")
-    public R modeDelete(@RequestBody String[] modeIds) {
-        modeService.removeByIds(Arrays.asList(modeIds));
-
-        return R.ok();
-    }
-
-    //endregion
-
     //region mug_chart
     @Autowired
     ChartService chartService;
@@ -173,9 +127,8 @@ public class GameConfigController {
 
     @GetMapping("/chart/attribute/{gameId}")
     public R chartAttribute(@PathVariable("gameId") String gameId) {
-        List<ModeEntity> mode = modeDao.getModeConfigListByGameId(gameId);
         List<DifficultyEntity> difficulty = difficultyDao.getDifficultyConfigListByGameId(gameId);
-        return R.ok().put("modeList", mode).put("difficultyList", difficulty);
+        return R.ok().put("difficultyList", difficulty);
     }
 
     @PostMapping("/chart/save")

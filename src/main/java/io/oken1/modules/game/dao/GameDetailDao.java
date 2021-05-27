@@ -26,4 +26,6 @@ public interface GameDetailDao {
      * 游戏难度列表
      */
     List<LinkedHashMap> getDifficultyListByGameId(String gameId);
+
+    List<LinkedHashMap> getModeListByGameId(String gameId);
 }

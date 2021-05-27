@@ -1,6 +1,7 @@
 package io.oken1.modules.game.controller;
 
 import io.oken1.common.utils.R;
+import io.oken1.modules.game.dao.GameDao;
 import io.oken1.modules.game.dao.GameDetailDao;
 import io.oken1.modules.game.service.GameService;
 import io.swagger.annotations.Api;
@@ -22,6 +23,9 @@ public class GameController {
     GameService gameService;
 
     @Autowired
+    GameDao gameDao;
+
+    @Autowired
     GameDetailDao gameDetailDao;
 
     /**
@@ -39,7 +43,7 @@ public class GameController {
     @ApiOperation("游戏详细信息")
     @GetMapping("/gameInfo")
     public R gameInfo(String gameId) {
-        LinkedHashMap gameInfo = gameService.getGameInfoByGameId(gameId);
+        LinkedHashMap gameInfo = gameDao.getGameInfoByGameId(gameId);
         List<LinkedHashMap> songList = gameService.getSongListByGameId(gameId);
         List<LinkedHashMap> versionList = gameDetailDao.getVersionListByGameId(gameId);
         List<LinkedHashMap> difficultyList = gameDetailDao.getDifficultyListByGameId(gameId);

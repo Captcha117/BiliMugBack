@@ -34,14 +34,14 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
         return new PageUtils(page);
     }
 
+    /**
+     * 获取游戏列表
+     *
+     * @return 游戏列表
+     */
     @Override
     public List<LinkedHashMap> getGameList() {
         return gameDao.getGameList();
-    }
-
-    @Override
-    public LinkedHashMap getGameInfoByGameId(String gameId) {
-        return gameDao.getGameInfoByGameId(gameId);
     }
 
     @Override
@@ -52,13 +52,20 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
             List<HashMap> charts = (List<HashMap>) l.get("charts");
             for (HashMap c : charts
             ) {
-                l.put(c.get("difficultyName"), c.get("chartLevel"));
+                l.put(c.get("difficultyId"), c.get("chartLevel"));
             }
             l.remove("charts");
         }
         return list;
     }
 
+    /**
+     * 获取游戏播放数据
+     *
+     * @param gameId 游戏ID
+     * @param type   数据类型
+     * @return 游戏播放数据
+     */
     @Override
     public List<LinkedHashMap> getGamePlayData(String gameId, String type) {
         Date end = new Date();

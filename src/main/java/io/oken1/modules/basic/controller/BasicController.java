@@ -4,9 +4,8 @@ import io.oken1.common.utils.R;
 import io.oken1.modules.basic.dao.BasicDao;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,5 +37,11 @@ public class BasicController {
     public R getAllCompanyList() {
         List<LinkedHashMap> result = basicDao.getAllCompanyList();
         return R.ok().put("allCompanyList", result);
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public R upload(@RequestParam("file") MultipartFile file) throws Exception {
+        return R.ok();
     }
 }

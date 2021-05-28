@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.music.dao.SingleDao">
+    <select id="getSingleListByPersonId" resultType="map">
+        select s.single_id,
+               s.single_title_en,
+               s.single_title_jp,
+               s.single_title_cn,
+               s.single_artist,
+               s.single_length,
+               s.single_style,
+               s.release_date,
+               s.single_bpm
+        from mug_single s
+        where instr(s.single_artist, #{personId}) > 0
+    </select>
+
+    <!--config-->
     <select id="getSingleList" resultType="io.oken1.modules.music.entity.SingleEntity">
         select *
         from mug_single limit 100

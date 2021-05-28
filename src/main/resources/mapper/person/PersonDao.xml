@@ -5,8 +5,7 @@
     <select id="getPersonConfigList" resultType="map">
         select p.*, r.region_name_abbr region
         from mug_person p
-                 left join tb_region r on p.person_region = r.region_code
-        limit 100
+                 left join tb_region r on p.person_region = r.region_code limit 100
     </select>
     <select id="searchPerson" resultType="map">
         select *, r.region_name_abbr region

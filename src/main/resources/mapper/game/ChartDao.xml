@@ -11,6 +11,7 @@
                c.difficulty_id,
                d.difficulty_name,
                c.chart_level,
+               c.chart_designer,
                c.chart_usable
         from mug_chart c
                  left join mug_song s on c.song_id = s.song_id
@@ -18,4 +19,12 @@
         where s.song_id = #{songId}
         order by d.inx
     </select>
+
+    <update id="unusableChart">
+        update mug_chart c
+        set c.chart_usable = 0
+        where c.chart_id != #{chartId}
+          and c.song_id = #{songId}
+          and c.difficulty_id = #{difficultyId}
+    </update>
 </mapper>

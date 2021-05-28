@@ -10,4 +10,6 @@ import java.util.List;
 @Mapper
 public interface ChartDao extends BaseMapper<ChartEntity> {
     List<LinkedHashMap> getChartConfigListBySongId(String songId);
+
+    void unusableChart(Integer chartId, String songId, Integer difficultyId);
 }

@@ -3,12 +3,12 @@
 
 <mapper namespace="io.oken1.modules.basic.dao.BasicDao">
     <select id="getAllSnsList" resultType="map">
-        SELECT s.sns_type    SnsType,
-               s.sns_cn      SnsCn,
-               s.sns_en      SnsEn,
-               s.sns_jp      SnsJp,
-               s.default_url DefaultUrl,
-               s.icon        Icon
+        SELECT s.sns_type_id sns_type,
+               s.sns_cn,
+               s.sns_en,
+               s.sns_jp,
+               s.default_url,
+               s.icon
         FROM tb_sns_type s
         ORDER BY s.inx
     </select>

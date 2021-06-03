@@ -40,19 +40,33 @@ public class PersonConfigController {
 
     @GetMapping("/person/info/{personId}")
     public R personInfo(@PathVariable("personId") String personId) {
-        PersonEntity personEntity = personService.getById(personId);
-        return R.ok().put("personInfo", personEntity);
+        LinkedHashMap person = personDao.getPersonInfoByPersonId(personId);
+        return R.ok().put("personInfo", person);
     }
 
-    @PostMapping("/person/save")
-    public R personSave(@RequestBody PersonEntity personEntity) {
+    @PostMapping("/person/save/{isGroup}")
+    public R personSave(@RequestBody PersonEntity personEntity, @PathVariable("isGroup") Boolean isGroup) {
         personService.save(personEntity);
+        if (isGroup) {
+            GroupEntity groupEntity = new GroupEntity();
+            groupEntity.setGroupId(personEntity.getPersonId());
+            groupService.save(groupEntity);
+        }
         return R.ok();
     }
 
-    @PostMapping("/person/update")
-    public R personUpdate(@RequestBody PersonEntity personEntity) {
+    @PostMapping("/person/update/{isGroup}")
+    public R personUpdate(@RequestBody PersonEntity personEntity, @PathVariable("isGroup") Boolean isGroup) {
         personService.updateById(personEntity);
+        GroupEntity groupEntity = groupService.getById(personEntity.getPersonId());
+        if (isGroup && groupEntity == null) {
+            // 是团队且未保存
+            groupEntity = new GroupEntity();
+            groupEntity.setGroupId(personEntity.getPersonId());
+            groupService.save(groupEntity);
+        } else if (!isGroup && groupEntity != null) {
+            groupService.removeById(personEntity.getPersonId());
+        }
         return R.ok();
     }
 
@@ -130,7 +144,7 @@ public class PersonConfigController {
 
     @GetMapping("/group/info/{groupId}")
     public R groupInfo(@PathVariable("groupId") String groupId) {
-        GroupEntity groupEntity = groupService.getById(groupId);
+        LinkedHashMap groupEntity = groupDao.getGroupInfoByGroupId(groupId);
         return R.ok().put("groupInfo", groupEntity);
     }
 

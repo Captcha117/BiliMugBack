@@ -3,8 +3,9 @@
 
 <mapper namespace="io.oken1.modules.person.dao.GroupMemberDao">
     <select id="getGroupMemberConfigList" resultType="map">
-        select g.group_id, g.group_name, z.member_count
+        select g.group_id, p.person_name group_name, z.member_count
         from mug_group g
+                 left join mug_person p on g.group_id = p.person_id
                  left join (select m.group_id, count(1) member_count from mug_group_member m group by m.group_id) z
                            on g.group_id = z.group_id
     </select>

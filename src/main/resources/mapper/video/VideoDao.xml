@@ -3,15 +3,15 @@
 
 <mapper namespace="io.oken1.modules.video.dao.VideoDao">
     <select id="getVideosByGameId" resultType="map">
-        SELECT v.aid       Aid,
-               v.title     Title,
-               v.pub_time  PubTime,
-               v.copyright Copyright,
-               v.uid       Uid,
-               v.play      Play,
-               u.id        Id,
-               u.face      Face,
-               v.cover     Cover
+        SELECT v.aid,
+               v.title,
+               v.pub_time,
+               v.copyright,
+               v.uid,
+               v.play,
+               u.id,
+               u.face,
+               v.cover
         FROM mug_video v
                  LEFT JOIN mug_game_content c ON v.aid = c.aid
                  LEFT JOIN mug_uploader u ON v.uid = u.uid

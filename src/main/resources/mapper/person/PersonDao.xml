@@ -3,10 +3,20 @@
 
 <mapper namespace="io.oken1.modules.person.dao.PersonDao">
     <select id="getPersonConfigList" resultType="map">
-        select p.*, r.region_name_abbr region
+        select p.*, r.region_name_abbr region, if(g.group_id is null, 0, 1) is_group
         from mug_person p
-                 left join tb_region r on p.person_region = r.region_code limit 100
+                 left join tb_region r on p.person_region = r.region_code
+                 left join mug_group g on p.person_id = g.group_id
+        limit 100
     </select>
+
+    <select id="getPersonInfoByPersonId" resultType="java.util.LinkedHashMap">
+        select p.*, if(g.group_id is null, 0, 1) is_group
+        from mug_person p
+                 left join mug_group g on p.person_id = g.group_id
+        where p.person_id = #{personId}
+    </select>
+
     <select id="searchPerson" resultType="map">
         select *, r.region_name_abbr region
         from mug_person p

@@ -41,11 +41,11 @@
                 DATE_FORMAT( v.pub_date, '%y年%m月' )
             </when>
         </choose>
-        Time,
-        sum(v.play / v.game_count) AllPlay,
-        sum(IF(v.dssq, 0, v.play / v.game_count)) Play,
-        count(1) AllCount,
-        sum(IF(v.dssq, 0, 1)) Count
+        time,
+        sum(v.play / v.game_count) all_play,
+        sum(IF(v.dssq, 0, v.play / v.game_count)) play,
+        count(1) all_count,
+        sum(IF(v.dssq, 0, 1)) count
         FROM v_video v
         WHERE instr(v.game_id, #{gameId}) > 0
         AND v.pub_date BETWEEN #{startDate} AND #{endDate}

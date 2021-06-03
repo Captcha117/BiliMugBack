@@ -22,18 +22,6 @@ public class GroupEntity implements Serializable {
     @TableId(type = IdType.INPUT)
     private String groupId;
     /**
-     * 团队名
-     */
-    private String groupName;
-    /**
-     * 团队别名
-     */
-    private String groupAlias;
-    /**
-     * 团队国家/地区
-     */
-    private String groupRegion;
-    /**
      * 建立日期
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")

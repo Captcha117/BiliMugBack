@@ -11,5 +11,7 @@ import java.util.List;
 public interface PersonDao extends BaseMapper<PersonEntity> {
     List<LinkedHashMap> getPersonConfigList();
 
+    LinkedHashMap getPersonInfoByPersonId(String personId);
+
     List<LinkedHashMap> searchPerson(String search);
 }

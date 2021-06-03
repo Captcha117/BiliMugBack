@@ -2,23 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.person.dao.GroupDao">
-    <select id="getGroupListBtPersonId" resultType="map">
-        select g.group_id, g.group_name
+    <select id="getGroupListByPersonId" resultType="map">
+        select g.group_id, p.person_name group_name
         from mug_group g
+                 left join mug_person p on g.group_id = p.person_id
         where g.group_id in (select distinct m.group_id from mug_group_member m where m.person_id = #{personId})
     </select>
 
     <!--config-->
     <select id="getGroupConfigList" resultType="map">
-        select g.*, r.region_name_abbr region
+        select g.*,
+               r.region_name_abbr region,
+               person_name        group_name,
+               person_alias       group_alias
         from mug_group g
-                 left join tb_region r on g.group_region = r.region_code limit 100
+                 left join mug_person p on g.group_id = p.person_id
+                 left join tb_region r on p.person_region = r.region_code
+        limit 100
     </select>
-    <select id="searchGroup" resultType="map">
-        select *, r.region_name_abbr region
+
+    <select id="getGroupInfoByGroupId" resultType="java.util.LinkedHashMap">
+        select g.*,
+               r.region_name_abbr region,
+               person_name        group_name,
+               person_alias       group_alias
         from mug_group g
-                 left join tb_region r on g.group_region = r.region_code
-        where instr(g.group_name, #{search}) > 0
-           or instr(g.group_alias, #{search}) > 0
+                 left join mug_person p on g.group_id = p.person_id
+                 left join tb_region r on p.person_region = r.region_code
+        where g.group_id = #{groupId}
+    </select>
+
+    <select id="searchGroup" resultType="map">
+        select *,
+               r.region_name_abbr region,
+               person_name        group_name,
+               person_alias       group_alias
+        from mug_group g
+                 left join mug_person p on g.group_id = p.person_id
+                 left join tb_region r on p.person_region = r.region_code
+        where instr(p.person_name, #{search}) > 0
+           or instr(p.person_alias, #{search}) > 0
     </select>
 </mapper>

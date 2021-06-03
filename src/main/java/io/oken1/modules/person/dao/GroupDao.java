@@ -11,5 +11,7 @@ import java.util.List;
 public interface GroupDao extends BaseMapper<GroupEntity> {
     List<LinkedHashMap> getGroupConfigList();
 
+    LinkedHashMap getGroupInfoByGroupId(String groupId);
+
     List<LinkedHashMap> searchGroup(String search);
 }

@@ -26,7 +26,8 @@
                song_artist   artist,
                song_length   length,
                release_date,
-               song_bpm      bpm
+               song_bpm      bpm,
+               chart_designer
         FROM mug_song s
         WHERE s.game_id = #{gameId}
         ORDER BY s.song_inx, s.song_title_en
@@ -59,12 +60,14 @@
                s.song_bpm,
                s.song_length,
                s.single_id,
-               s.release_date
+               s.release_date,
+               s.chart_designer
         FROM mug_song s
                  left join mug_game g on s.game_id = g.game_id
         where song_id = #{songId}
     </select>
 
+    <!--config-->
     <select id="getSongConfigList" resultType="map">
         select g.game_id,
                g.common_name game_name,

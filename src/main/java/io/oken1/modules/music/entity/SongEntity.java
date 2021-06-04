@@ -63,6 +63,10 @@ public class SongEntity implements Serializable {
      */
     private String SongBpm;
     /**
+     * 谱师
+     */
+    private String ChartDesigner;
+    /**
      * 排序
      */
     private String SongInx;

@@ -28,10 +28,6 @@ public class ChartEntity implements Serializable {
      */
     private String chartLevel;
     /**
-     * 设计者
-     */
-    private String chartDesigner;
-    /**
      * 是否可用
      */
     private Integer chartUsable;

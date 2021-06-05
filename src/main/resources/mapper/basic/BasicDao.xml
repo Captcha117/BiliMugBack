@@ -13,8 +13,8 @@
         ORDER BY s.inx
     </select>
 
-    <select id="getAllCompanyList" resultType="map">
-        select c.company_id, company_name, company_alias, company_region, company_address
+    <select id="getCompanyList" resultType="map">
+        select c.company_id, company_name, company_alias, company_region
         from mug_company c
         order by c.company_name
     </select>

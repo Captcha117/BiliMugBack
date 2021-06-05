@@ -33,10 +33,10 @@ public class BasicController {
      *
      * @return 公司信息表
      */
-    @GetMapping("/allCompanyList")
-    public R getAllCompanyList() {
-        List<LinkedHashMap> result = basicDao.getAllCompanyList();
-        return R.ok().put("allCompanyList", result);
+    @GetMapping("/getCompanyList")
+    public R getCompanyList() {
+        List<LinkedHashMap> result = basicDao.getCompanyList();
+        return R.ok().put("companyList", result);
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)

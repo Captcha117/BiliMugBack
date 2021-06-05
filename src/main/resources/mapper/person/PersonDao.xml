@@ -2,6 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.person.dao.PersonDao">
+    <select id="getPersonGameByPersonId" resultType="map">
+        SELECT g.game_id,
+               g.common_name,
+               g.other_name,
+               g.icon_version
+        FROM mug_game g
+        WHERE g.game_id IN (
+            SELECT DISTINCT (s.game_id)
+            FROM mug_song s
+            WHERE instr(s.song_artist, #{personId}) > 0
+               or instr(s.chart_designer, #{personId}) > 0
+        )
+    </select>
+    <select id="getPersonSongByPersonId" resultType="map">
+        SELECT s.song_id,
+               s.game_id,
+               g.common_name game_name,
+               s.single_id,
+               s.song_title_en,
+               s.song_title_jp,
+               s.song_title_cn,
+               s.song_artist,
+               s.chart_designer
+        FROM mug_song s
+                 left join mug_game g on s.game_id = g.game_id
+        WHERE instr(s.song_artist, #{personId}) > 0
+           or instr(s.chart_designer, #{personId}) > 0
+    </select>
+
+    <!--config-->
     <select id="getPersonConfigList" resultType="map">
         select p.*, r.region_name_abbr region, if(g.group_id is null, 0, 1) is_group
         from mug_person p

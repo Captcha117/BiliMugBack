@@ -9,6 +9,23 @@ import java.util.List;
 
 @Mapper
 public interface PersonDao extends BaseMapper<PersonEntity> {
+    /**
+     * 根据人物ID获取人物供曲游戏
+     *
+     * @param personId 人物ID
+     * @return 人物供曲游戏列表
+     */
+    List<LinkedHashMap> getPersonGameByPersonId(String personId);
+
+    /**
+     * 根据人物ID获取人物供曲和进行谱面制作的曲目
+     *
+     * @param personId 人物ID
+     * @return 供曲和进行谱面制作的曲目列表
+     */
+    List<LinkedHashMap> getPersonSongByPersonId(String personId);
+
+    //config
     List<LinkedHashMap> getPersonConfigList();
 
     LinkedHashMap getPersonInfoByPersonId(String personId);

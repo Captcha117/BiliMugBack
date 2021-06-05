@@ -83,14 +83,14 @@ public class BasicConfigController {
         return R.ok().put("snsTypeInfo", snsTypeEntity);
     }
 
-    @PostMapping("/snsType/save/{increase}")
-    public R snsTypeSave(@RequestBody SnsTypeEntity snsType, @PathVariable Boolean increase) {
+    @PostMapping("/snsType/save")
+    public R snsTypeSave(@RequestBody SnsTypeEntity snsType) {
         snsTypeService.save(snsType);
         return R.ok();
     }
 
-    @PostMapping("/snsType/update/{increase}")
-    public R snsTypeUpdate(@RequestBody SnsTypeEntity snsType, @PathVariable Boolean increase) {
+    @PostMapping("/snsType/update")
+    public R snsTypeUpdate(@RequestBody SnsTypeEntity snsType) {
         snsTypeService.updateById(snsType);
         return R.ok();
     }

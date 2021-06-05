@@ -9,5 +9,5 @@ import java.util.List;
 public interface BasicDao {
     List<LinkedHashMap> getAllSnsList();
 
-    List<LinkedHashMap> getAllCompanyList();
+    List<LinkedHashMap> getCompanyList();
 }

@@ -6,10 +6,10 @@
     <select id="getGameList" resultType="map">
         SELECT g.game_id,
                g.common_name,
-               g.other_name,
-               g.icon_version
+               replace(g.other_name, ',', ', ') other_name,
+               g.icon_version,
+               g.parent_id
         FROM mug_game g
-        where g.parent_id is null
         ORDER BY g.common_name
     </select>
 

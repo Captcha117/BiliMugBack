@@ -48,6 +48,7 @@ public class PersonController {
     public R getRelatedInfoByPersonId(String personId) {
         List<LinkedHashMap> gameList = personDao.getPersonGameByPersonId(personId);
         List<LinkedHashMap> songList = personDao.getPersonSongByPersonId(personId);
-        return R.ok().put("gameList", gameList).put("songList", songList);
+        List<LinkedHashMap> singleList = personDao.getPersonSingleByPersonId(personId);
+        return R.ok().put("gameList", gameList).put("songList", songList).put("singleList", singleList);
     }
 }

@@ -18,4 +18,43 @@
         from mug_company c
         order by c.company_name
     </select>
+
+    <!--search-->
+    <select id="searchGame" resultType="map">
+        select game_id,
+               common_name,
+               other_name,
+               icon_version,
+               developer,
+               c.company_name
+        from mug_game g
+                 left join mug_company c on g.developer = c.company_id
+        where instr(g.common_name, #{search}) > 0
+           or instr(g.other_name, #{search}) > 0
+           or instr(c.company_name, #{search}) > 0
+    </select>
+    <select id="searchSingle" resultType="map">
+        select single_id,
+               single_title_en,
+               single_title_jp,
+               single_title_cn,
+               single_alias,
+               single_artist
+        from mug_single s
+        where instr(single_title_en, #{search}) > 0
+           or instr(single_title_jp, #{search}) > 0
+           or instr(single_title_cn, #{search}) > 0
+           or instr(single_alias, #{search}) > 0
+    </select>
+    <select id="searchPerson" resultType="map">
+        select person_id, person_name, person_alias, person_region
+        from mug_person p
+        where instr(person_name, #{search}) > 0
+           or instr(person_alias, #{search}) > 0
+    </select>
+    <select id="searchUploader" resultType="map">
+        select uid, id, face
+        from mug_uploader
+        where instr(id, #{search}) > 0
+    </select>
 </mapper>

@@ -25,6 +25,14 @@ public interface PersonDao extends BaseMapper<PersonEntity> {
      */
     List<LinkedHashMap> getPersonSongByPersonId(String personId);
 
+    /**
+     * 根据人物ID获取人物单曲
+     *
+     * @param personId 人物ID
+     * @return 单曲列表
+     */
+    List<LinkedHashMap> getPersonSingleByPersonId(String personId);
+
     //config
     List<LinkedHashMap> getPersonConfigList();
 

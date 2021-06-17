@@ -22,6 +22,11 @@ public class PersonServiceImpl extends ServiceImpl<PersonDao, PersonEntity> impl
     @Autowired
     SongDao songDao;
 
+    /**
+     * 曲目艺术家标签化
+     *
+     * @param gameId 游戏ID
+     */
     @Override
     public void processSongArtist(String gameId) {
         //曲目列表
@@ -32,10 +37,9 @@ public class PersonServiceImpl extends ServiceImpl<PersonDao, PersonEntity> impl
         for (SongEntity song : songList) {
             String artistName = song.getSongArtist();
             String newArtistName = artistName;
-            if(song.getSongId().equals("d35b793d"))
-            {
-                int a = 2;
-            }
+//            if (song.getSongId().equals("d35b793d")) {
+//                int a = 2;
+//            }
             //遍历人物
             for (PersonEntity artist : artistList) {
                 String[] artistNames = (artist.getPersonName() + "," + MyUtils.nvl(artist.getPersonAlias(), "")).split(",");

@@ -6,29 +6,60 @@
         SELECT g.game_id,
                g.common_name,
                g.other_name,
-               g.icon_version
+               g.icon_version,
+               g.developer,
+               c.company_name
         FROM mug_game g
+                 left join mug_company c on g.developer = c.company_id
         WHERE g.game_id IN (
             SELECT DISTINCT (s.game_id)
             FROM mug_song s
             WHERE instr(s.song_artist, #{personId}) > 0
                or instr(s.chart_designer, #{personId}) > 0
         )
+        order by g.common_name
     </select>
     <select id="getPersonSongByPersonId" resultType="map">
         SELECT s.song_id,
                s.game_id,
-               g.common_name game_name,
+               g.common_name,
+               g.other_name,
+               g.icon_version,
                s.single_id,
+               ms.single_title_en,
+               ms.single_artist,
                s.song_title_en,
                s.song_title_jp,
                s.song_title_cn,
                s.song_artist,
-               s.chart_designer
+               s.chart_designer,
+               g.developer,
+               c.company_name
         FROM mug_song s
                  left join mug_game g on s.game_id = g.game_id
+                 left join mug_company c on g.developer = c.company_id
+                 left join mug_single ms on s.single_id = ms.single_id
         WHERE instr(s.song_artist, #{personId}) > 0
            or instr(s.chart_designer, #{personId}) > 0
+        order by s.song_title_en, g.common_name
+    </select>
+    <select id="getPersonSingleByPersonId" resultType="map">
+        select single_id,
+               single_title_en,
+               single_title_jp,
+               single_title_cn,
+               single_alias,
+               single_artist,
+               single_style,
+               single_cast
+        from mug_single g
+        where instr(g.single_artist, #{personId}) > 0
+           or g.single_id in (
+            SELECT s.single_id
+            FROM mug_song s
+            WHERE instr(s.song_artist, #{personId}) > 0
+        )
+        order by single_title_en
     </select>
 
     <!--config-->

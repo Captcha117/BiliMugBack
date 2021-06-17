@@ -44,4 +44,15 @@ public class BasicController {
     public R upload(@RequestParam("file") MultipartFile file) throws Exception {
         return R.ok();
     }
+
+    /**
+     * 全局搜索
+     *
+     * @param search 关键词
+     * @return 搜索结果
+     */
+    @GetMapping("/globalSearch")
+    public R globalSearch(String search) {
+        return null;
+    }
 }

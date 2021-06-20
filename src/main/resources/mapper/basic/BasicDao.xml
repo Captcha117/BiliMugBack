@@ -32,6 +32,7 @@
         where instr(g.common_name, #{search}) > 0
            or instr(g.other_name, #{search}) > 0
            or instr(c.company_name, #{search}) > 0
+        order by common_name
     </select>
     <select id="searchSingle" resultType="map">
         select single_id,
@@ -45,16 +46,46 @@
            or instr(single_title_jp, #{search}) > 0
            or instr(single_title_cn, #{search}) > 0
            or instr(single_alias, #{search}) > 0
+        order by single_title_en
+        limit 50
     </select>
     <select id="searchPerson" resultType="map">
         select person_id, person_name, person_alias, person_region
         from mug_person p
         where instr(person_name, #{search}) > 0
            or instr(person_alias, #{search}) > 0
+        order by person_name
+        limit 50
     </select>
     <select id="searchUploader" resultType="map">
         select uid, id, face
         from mug_uploader
         where instr(id, #{search}) > 0
+           or uid = #{search}
+        order by id
+        limit 50
+    </select>
+    <select id="searchVideo" resultType="map">
+        select v.aid,
+               v.bid,
+               v.title,
+               v.pub_time,
+               v.copyright,
+               v.uid,
+               v.play,
+               v.cover,
+               v.update_time,
+               u.id,
+               u.face
+        from mug_video v
+                 left join mug_uploader u on v.uid = u.uid
+        where aid = #{search}
+           or bid = #{search}
+           or bid = concat('BV', #{search})
+           or instr(title, #{search}) > 0
+           or instr(id, #{search}) > 0
+           or v.uid = #{search}
+        order by v.play desc
+        limit 50
     </select>
 </mapper>

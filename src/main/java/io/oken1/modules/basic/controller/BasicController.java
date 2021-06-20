@@ -2,7 +2,9 @@ package io.oken1.modules.basic.controller;
 
 import io.oken1.common.utils.R;
 import io.oken1.modules.basic.dao.BasicDao;
+import io.oken1.modules.game.entity.DifficultyEntity;
 import io.swagger.annotations.Api;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +55,16 @@ public class BasicController {
      */
     @GetMapping("/globalSearch")
     public R globalSearch(String search) {
-        return null;
+        if (StringUtils.isBlank(search) || search.length() < 2) {
+            return R.error();
+        }
+        List<LinkedHashMap> gameList = basicDao.searchGame(search);
+        List<LinkedHashMap> singleList = basicDao.searchSingle(search);
+        List<LinkedHashMap> personList = basicDao.searchPerson(search);
+        List<LinkedHashMap> uploaderList = basicDao.searchUploader(search);
+        List<LinkedHashMap> videoList = basicDao.searchVideo(search);
+        return R.ok().put("gameList", gameList).put("singleList", singleList)
+                .put("personList", personList).put("uploaderList", uploaderList)
+                .put("videoList", videoList);
     }
 }

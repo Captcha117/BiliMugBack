@@ -2,9 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.person.dao.UploaderDao">
+    <select id="getUploaderVideoByUid" resultType="map">
+        select v.aid,
+               v.bid,
+               v.title,
+               v.pub_time,
+               v.copyright,
+               v.ps,
+               v.duration,
+               v.uid,
+               v.play,
+               v.cover,
+               v.tag,
+               v.update_time,
+               u.uid,
+               u.id,
+               u.face
+        from mug_video v
+                 left join mug_game_content c on v.aid = c.aid
+                 left join mug_game g on c.game_id = g.game_id
+                 left join mug_uploader u on v.uid = u.uid
+        where v.uid = #{uid}
+        order by v.pub_time desc
+        limit 20
+    </select>
+    <select id="getUploaderGameByUid" resultType="map">
+        select g.game_id,
+               g.common_name,
+               g.full_name,
+               g.other_name,
+               g.icon_version,
+               g.update_time,
+               z.game_count
+        from (select distinct c.game_id, count(1) game_count
+              from mug_video v
+                       left join mug_game_content c on v.aid = c.aid
+              where v.uid = #{uid}
+              group by c.game_id) z
+                 left join
+             mug_game g on z.game_id = g.game_id
+        order by z.game_count desc, g.common_name
+    </select>
+
+    <!--config-->
     <select id="getUploaderConfigList" resultType="map">
         select p.*
-        from mug_uploader p limit 100
+        from mug_uploader p
+        limit 100
     </select>
     <select id="searchUploader" resultType="map">
         select *

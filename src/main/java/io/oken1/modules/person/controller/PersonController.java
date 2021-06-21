@@ -1,9 +1,13 @@
 package io.oken1.modules.person.controller;
 
 import io.oken1.common.utils.R;
+import io.oken1.modules.game.model.GameModel;
 import io.oken1.modules.person.dao.PersonDao;
+import io.oken1.modules.person.dao.UploaderDao;
 import io.oken1.modules.person.entity.PersonEntity;
+import io.oken1.modules.person.entity.UploaderEntity;
 import io.oken1.modules.person.service.PersonService;
+import io.oken1.modules.person.service.UploaderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +30,12 @@ public class PersonController {
     @Autowired
     PersonDao personDao;
 
+    @Autowired
+    UploaderService uploaderService;
+
+    @Autowired
+    UploaderDao uploaderDao;
+
     @ApiOperation("曲目艺术家标签化")
     @GetMapping("/processSongArtist")
     public R processSongArtist(@RequestParam String gameId) {
@@ -37,18 +47,33 @@ public class PersonController {
     }
 
     @ApiOperation("获取人物基本信息")
-    @GetMapping("/getPersonInfo")
-    public R getPersonInfo(String personId) {
+    @GetMapping("/getArtistInfoByPersonId")
+    public R getArtistInfoByPersonId(String personId) {
         PersonEntity personEntity = personService.getById(personId);
-        return R.ok().put("personInfo", personEntity);
+        return R.ok().put("artistInfo", personEntity);
     }
 
     @ApiOperation("获取人物游戏相关信息")
-    @GetMapping("/getRelatedInfoByPersonId")
-    public R getRelatedInfoByPersonId(String personId) {
+    @GetMapping("/getArtistRelatedInfoByPersonId")
+    public R getArtistRelatedInfoByPersonId(String personId) {
         List<LinkedHashMap> gameList = personDao.getPersonGameByPersonId(personId);
         List<LinkedHashMap> songList = personDao.getPersonSongByPersonId(personId);
         List<LinkedHashMap> singleList = personDao.getPersonSingleByPersonId(personId);
         return R.ok().put("gameList", gameList).put("songList", songList).put("singleList", singleList);
+    }
+
+    @ApiOperation("获取UP主基本信息")
+    @GetMapping("/getUploaderInfoByUid")
+    public R getUploaderInfoByUid(Long uid) {
+        UploaderEntity uploaderEntity = uploaderService.getById(uid);
+        return R.ok().put("uploaderInfo", uploaderEntity);
+    }
+
+    @ApiOperation("获取UP主相关信息")
+    @GetMapping("/getUploaderRelatedInfoByUid")
+    public R getUploaderRelatedInfoByUid(Long uid) {
+        List<LinkedHashMap> videoList = uploaderDao.getUploaderVideoByUid(uid);
+        List<LinkedHashMap> gameList = uploaderDao.getUploaderGameByUid(uid);
+        return R.ok().put("videoList", videoList).put("gameList", gameList);
     }
 }

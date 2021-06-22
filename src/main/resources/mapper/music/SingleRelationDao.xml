@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.oken1.modules.music.dao.SingleRelationDao">
+    <select id="getSingleRelationListBySingleId" resultType="map">
+        select r.pk_id,
+               r.single_id,
+               s1.single_title_en,
+               r.relate_id,
+               s2.single_title_en relate_title
+        from mug_single_relation r
+                 left join mug_single s1 on r.single_id = s1.single_id
+                 left join mug_single s2 on r.relate_id = s2.single_id
+        where r.single_id = #{singleId}
+    </select>
+</mapper>

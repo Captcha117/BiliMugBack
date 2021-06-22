@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.person.dao.UploaderDao">
+    <select id="getUploaderRankByUid" resultType="java.util.LinkedHashMap">
+        select *
+        from mug_uploader_rank r
+        where r.uid = #{uid}
+          and (r.update_date = CURRENT_DATE() or r.update_date = DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY))
+        order by r.update_date desc
+        limit 1
+    </select>
     <select id="getUploaderVideoByUid" resultType="map">
         select v.aid,
                v.bid,
@@ -39,8 +47,7 @@
                        left join mug_game_content c on v.aid = c.aid
               where v.uid = #{uid}
               group by c.game_id) z
-                 left join
-             mug_game g on z.game_id = g.game_id
+                 join mug_game g on z.game_id = g.game_id
         order by z.game_count desc, g.common_name
     </select>
 

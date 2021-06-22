@@ -15,11 +15,26 @@
         from mug_single s
         where instr(s.single_artist, #{personId}) > 0
     </select>
+    <select id="getSingleGameBySingleId" resultType="io.oken1.modules.game.model.GameModel">
+        select *
+        from mug_game g
+        where g.game_id in (select s.game_id from mug_song s where s.single_id = #{singleId})
+    </select>
+    <select id="getSingleSongBySingleId" resultType="map">
+        select s.song_id,
+               s.game_id,
+               s.single_id,
+               s.song_title_en,
+               s.song_artist
+        from mug_song s
+        where s.single_id = #{singleId}
+    </select>
 
     <!--config-->
     <select id="getSingleList" resultType="io.oken1.modules.music.entity.SingleEntity">
         select *
-        from mug_single limit 100
+        from mug_single
+        limit 100
     </select>
     <select id="searchSingle" resultType="io.oken1.modules.music.entity.SingleEntity">
         select *

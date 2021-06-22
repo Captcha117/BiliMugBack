@@ -2,9 +2,12 @@ package io.oken1.modules.music.controller;
 
 import io.oken1.common.utils.R;
 import io.oken1.modules.music.dao.SingleDao;
+import io.oken1.modules.music.dao.SingleRelationDao;
 import io.oken1.modules.music.dao.SongDao;
 import io.oken1.modules.music.entity.SingleEntity;
+import io.oken1.modules.music.entity.SingleRelationEntity;
 import io.oken1.modules.music.entity.SongEntity;
+import io.oken1.modules.music.service.SingleRelationService;
 import io.oken1.modules.music.service.SingleService;
 import io.oken1.modules.music.service.SongService;
 import io.swagger.annotations.Api;
@@ -109,6 +112,37 @@ public class MusicConfigController {
         List<SingleEntity> singleList = singleDao.searchSingle(search);
         return R.ok().put("singleList", singleList);
     }
+
+    @Autowired
+    SingleRelationService singleRelationService;
+    @Autowired
+    SingleRelationDao singleRelationDao;
+
+    @GetMapping("/singleRelation/info/{singleId}")
+    public R singleRelationInfo(@PathVariable("singleId") String singleId) {
+        List<LinkedHashMap> singleRelationList = singleRelationDao.getSingleRelationListBySingleId(singleId);
+        return R.ok().put("singleRelationList", singleRelationList);
+    }
+
+    @PostMapping("/singleRelation/save")
+    public R singleRelationSave(@RequestBody SingleRelationEntity singleRelationEntity) {
+        singleRelationService.save(singleRelationEntity);
+        return R.ok();
+    }
+
+    @PostMapping("/singleRelation/update")
+    public R singleRelationUpdate(@RequestBody SingleRelationEntity singleRelationEntity) {
+        singleRelationService.updateById(singleRelationEntity);
+        return R.ok();
+    }
+
+    @PostMapping("/singleRelation/delete")
+    public R singleRelationDelete(@RequestBody String[] singleRelationIds) {
+        singleRelationService.removeByIds(Arrays.asList(singleRelationIds));
+
+        return R.ok();
+    }
+
 
     //endregion
 }

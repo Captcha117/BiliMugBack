@@ -10,4 +10,6 @@ public interface RankDao {
     List<LinkedHashMap> gameRank(String startDate, String endDate);
 
     List<LinkedHashMap> upRank(String startDate, String endDate, String referStartDate, String referEndDate);
+
+    void insertUploaderYearRank();
 }

@@ -47,4 +47,14 @@ public class RankController {
         List<LinkedHashMap> result = rankDao.upRank(startDate, endDate, referStartDate, referEndDate);
         return R.ok().put("result", result);
     }
+
+    /**
+     * 保存UP近一年排名
+     */
+    @ApiOperation("保存UP近一年排名")
+    @GetMapping("/up/year")
+    public R uploaderYearRank() {
+        rankDao.insertUploaderYearRank();
+        return R.ok();
+    }
 }

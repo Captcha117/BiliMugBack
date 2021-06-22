@@ -16,7 +16,7 @@ public class SingleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 曲目ID
+     * 单曲ID
      */
     @TableId(type = IdType.INPUT)
     private String singleId;

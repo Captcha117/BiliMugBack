@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.video.dao.RankDao">
+    <!--游戏排行-->
     <select id="gameRank" resultType="map">
         SELECT g.common_name                              Name,
                z.total                                    Total,
@@ -28,6 +29,7 @@
         ORDER BY z.valid_play DESC
     </select>
 
+    <!--UP主排行-->
     <select id="upRank" resultType="map">
         SELECT
             rank ( ) over ( ORDER BY z.valid_play DESC ) valid_rank,
@@ -97,4 +99,23 @@
         ORDER BY
             valid_play DESC
     </select>
+
+    <sql id="yearUploaderRankSql">
+        SELECT v.uid,
+               current_date()                                           update_date,
+               sum(IF(v.dssq, 0, v.play))                               play,
+               count(IF(v.dssq, 0, 1))                                  num,
+               rank() over ( ORDER BY sum(IF(v.dssq, 0, v.play)) DESC ) play_rank
+        FROM v_video v
+        WHERE v.pub_date BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -1 year)
+                  AND DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY)
+        GROUP BY v.uid
+        ORDER BY play DESC
+        LIMIT 500
+    </sql>
+
+    <insert id="insertUploaderYearRank">
+        insert mug_uploader_rank (uid, update_date, video_play, video_count, uploader_rank)
+        <include refid="yearUploaderRankSql"/>
+    </insert>
 </mapper>

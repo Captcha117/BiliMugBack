@@ -1,7 +1,6 @@
 package io.oken1.modules.person.controller;
 
 import io.oken1.common.utils.R;
-import io.oken1.modules.game.model.GameModel;
 import io.oken1.modules.person.dao.PersonDao;
 import io.oken1.modules.person.dao.UploaderDao;
 import io.oken1.modules.person.entity.PersonEntity;
@@ -66,7 +65,8 @@ public class PersonController {
     @GetMapping("/getUploaderInfoByUid")
     public R getUploaderInfoByUid(Long uid) {
         UploaderEntity uploaderEntity = uploaderService.getById(uid);
-        return R.ok().put("uploaderInfo", uploaderEntity);
+        LinkedHashMap rankInfo = uploaderDao.getUploaderRankByUid(uid);
+        return R.ok().put("uploaderInfo", uploaderEntity).put("rankInfo", rankInfo);
     }
 
     @ApiOperation("获取UP主相关信息")

@@ -66,7 +66,8 @@ public class PersonController {
     public R getUploaderInfoByUid(Long uid) {
         UploaderEntity uploaderEntity = uploaderService.getById(uid);
         LinkedHashMap rankInfo = uploaderDao.getUploaderRankByUid(uid);
-        return R.ok().put("uploaderInfo", uploaderEntity).put("rankInfo", rankInfo);
+        List<LinkedHashMap> gameRankInfo = uploaderDao.getUploaderGameRankListByUid(uid);
+        return R.ok().put("uploaderInfo", uploaderEntity).put("rankInfo", rankInfo).put("gameRankInfo", gameRankInfo);
     }
 
     @ApiOperation("获取UP主相关信息")

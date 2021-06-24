@@ -4,11 +4,19 @@
 <mapper namespace="io.oken1.modules.person.dao.UploaderDao">
     <select id="getUploaderRankByUid" resultType="java.util.LinkedHashMap">
         select *
-        from mug_uploader_rank r
+        from mug_rank_uploader r
         where r.uid = #{uid}
-          and (r.update_date = CURRENT_DATE() or r.update_date = DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY))
-        order by r.update_date desc
+          and r.game_id is null
+        order by r.update_time desc
         limit 1
+    </select>
+    <select id="getUploaderGameRankListByUid" resultType="map">
+        SELECT *
+        FROM mug_rank_uploader r
+        WHERE r.uid = #{uid}
+          AND r.game_id IS NOT NULL
+          AND r.update_time = (SELECT max(update_time) FROM mug_rank_uploader)
+        ORDER BY r.update_time DESC
     </select>
     <select id="getUploaderVideoByUid" resultType="map">
         select v.aid,

@@ -100,9 +100,9 @@
             valid_play DESC
     </select>
 
-    <sql id="yearUploaderRankSql">
+    <sql id="uploaderYearRankSql">
         SELECT v.uid,
-               current_date()                                           update_date,
+               current_timestamp()                                      update_time,
                sum(IF(v.dssq, 0, v.play))                               play,
                count(IF(v.dssq, 0, 1))                                  num,
                rank() over ( ORDER BY sum(IF(v.dssq, 0, v.play)) DESC ) play_rank
@@ -115,7 +115,46 @@
     </sql>
 
     <insert id="insertUploaderYearRank">
-        insert mug_uploader_rank (uid, update_date, video_play, video_count, uploader_rank)
-        <include refid="yearUploaderRankSql"/>
+        insert mug_rank_uploader (uid, update_time, video_play, video_count, uploader_rank)
+        <include refid="uploaderYearRankSql"/>
+    </insert>
+
+    <sql id="uploaderGameYearRankSql">
+        SELECT k.*, current_timestamp() update_time
+        FROM (
+                 SELECT t.uid,
+                        t.game_id,
+                        sum(t.game_play)                     video_play,
+                        count(1)                             video_count,
+                        rank() over ( PARTITION BY t.game_id
+                            ORDER BY sum(t.game_play) DESC ) uploader_rank
+                 FROM (
+                          SELECT v.aid,
+                                 v.uid,
+                                 v.play,
+                                 v.pub_time,
+                                 c.game_id,
+                                 z.game_count,
+                                 round(v.play / z.game_count) game_play
+                          FROM mug_video v
+                                   JOIN mug_game_content c ON v.aid = c.aid
+                                   LEFT JOIN mug_dssq d ON v.aid = d.aid
+                                   LEFT JOIN (SELECT c.aid, count(1) game_count
+                                              FROM mug_game_content c
+                                              GROUP BY c.aid) z ON z.aid = v.aid
+                          WHERE d.aid IS NULL
+                            AND v.pub_time BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL - 1 YEAR)
+                              AND CURRENT_DATE()
+                      ) t
+                 GROUP BY t.uid,
+                          t.game_id
+             ) k
+        WHERE 500 >= k.uploader_rank
+          AND k.video_play >= 1000
+        ORDER BY k.video_play DESC
+    </sql>
+    <insert id="insertUploaderGameYearRank">
+        insert mug_rank_uploader (uid, game_id, video_play, video_count, uploader_rank, update_time)
+        <include refid="uploaderGameYearRankSql"/>
     </insert>
 </mapper>

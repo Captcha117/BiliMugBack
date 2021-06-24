@@ -57,4 +57,14 @@ public class RankController {
         rankDao.insertUploaderYearRank();
         return R.ok();
     }
+
+    /**
+     * 保存UP近一年排名
+     */
+    @ApiOperation("保存UP近一年游戏排名")
+    @GetMapping("/up/game/year")
+    public R uploaderGameYearRank(){
+        rankDao.insertUploaderGameYearRank();
+        return R.ok();
+    }
 }

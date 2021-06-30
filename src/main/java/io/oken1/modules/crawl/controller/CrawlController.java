@@ -70,7 +70,7 @@ public class CrawlController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "aid/bvid", required = true, paramType = "query"),
     })
-    @GetMapping(value = "/crawlVideosById")
+    @GetMapping(value = "/crawlVideoById")
     public R crawlVideoById(String id) {
         Object result = crawlService.crawlVideoById(id);
         return R.ok().put("result", result);
@@ -82,7 +82,7 @@ public class CrawlController {
      * @param id UP主ID
      * @return UP主信息爬取结果
      */
-    @ApiOperation("获取UP主信息")
+    @ApiOperation("根据UID获取UP主信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "mid", required = true, paramType = "query"),
     })

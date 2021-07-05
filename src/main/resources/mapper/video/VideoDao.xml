@@ -152,11 +152,13 @@
         limit 30]]>
     </select>
 
-    <select id="getUnclassified" resultType="io.oken1.modules.video.entity.VideoEntity">
+    <select id="getUnclassified" resultType="map">
         SELECT
-        *
+        *,
+        u.id
         FROM
         mug_video v
+        left join mug_uploader u on v.uid = u.uid
         WHERE
         v.aid NOT IN ( SELECT c.aid FROM mug_game_content c )
         and v.play >= #{minPlay}

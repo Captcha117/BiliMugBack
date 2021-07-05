@@ -51,8 +51,8 @@ public class RankController {
     /**
      * 保存UP近一年排名
      */
-    @ApiOperation("保存UP近一年排名")
-    @GetMapping("/up/year")
+    @ApiOperation("保存UP近一年视频总播放排名")
+    @PostMapping("/up/year")
     public R uploaderYearRank() {
         rankDao.insertUploaderYearRank();
         return R.ok();
@@ -62,9 +62,16 @@ public class RankController {
      * 保存UP近一年排名
      */
     @ApiOperation("保存UP近一年游戏排名")
-    @GetMapping("/up/game/year")
-    public R uploaderGameYearRank(){
+    @PostMapping("/up/game/year")
+    public R uploaderGameYearRank() {
         rankDao.insertUploaderGameYearRank();
         return R.ok();
+    }
+
+    @ApiOperation("获取UP主年度排名的最近更新日期")
+    @GetMapping("/getRecentYearRankUpdateTime")
+    public R getRecentYearRankUpdateTime() {
+        LinkedHashMap result = rankDao.getRecentYearRankUpdateTime();
+        return R.ok().put("result", result);
     }
 }

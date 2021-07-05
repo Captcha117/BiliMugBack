@@ -14,4 +14,6 @@ public interface RankDao {
     void insertUploaderYearRank();
 
     void insertUploaderGameYearRank();
+
+    LinkedHashMap getRecentYearRankUpdateTime();
 }

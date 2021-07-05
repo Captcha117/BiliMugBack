@@ -2,6 +2,7 @@ package io.oken1.modules.crawl.service.impl;
 
 
 import com.google.gson.Gson;
+import io.oken1.common.utils.DateUtils;
 import io.oken1.common.utils.ShiroUtils;
 import io.oken1.config.BizConfig;
 import io.oken1.modules.crawl.entity.BiliArchiveEntity;
@@ -63,7 +64,7 @@ public class CrawlServiceImpl implements CrawlService {
         int page = startPage;
         try {
             for (; page <= endPage; page++) {
-                System.out.println("start:" + page);
+                System.out.println(DateUtils.format(new Date(), "HH:mm:ss") + " " + page + " start");
                 String url = bizConfig.biliApiUrl + "/x/web-interface/newlist?rid=136&pn=" + page + "&ps=50";
                 HttpGet httpGet = new HttpGet(url);
                 HttpResponse response = client.execute(httpGet);
@@ -71,8 +72,8 @@ public class CrawlServiceImpl implements CrawlService {
                 String str = EntityUtils.toString(entity);
                 BiliArchiveEntity biliArchive = gson.fromJson(str, BiliArchiveEntity.class);
                 saveData(biliArchive);
-                System.out.println("end:" + page);
-                Thread.sleep((long) (1500 + Math.random() * 200));
+                System.out.println(DateUtils.format(new Date(), "HH:mm:ss") + " " + page + " end");
+                Thread.sleep(startPage % 10 == 0 ? 6000 : (long) (2500 + Math.random() * 500));
             }
         } catch (Exception e) {
             System.out.println(Arrays.toString(e.getStackTrace()));

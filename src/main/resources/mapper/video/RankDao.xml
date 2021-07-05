@@ -32,72 +32,72 @@
     <!--UP主排行-->
     <select id="upRank" resultType="map">
         SELECT
-            rank ( ) over ( ORDER BY z.valid_play DESC ) valid_rank,
+        rank ( ) over ( ORDER BY z.valid_play DESC ) valid_rank,
         <if test="referStartDate != null and referEndDate != null">
             c.compare_rank,
         </if>
-            u.id,
-            z.total,
-            z.play,
-            z.valid_total,
-            z.valid_play,
-            z.play - z.valid_play filter_play,
-            z.coin,
-            rank ( ) over ( ORDER BY z.coin DESC ) coin_rank,
-            z.share,
-            rank ( ) over ( ORDER BY z.SHARE DESC ) share_rank,
-            z.iine,
-            rank ( ) over ( ORDER BY z.iine DESC ) iine_rank,
-            z.carry,
-            u.face
+        u.id,
+        z.total,
+        z.play,
+        z.valid_total,
+        z.valid_play,
+        z.play - z.valid_play filter_play,
+        z.coin,
+        rank ( ) over ( ORDER BY z.coin DESC ) coin_rank,
+        z.share,
+        rank ( ) over ( ORDER BY z.SHARE DESC ) share_rank,
+        z.iine,
+        rank ( ) over ( ORDER BY z.iine DESC ) iine_rank,
+        z.carry,
+        u.face
         FROM
-            (
-                SELECT
-                    v.uid,
-                    count( 1 ) total,
-                    sum( v.play ) play,
-                    sum( IF(d.aid IS NULL, v.coin, 0) ) coin,
-                    sum( IF(d.aid IS NULL, v.share, 0) ) share,
-                    sum( IF(d.aid IS NULL, v.iine, 0) ) iine,
-                    sum( IF(d.aid IS NULL, 1, 0) ) valid_total,
-                    sum( IF(d.aid IS NULL, v.play, 0) ) valid_play,
-                    sum( IF(d.aid IS NULL, v.copyright - 1, 0)) carry
-                FROM
-                    mug_video v
-                        LEFT JOIN mug_dssq d ON v.aid = d.aid
-                WHERE
-                    date( v.pub_time ) >= str_to_date( #{startDate}, '%Y-%m-%d' )
-                  AND str_to_date( #{endDate}, '%Y-%m-%d' ) >= date( v.pub_time )
-                GROUP BY
-                    v.uid
-            ) z
-                LEFT JOIN mug_uploader u ON z.uid = u.uid
+        (
+        SELECT
+        v.uid,
+        count( 1 ) total,
+        sum( v.play ) play,
+        sum( IF(d.aid IS NULL, v.coin, 0) ) coin,
+        sum( IF(d.aid IS NULL, v.share, 0) ) share,
+        sum( IF(d.aid IS NULL, v.iine, 0) ) iine,
+        sum( IF(d.aid IS NULL, 1, 0) ) valid_total,
+        sum( IF(d.aid IS NULL, v.play, 0) ) valid_play,
+        sum( IF(d.aid IS NULL, v.copyright - 1, 0)) carry
+        FROM
+        mug_video v
+        LEFT JOIN mug_dssq d ON v.aid = d.aid
+        WHERE
+        date( v.pub_time ) >= str_to_date( #{startDate}, '%Y-%m-%d' )
+        AND str_to_date( #{endDate}, '%Y-%m-%d' ) >= date( v.pub_time )
+        GROUP BY
+        v.uid
+        ) z
+        LEFT JOIN mug_uploader u ON z.uid = u.uid
         <if test="referStartDate != null and referEndDate != null">
-                LEFT JOIN (
-                SELECT
-                    rank ( ) over ( ORDER BY z.valid_play DESC ) compare_rank,
-                    u.uid
-                FROM
-                    (
-                        SELECT
-                            v.uid,
-                            sum( IF(d.aid IS NULL, v.play, 0) ) valid_play
-                        FROM
-                            mug_video v
-                                LEFT JOIN mug_dssq d ON v.aid = d.aid
-                        WHERE
-                            date( v.pub_time ) >= str_to_date( #{referStartDate}, '%Y-%m-%d' )
-                          AND str_to_date( #{referEndDate}, '%Y-%m-%d' ) >= date( v.pub_time )
-                        GROUP BY
-                            v.uid
-                    ) z
-                        LEFT JOIN mug_uploader u ON z.uid = u.uid
+            LEFT JOIN (
+            SELECT
+            rank ( ) over ( ORDER BY z.valid_play DESC ) compare_rank,
+            u.uid
+            FROM
+            (
+            SELECT
+            v.uid,
+            sum( IF(d.aid IS NULL, v.play, 0) ) valid_play
+            FROM
+            mug_video v
+            LEFT JOIN mug_dssq d ON v.aid = d.aid
+            WHERE
+            date( v.pub_time ) >= str_to_date( #{referStartDate}, '%Y-%m-%d' )
+            AND str_to_date( #{referEndDate}, '%Y-%m-%d' ) >= date( v.pub_time )
+            GROUP BY
+            v.uid
+            ) z
+            LEFT JOIN mug_uploader u ON z.uid = u.uid
             ) c on u.uid = c.uid
         </if>
         WHERE
-            z.valid_play >= 100000
+        z.valid_play >= 100000
         ORDER BY
-            valid_play DESC
+        valid_play DESC
     </select>
 
     <sql id="uploaderYearRankSql">
@@ -157,4 +157,9 @@
         insert mug_rank_uploader (uid, game_id, video_play, video_count, uploader_rank, update_time)
         <include refid="uploaderGameYearRankSql"/>
     </insert>
+
+    <select id="getRecentYearRankUpdateTime" resultType="java.util.LinkedHashMap">
+        select (select max(u.update_time) from mug_rank_uploader u where u.game_id is null)     video_update_time,
+               (select max(u.update_time) from mug_rank_uploader u where u.game_id is not null) game_update_time
+    </select>
 </mapper>

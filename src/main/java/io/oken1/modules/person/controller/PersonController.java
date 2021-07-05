@@ -65,9 +65,7 @@ public class PersonController {
     @GetMapping("/getUploaderInfoByUid")
     public R getUploaderInfoByUid(Long uid) {
         UploaderEntity uploaderEntity = uploaderService.getById(uid);
-        LinkedHashMap rankInfo = uploaderDao.getUploaderRankByUid(uid);
-        List<LinkedHashMap> gameRankInfo = uploaderDao.getUploaderGameRankListByUid(uid);
-        return R.ok().put("uploaderInfo", uploaderEntity).put("rankInfo", rankInfo).put("gameRankInfo", gameRankInfo);
+        return R.ok().put("uploaderInfo", uploaderEntity);
     }
 
     @ApiOperation("获取UP主相关信息")
@@ -75,6 +73,8 @@ public class PersonController {
     public R getUploaderRelatedInfoByUid(Long uid) {
         List<LinkedHashMap> videoList = uploaderDao.getUploaderVideoByUid(uid);
         List<LinkedHashMap> gameList = uploaderDao.getUploaderGameByUid(uid);
-        return R.ok().put("videoList", videoList).put("gameList", gameList);
+        LinkedHashMap rankInfo = uploaderDao.getUploaderRankByUid(uid);
+        List<LinkedHashMap> gameRankList = uploaderDao.getUploaderGameRankListByUid(uid);
+        return R.ok().put("videoList", videoList).put("gameList", gameList).put("rankInfo", rankInfo).put("gameRankList", gameRankList);
     }
 }

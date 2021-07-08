@@ -2,6 +2,7 @@ package io.oken1.modules.video.controller;
 
 import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import io.oken1.common.utils.R;
 import io.oken1.modules.video.dao.DssqDao;
 import io.oken1.modules.video.dao.VideoDao;
@@ -99,6 +100,27 @@ public class ProcessController {
     }
 
     /**
+     * 批量更新视频的游戏分类
+     *
+     * @param contents 更新json字符串
+     * @return 批量视频内容更新结果
+     */
+    @ApiOperation("批量更新视频的游戏分类")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "contents", value = "更新json字符串", required = true, paramType = "query"),
+    })
+    @PostMapping("/updateGameContentBatch")
+    public R updateGameContentBatch(@RequestBody String contents) {
+        LinkedHashMap data = (LinkedHashMap) JSONUtils.parse(contents);
+        JSONArray jsonArr = JSONArray.parseArray((String) data.get("contents"));
+        for (int i = 0; i < jsonArr.size(); i++) {
+            JSONObject o = jsonArr.getJSONObject(i);
+            Object result = contentService.updateGameContent(Long.valueOf(String.valueOf(o.get("aid"))), (String) o.get("oldGameId"), (String) o.get("newGameId"));
+        }
+        return R.ok();
+    }
+
+    /**
      * 批量更新视频内容
      *
      * @param contents 视频内容
@@ -123,6 +145,7 @@ public class ProcessController {
      *
      * @param startDate 开始日期
      * @param endDate   结束日期
+     * @param minPlay   最低播放量
      * @return 未分类的视频信息
      */
     @ApiOperation("获取未分类的视频")
@@ -137,6 +160,33 @@ public class ProcessController {
             minPlay = 10000;
         }
         List<LinkedHashMap> result = videoDao.getUnclassified(startDate, endDate, minPlay);
+        return R.ok().put("result", result);
+    }
+
+    /**
+     * 获取已分类的视频
+     *
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @param minPlay   最低播放量
+     * @param gameId    游戏ID
+     * @param uploader  UP主
+     * @return 未分类的视频信息
+     */
+    @ApiOperation("获取已分类的视频")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
+            @ApiImplicitParam(name = "minPlay", value = "最低播放量", paramType = "query"),
+            @ApiImplicitParam(name = "gameId", value = "游戏ID", paramType = "query"),
+            @ApiImplicitParam(name = "uploader", value = "UP主", paramType = "query")
+    })
+    @GetMapping("/classified")
+    public R getClassifiedVideos(String startDate, String endDate, Integer minPlay, String gameId, String uploader) {
+        if (minPlay == null) {
+            minPlay = 10000;
+        }
+        List<LinkedHashMap> result = videoDao.getClassified(startDate, endDate, minPlay, gameId, uploader);
         return R.ok().put("result", result);
     }
 

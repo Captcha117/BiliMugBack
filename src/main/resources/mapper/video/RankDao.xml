@@ -149,7 +149,7 @@
                  GROUP BY t.uid,
                           t.game_id
              ) k
-        WHERE 500 >= k.uploader_rank
+        WHERE 100 >= k.uploader_rank
           AND k.video_play >= 1000
         ORDER BY k.video_play DESC
     </sql>

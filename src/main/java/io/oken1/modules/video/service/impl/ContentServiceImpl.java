@@ -50,6 +50,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentDao, GameContentEntit
                 return "content已存在";
             } else {
                 entity.setGameId(newGameId);
+                entity.setKeyword("admin");
                 saveOrUpdate(entity);
                 return "success";
             }

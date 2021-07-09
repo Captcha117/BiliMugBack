@@ -3,43 +3,44 @@
 
 <mapper namespace="io.oken1.modules.music.dao.SongDao">
 
-    <resultMap id="SongInfo" type="java.util.LinkedHashMap">
-        <result column="songId" property="song_id"/>
-        <result column="singleId" property="single_id"/>
-        <result column="title" property="title"/>
-        <result column="artist" property="artist"/>
-        <result column="length" property="length"/>
-        <result column="releaseDate" property="release_date"/>
-        <result column="bpm" property="bpm"/>
-        <collection property="charts" select="getChartsBySongId" javaType="java.util.List" column="{songId=song_id}">
-            <result column="chartId" property="chart_id"/>
-            <result column="difficultyId" property="difficulty_id"/>
-            <result column="chartLevel" property="chart_level"/>
+    <resultMap id="SongInfo" type="map">
+        <id property="songId" column="song_id"/>
+        <result property="singleId" column="single_id"/>
+        <result property="songTitleEn" column="song_title_en"/>
+        <result property="songArtist" column="song_artist"/>
+        <result property="songLength" column="song_length"/>
+        <result property="releaseDate" column="release_date"/>
+        <result property="songBpm" column="song_bpm"/>
+        <result property="songInx" column="song_inx"/>
+        <collection property="charts" javaType="list" ofType="io.oken1.modules.game.entity.ChartEntity">
+            <id property="chartId" column="chart_id"/>
+            <result property="difficultyId" column="difficulty_id"/>
+            <result property="chartLevel" column="chart_level"/>
+            <result property="chartBase" column="chart_base"/>
         </collection>
     </resultMap>
 
     <!--游戏曲目-->
     <select id="getSongListByGameId" resultMap="SongInfo">
-        SELECT song_id,
-               single_id,
-               song_title_en title,
-               song_artist   artist,
-               song_length   length,
-               release_date,
-               song_bpm      bpm,
-               chart_designer
-        FROM mug_song s
-        WHERE s.game_id = #{gameId}
-        ORDER BY s.song_inx, s.song_title_en
-    </select>
-
-    <select id="getChartsBySongId" resultType="map">
-        SELECT c.chart_id,
+        SELECT s.song_id,
+               s.single_id,
+               s.song_title_en,
+               s.song_artist,
+               s.song_length,
+               s.release_date,
+               s.song_bpm,
+               s.song_id,
+               s.song_inx,
+               c.chart_id,
+               c.difficulty_id,
                c.chart_level,
-               c.difficulty_id
-        FROM mug_chart c
-        WHERE c.song_id = #{songId}
-          AND c.chart_usable = 1
+               c.chart_base
+        FROM mug_song s
+                 left join mug_chart c on s.song_id = c.song_id
+                 left join mug_difficulty d on c.difficulty_id = d.difficulty_id
+        WHERE s.game_id = #{gameId}
+          and c.chart_usable = 1
+        ORDER BY s.song_inx, s.song_title_en, d.inx
     </select>
 
     <select id="getBriefSongListByGameId" resultType="io.oken1.modules.music.entity.SongEntity">

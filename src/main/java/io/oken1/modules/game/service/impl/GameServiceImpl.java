@@ -13,7 +13,10 @@ import io.oken1.modules.music.dao.SongDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("GameService")
 public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements GameService {
@@ -42,21 +45,6 @@ public class GameServiceImpl extends ServiceImpl<GameDao, GameEntity> implements
     @Override
     public List<LinkedHashMap> getGameList() {
         return gameDao.getGameList();
-    }
-
-    @Override
-    public List<LinkedHashMap> getSongListByGameId(String gameId) {
-        List<LinkedHashMap> list = songDao.getSongListByGameId(gameId);
-        for (LinkedHashMap l : list
-        ) {
-            List<HashMap> charts = (List<HashMap>) l.get("charts");
-            for (HashMap c : charts
-            ) {
-                l.put(c.get("difficultyId"), c.get("chartLevel"));
-            }
-            l.remove("charts");
-        }
-        return list;
     }
 
     /**

@@ -170,7 +170,7 @@ public class ProcessController {
      * @param endDate   结束日期
      * @param minPlay   最低播放量
      * @param gameId    游戏ID
-     * @param uploader  UP主
+     * @param search    搜索
      * @return 未分类的视频信息
      */
     @ApiOperation("获取已分类的视频")
@@ -179,14 +179,11 @@ public class ProcessController {
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
             @ApiImplicitParam(name = "minPlay", value = "最低播放量", paramType = "query"),
             @ApiImplicitParam(name = "gameId", value = "游戏ID", paramType = "query"),
-            @ApiImplicitParam(name = "uploader", value = "UP主", paramType = "query")
+            @ApiImplicitParam(name = "search", value = "搜索", paramType = "query")
     })
     @GetMapping("/classified")
-    public R getClassifiedVideos(String startDate, String endDate, Integer minPlay, String gameId, String uploader) {
-        if (minPlay == null) {
-            minPlay = 10000;
-        }
-        List<LinkedHashMap> result = videoDao.getClassified(startDate, endDate, minPlay, gameId, uploader);
+    public R getClassifiedVideos(String startDate, String endDate, Integer minPlay, String gameId, String search) {
+        List<LinkedHashMap> result = videoDao.getClassified(startDate, endDate, minPlay, gameId, search);
         return R.ok().put("result", result);
     }
 

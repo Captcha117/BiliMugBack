@@ -79,7 +79,7 @@
         <include refid="osuContentSql"/>
     </insert>
 
-    <select id="getContent" resultType="io.oken1.modules.video.entity.GameContentEntity">
+    <select id="getGameContent" resultType="io.oken1.modules.video.entity.GameContentEntity">
         select * from mug_game_content c where c.aid = #{aid} and c.game_id = #{gameId}
     </select>
 </mapper>

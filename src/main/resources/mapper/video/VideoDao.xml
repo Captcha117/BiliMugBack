@@ -172,28 +172,25 @@
     <select id="getClassified" resultType="map">
         SELECT
         *,
-        u.id
+        u.id,
+        g.common_name game_name
         FROM
         mug_video v
         left join mug_uploader u on v.uid = u.uid
         left join mug_game_content c on v.aid = c.aid
+        left join mug_game g on g.game_id = c.game_id
         WHERE v.play >= #{minPlay}
-        and c.aid is not null
-        <choose>
-            <when test="gameId != null">
-                and c.game_id = #{gameId}
-            </when>
-          <otherwise>
-              and c.game_id IS NULL
-          </otherwise>
-        </choose>
-
-        AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+        <if test="gameId != null">
+            and c.game_id = #{gameId}
+        </if>
+        <if test="startDate!=null">
+            AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+        </if>
         <if test="endDate!=null">
             and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
         </if>
-        <if test="uploader!=null">
-            and (v.uid = #{uploader} or instr(u.id, #{uploader}) > 0)
+        <if test="search!=null">
+            and (v.uid = #{search} or instr(u.id, #{search}) > 0 or v.aid = #{search})
         </if>
         order by v.play desc
     </select>

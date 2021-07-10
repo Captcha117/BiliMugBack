@@ -4,29 +4,37 @@
 <mapper namespace="io.oken1.modules.video.dao.RankDao">
     <!--游戏排行-->
     <select id="gameRank" resultType="map">
-        SELECT g.common_name                              Name,
-               z.total                                    Total,
-               z.play                                     Play,
-               z.valid_total                              ValidTotal,
-               z.valid_play                               ValidPlay,
-               z.play - z.valid_play                      FilterPlay,
-               rank() over ( ORDER BY z.valid_play DESC ) ValidRank,
-               rank() over ( ORDER BY z.play DESC )       OriginRank
+        SELECT g.common_name                                   game_name,
+               z.game_id,
+               sum(z.video_play)                               total_play,
+               count(1)                                        total_count,
+               sum(z.valid_count)                              valid_total_count,
+               sum(z.valid_play)                               valid_total_play,
+               rank() over ( ORDER BY sum(z.valid_play) DESC ) valid_rank,
+               rank() over ( ORDER BY sum(z.video_play) DESC ) origin_rank
         FROM (
-                 SELECT c.game_id,
-                        count(1)                          total,
-                        sum(v.play)                       play,
-                        sum(IF(d.aid IS NULL, 1, 0))      valid_total,
-                        sum(IF(d.aid IS NULL, v.play, 0)) valid_play
-                 FROM mug_game_content c
-                          LEFT JOIN mug_video v ON c.aid = v.aid
-                          LEFT JOIN mug_dssq d ON v.aid = d.aid
-                 WHERE date(v.pub_time) >= str_to_date(#{startDate}, '%Y-%m-%d')
-                   AND str_to_date(#{endDate}, '%Y-%m-%d') >= date(v.pub_time)
-                 GROUP BY c.game_id
+                 SELECT t.game_id,
+                        t.video_play,
+                        IF(t.not_dssq, 1, 0)            valid_count,
+                        IF(t.not_dssq, t.video_play, 0) valid_play
+                 FROM (
+                          SELECT v.aid,
+                                 c.game_id,
+                                 round(v.play / z.game_count) video_play,
+                                 IF(d.aid IS NOT NULL, 0, 1)  not_dssq
+                          FROM mug_video v
+                                   JOIN mug_game_content c ON v.aid = c.aid
+                                   LEFT JOIN mug_dssq d ON v.aid = d.aid
+                                   LEFT JOIN (SELECT c.aid, count(1) game_count
+                                              FROM mug_game_content c
+                                              GROUP BY c.aid) z ON z.aid = v.aid
+                          WHERE date(v.pub_time) BETWEEN str_to_date(#{startDate}, '%Y-%m-%d')
+                                    AND str_to_date(#{endDate}, '%Y-%m-%d')
+                      ) t
              ) z
                  LEFT JOIN mug_game g ON z.game_id = g.game_id
-        ORDER BY z.valid_play DESC
+        GROUP BY z.game_id
+        ORDER BY valid_total_play DESC
     </select>
 
     <!--UP主排行-->

@@ -152,39 +152,24 @@
         limit 30]]>
     </select>
 
-    <select id="getUnclassified" resultType="map">
-        SELECT
-        *,
-        u.id
-        FROM
-        mug_video v
+    <select id="getProcessVideoList" resultType="map">
+        select v.*, z.*, u.id
+        from mug_video v
+                 left join (
+            select c.aid,
+                   group_concat(c.keyword) keyword,
+                   group_concat(c.game_id) game_id,
+                   group_concat(g.common_name) game_name
+            from mug_game_content c
+                     left join mug_game g on c.game_id = g.game_id
+            group by c.aid) z on v.aid = z.aid
         left join mug_uploader u on v.uid = u.uid
-        WHERE
-        v.aid NOT IN ( SELECT c.aid FROM mug_game_content c )
-        and v.play >= #{minPlay}
-        AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
-        <if test="endDate!=null">
-            and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
-        </if>
-        order by v.play desc
-    </select>
-
-    <select id="getClassified" resultType="map">
-        SELECT
-        *,
-        u.id,
-        g.common_name game_name
-        FROM
-        mug_video v
-        left join mug_uploader u on v.uid = u.uid
-        left join mug_game_content c on v.aid = c.aid
-        left join mug_game g on g.game_id = c.game_id
         WHERE v.play >= #{minPlay}
         <if test="gameId != null">
-            and c.game_id = #{gameId}
+            instr(z.game_id, #{gameId}) > 0
         </if>
         <if test="startDate!=null">
-            AND date( v.pub_time ) >= str_to_date(#{startDate},'%Y-%m-%d')
+            AND date(v.pub_time) >= str_to_date(#{startDate},'%Y-%m-%d')
         </if>
         <if test="endDate!=null">
             and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
@@ -192,6 +177,14 @@
         <if test="search!=null">
             and (v.uid = #{search} or instr(u.id, #{search}) > 0 or v.aid = #{search})
         </if>
+        <choose>
+            <when test="isClassify">
+                and z.game_id is not null
+            </when>
+            <otherwise>
+                and z.game_id is null
+            </otherwise>
+        </choose>
         order by v.play desc
     </select>
 

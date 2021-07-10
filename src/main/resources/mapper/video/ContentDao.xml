@@ -82,4 +82,12 @@
     <select id="getGameContent" resultType="io.oken1.modules.video.entity.GameContentEntity">
         select * from mug_game_content c where c.aid = #{aid} and c.game_id = #{gameId}
     </select>
+
+    <delete id="deleteContentByAids">
+        delete from mug_game_content c where c.aid in
+        <foreach item="aids" index="index" collection="list"
+                 open="(" separator="," close=")">
+            #{aids}
+        </foreach>
+    </delete>
 </mapper>

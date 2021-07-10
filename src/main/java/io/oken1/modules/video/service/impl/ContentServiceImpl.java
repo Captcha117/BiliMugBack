@@ -38,30 +38,4 @@ public class ContentServiceImpl extends ServiceImpl<ContentDao, GameContentEntit
         }
         return "success";
     }
-
-    @Override
-    public Object updateGameContent(Long aid, String oldGameId, String newGameId) {
-        // 非空则update
-        if (StringUtils.isNotBlank(oldGameId)) {
-            GameContentEntity entity = contentDao.getGameContent(aid, oldGameId);
-            if (entity == null) {
-                return "未找到对应的content";
-            } else if (contentDao.getGameContent(aid, newGameId) != null) {
-                return "content已存在";
-            } else {
-                entity.setGameId(newGameId);
-                entity.setKeyword("admin");
-                saveOrUpdate(entity);
-                return "success";
-            }
-        } else {
-            // 否则add
-            GameContentEntity gameContentEntity = new GameContentEntity();
-            gameContentEntity.setAid(aid);
-            gameContentEntity.setGameId(newGameId);
-            gameContentEntity.setKeyword("admin");
-            saveOrUpdate(gameContentEntity);
-            return "success";
-        }
-    }
 }

@@ -18,4 +18,6 @@ public interface ContentDao extends BaseMapper<GameContentEntity> {
     void insertOsuContent(String startDate, String endDate);
 
     GameContentEntity getGameContent(Long aid, String gameId);
+
+    void deleteContentByAids(List<Long> aids);
 }

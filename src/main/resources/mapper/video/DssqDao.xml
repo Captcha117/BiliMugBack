@@ -72,4 +72,12 @@
             #{aid}
         </foreach>
     </insert>
+
+    <delete id="removeDssq">
+        delete from mug_dssq d where d.aid in
+        <foreach item="aid" index="index" collection="array"
+                 open="(" separator="," close=")">
+            #{aid}
+        </foreach>
+    </delete>
 </mapper>

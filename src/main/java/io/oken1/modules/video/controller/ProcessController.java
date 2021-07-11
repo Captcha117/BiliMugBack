@@ -7,7 +7,6 @@ import io.oken1.modules.video.dao.ContentDao;
 import io.oken1.modules.video.dao.DssqDao;
 import io.oken1.modules.video.dao.VideoDao;
 import io.oken1.modules.video.entity.GameContentEntity;
-import io.oken1.modules.video.entity.VideoEntity;
 import io.oken1.modules.video.service.ContentService;
 import io.oken1.modules.video.service.DssqService;
 import io.swagger.annotations.Api;
@@ -63,30 +62,31 @@ public class ProcessController {
     }
 
     /**
-     * 获取要处理的视频
+     * 获取进行游戏分类的视频
      *
-     * @param startDate 开始日期
-     * @param endDate   结束日期
-     * @param minPlay   最低播放量
-     * @param gameId    游戏ID
-     * @param search    搜索
-     * @return 要处理的视频
+     * @param startDate  开始日期
+     * @param endDate    结束日期
+     * @param minPlay    最低播放量
+     * @param gameId     游戏ID
+     * @param search     搜索
+     * @param isClassify 是否已分类
+     * @return 进行游戏分类的视频
      */
-    @ApiOperation("获取要处理的视频")
+    @ApiOperation("获取进行游戏分类的视频")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
             @ApiImplicitParam(name = "minPlay", value = "最低播放量", paramType = "query"),
             @ApiImplicitParam(name = "gameId", value = "游戏ID", paramType = "query"),
             @ApiImplicitParam(name = "search", value = "搜索", paramType = "query"),
-            @ApiImplicitParam(name = "isClassified", value = "是否已分类", paramType = "query")
+            @ApiImplicitParam(name = "isClassify", value = "是否已分类", paramType = "query")
     })
-    @GetMapping("/getProcessVideoList")
+    @GetMapping("/getVideoListToClassify")
     public R getClassifiedVideos(String startDate, String endDate, Integer minPlay, String gameId, String search, Boolean isClassify) {
         if (minPlay == null) {
             minPlay = 10000;
         }
-        List<LinkedHashMap> result = videoDao.getProcessVideoList(startDate, endDate, minPlay, gameId, search, isClassify);
+        List<LinkedHashMap> result = videoDao.getProcessVideoList(startDate, endDate, minPlay, gameId, search, isClassify, null);
         return R.ok().put("result", result);
     }
 
@@ -119,27 +119,6 @@ public class ProcessController {
     }
 
     /**
-     * 显示标题dssq自动分类的结果
-     *
-     * @param startDate 开始日期
-     * @param endDate   结束日期
-     * @return 显示标题dssq自动分类的结果
-     */
-    @ApiOperation("显示标题dssq自动分类的结果")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
-    })
-    @GetMapping("/showTitleDssq")
-    public R showTitleDssq(String startDate, String endDate) {
-        if (StringUtils.isBlank(startDate)) {
-            return R.error();
-        }
-        Object result = dssqService.showTitleDssq(startDate, endDate);
-        return R.ok().put("result", result);
-    }
-
-    /**
      * 自动添加标题dssq
      *
      * @param startDate 开始日期
@@ -161,28 +140,31 @@ public class ProcessController {
     }
 
     /**
-     * 获取未被分为dssq的视频
+     * 获取进行dssq分类的视频
      *
      * @param startDate 开始日期
      * @param endDate   结束日期
-     * @return 未被分为dssq的视频
+     * @param minPlay   最低播放量
+     * @param gameId    游戏ID
+     * @param search    搜索
+     * @param isDssq    是否是dssq
+     * @return 进行dssq分类的视频
      */
-    @ApiOperation("获取未被分为dssq的视频")
+    @ApiOperation("获取进行dssq分类的视频")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, paramType = "query"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", paramType = "query"),
-            @ApiImplicitParam(name = "updateDate", value = "视频更新开始日期", paramType = "query"),
-            @ApiImplicitParam(name = "minPlay", value = "最低播放量", paramType = "query")
+            @ApiImplicitParam(name = "minPlay", value = "最低播放量", paramType = "query"),
+            @ApiImplicitParam(name = "gameId", value = "游戏ID", paramType = "query"),
+            @ApiImplicitParam(name = "search", value = "搜索", paramType = "query"),
+            @ApiImplicitParam(name = "isClassify", value = "是否是dssq", paramType = "query")
     })
-    @GetMapping("/unclassifiedDssq")
-    public R unclassifiedDssq(String startDate, String endDate, String updateDate, Integer minPlay) {
+    @GetMapping("/getVideoListToDssq")
+    public R getVideoListToDssq(String startDate, String endDate, Integer minPlay, String gameId, String search, Boolean isDssq) {
         if (minPlay == null) {
             minPlay = 3000;
         }
-        if (minPlay < 3000) {
-            return R.error();
-        }
-        List<VideoEntity> result = videoDao.getUnclassifiedDssq(startDate, endDate, updateDate, minPlay);
+        List<LinkedHashMap> result = videoDao.getProcessVideoList(startDate, endDate, minPlay, gameId, search, null, isDssq);
         return R.ok().put("result", result);
     }
 
@@ -215,6 +197,21 @@ public class ProcessController {
     @PostMapping("/manualInsertTitleDssq")
     public R manualInsertTitleDssq(@RequestBody Long[] aids) {
         dssqDao.manualInsertDssq(aids, "title");
+        return R.ok();
+    }
+
+    /**
+     * 删除dssq
+     *
+     * @param aids aid数组
+     */
+    @ApiOperation("删除dssq")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "aids", value = "aid数组", required = true, paramType = "query"),
+    })
+    @PostMapping("/removeDssq")
+    public R removeDssq(@RequestBody Long[] aids) {
+        dssqDao.removeDssq(aids);
         return R.ok();
     }
 }

@@ -14,12 +14,6 @@ public class DssqServiceImpl extends ServiceImpl<DssqDao, DssqEntity> implements
     DssqDao dssqDao;
 
     @Override
-    public Object showTitleDssq(String startDate, String endDate) {
-        Object result = dssqDao.showTitleDssq(startDate, endDate);
-        return result;
-    }
-
-    @Override
     public Object insertTitleDssq(String startDate, String endDate) {
         try {
             dssqDao.insertTitleDssq(startDate, endDate);

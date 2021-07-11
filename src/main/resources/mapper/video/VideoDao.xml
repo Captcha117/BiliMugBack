@@ -153,7 +153,7 @@
     </select>
 
     <select id="getProcessVideoList" resultType="map">
-        select v.*, z.*, u.id
+        select v.*, z.*, u.id, d.keyword dssq_keyword
         from mug_video v
                  left join (
             select c.aid,
@@ -164,27 +164,40 @@
                      left join mug_game g on c.game_id = g.game_id
             group by c.aid) z on v.aid = z.aid
         left join mug_uploader u on v.uid = u.uid
+        left join mug_dssq d on v.aid = d.aid
         WHERE v.play >= #{minPlay}
         <if test="gameId != null">
-            instr(z.game_id, #{gameId}) > 0
+            and instr(z.game_id, #{gameId}) > 0
         </if>
-        <if test="startDate!=null">
+        <if test="startDate != null">
             AND date(v.pub_time) >= str_to_date(#{startDate},'%Y-%m-%d')
         </if>
-        <if test="endDate!=null">
+        <if test="endDate != null">
             and str_to_date(#{endDate}, '%Y-%m-%d') >= date( v.pub_time )
         </if>
-        <if test="search!=null">
+        <if test="search != null">
             and (v.uid = #{search} or instr(u.id, #{search}) > 0 or v.aid = #{search})
         </if>
-        <choose>
-            <when test="isClassify">
-                and z.game_id is not null
-            </when>
-            <otherwise>
-                and z.game_id is null
-            </otherwise>
-        </choose>
+        <if test="isClassify != null">
+            <choose>
+                <when test="isClassify">
+                    and z.game_id is not null
+                </when>
+                <otherwise>
+                    and z.game_id is null
+                </otherwise>
+            </choose>
+        </if>
+        <if test="isDssq != null">
+            <choose>
+                <when test="isDssq">
+                    and d.aid is not null
+                </when>
+                <otherwise>
+                    and d.aid is null
+                </otherwise>
+            </choose>
+        </if>
         order by v.play desc
     </select>
 

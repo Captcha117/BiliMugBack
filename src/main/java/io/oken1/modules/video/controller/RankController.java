@@ -43,8 +43,11 @@ public class RankController {
      */
     @ApiOperation("UP排名")
     @GetMapping("/up")
-    public R up(String startDate, String endDate, String referStartDate, String referEndDate) {
-        List<LinkedHashMap> result = rankDao.upRank(startDate, endDate, referStartDate, referEndDate);
+    public R up(String startDate, String endDate, String referStartDate, String referEndDate, Integer minPlay) {
+        if (minPlay == null) {
+            minPlay = 100000;
+        }
+        List<LinkedHashMap> result = rankDao.upRank(startDate, endDate, referStartDate, referEndDate, minPlay);
         return R.ok().put("result", result);
     }
 
@@ -72,6 +75,13 @@ public class RankController {
     @GetMapping("/getRecentYearRankUpdateTime")
     public R getRecentYearRankUpdateTime() {
         LinkedHashMap result = rankDao.getRecentYearRankUpdateTime();
+        return R.ok().put("result", result);
+    }
+
+    @ApiOperation("根据游戏ID获取UP主排行")
+    @PostMapping("/getUpRankByGameId")
+    public R getUpRankByGameId(@RequestBody  String[] gameIds) {
+        List<LinkedHashMap> result = rankDao.getUpRankByGameId(gameIds);
         return R.ok().put("result", result);
     }
 }

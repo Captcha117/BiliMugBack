@@ -88,19 +88,23 @@
     </select>
 
     <select id="getGameRank" resultType="map">
-        SELECT z.*,
-               g.common_name game
+        SELECT t.game_id,
+               sum(t.game_play) play,
+               g.common_name    game
         FROM (
                  SELECT c.game_id,
-                        sum(v.play) play
+                        round(v.play / z.game_count) game_play
                  FROM mug_video v
-                          LEFT JOIN mug_game_content c ON v.aid = c.aid
-                 WHERE date(v.pub_time) >= str_to_date(#{startDate}, '%Y-%m-%d')
+                          JOIN mug_game_content c ON v.aid = c.aid
+                          LEFT JOIN mug_dssq d ON v.aid = d.aid
+                          LEFT JOIN (SELECT c.aid, count(1) game_count FROM mug_game_content c GROUP BY c.aid) z
+                                    ON z.aid = v.aid
+                 WHERE d.aid IS NULL
+                   AND date(v.pub_time) >= str_to_date(#{startDate}, '%Y-%m-%d')
                    AND str_to_date(#{date}, '%Y-%m-%d') >= date(v.pub_time)
-                   and v.aid not in (select d.aid from mug_dssq d)
-                 GROUP BY c.game_id
-             ) z
-                 JOIN mug_game g ON z.game_id = g.game_id
+             ) t
+                 LEFT JOIN mug_game g ON t.game_id = g.game_id
+        GROUP BY t.game_id
         ORDER BY play DESC
         LIMIT 30
     </select>

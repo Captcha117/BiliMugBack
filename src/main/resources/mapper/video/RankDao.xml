@@ -103,7 +103,7 @@
             ) c on u.uid = c.uid
         </if>
         WHERE
-        z.valid_play >= 100000
+        z.valid_play >= #{minPlay}
         ORDER BY
         valid_play DESC
     </select>
@@ -169,5 +169,27 @@
     <select id="getRecentYearRankUpdateTime" resultType="java.util.LinkedHashMap">
         select (select max(u.update_time) from mug_rank_uploader u where u.game_id is null)     video_update_time,
                (select max(u.update_time) from mug_rank_uploader u where u.game_id is not null) game_update_time
+    </select>
+
+    <select id="getUpRankByGameId" resultType="map">
+        select r.pk_id,
+               r.uid,
+               r.game_id,
+               r.video_play,
+               r.video_count,
+               r.uploader_rank,
+               r.update_time,
+               u.id,
+               u.face,
+               g.common_name game_name
+        from mug_rank_uploader r
+                 left join mug_uploader u on r.uid = u.uid
+                 left join mug_game g on r.game_id = g.game_id
+        where r.game_id in
+        <foreach item="gameIds" index="index" collection="array"
+                 open="(" separator="," close=")">
+            #{gameIds}
+        </foreach>
+          and r.update_time = (select max(u.update_time) from mug_rank_uploader u where u.game_id is not null)
     </select>
 </mapper>

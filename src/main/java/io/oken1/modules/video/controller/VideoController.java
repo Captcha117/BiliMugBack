@@ -1,5 +1,19 @@
 package io.oken1.modules.video.controller;
 
+import io.oken1.common.utils.DateUtils;
+import io.oken1.common.utils.R;
+import io.oken1.modules.video.dao.VideoDao;
+import io.oken1.modules.video.service.VideoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -9,18 +23,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import io.oken1.common.utils.DateUtils;
-import io.oken1.modules.video.dao.VideoDao;
-import io.oken1.modules.video.service.VideoService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import io.oken1.common.utils.R;
 
 
 @Api(value = "视频", tags = {"视频"})
@@ -107,7 +109,7 @@ public class VideoController {
             System.out.println(queryDate.toString());
             List<HashMap> result = videoDao.getGameRank(startDate, DateUtils.format(queryDate));
             for (HashMap hashMap : result) {
-                bWriter.write(DateUtils.format(queryDate) + "," + hashMap.get("game_id") + ","
+                bWriter.write(DateUtils.format(queryDate) + "," + hashMap.get("gameId") + ","
                         + hashMap.get("game") + "," + hashMap.get("play") + "\r\n");
                 bWriter.flush();
             }

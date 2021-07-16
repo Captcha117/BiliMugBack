@@ -2,13 +2,16 @@ package io.oken1.modules.basic.controller;
 
 import io.oken1.common.utils.R;
 import io.oken1.modules.basic.dao.BasicDao;
-import io.oken1.modules.game.entity.DifficultyEntity;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -66,5 +69,26 @@ public class BasicController {
         return R.ok().put("gameList", gameList).put("singleList", singleList)
                 .put("personList", personList).put("uploaderList", uploaderList)
                 .put("videoList", videoList);
+    }
+
+    @PostMapping("/saveImg")
+    public R saveImg(MultipartFile file, String folder, String fileName) {
+        if (StringUtils.isBlank(folder) || StringUtils.isBlank(fileName)) {
+            return R.error("文件夹或文件名错误！");
+        }
+        try {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get("../img/" + folder + "/" + fileName);
+            //如果没有files文件夹，则创建
+            if (!Files.isWritable(path)) {
+                Files.createDirectories(Paths.get("../img/" + folder + "/"));
+            }
+            //文件写入指定路径
+            Files.write(path, bytes);
+            return R.ok();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return R.error("图片保存失败！");
+        }
     }
 }

@@ -6,6 +6,7 @@ import io.oken1.modules.game.dao.GameDetailDao;
 import io.oken1.modules.game.service.GameService;
 import io.oken1.modules.music.dao.SongDao;
 import io.oken1.modules.music.model.SongModel;
+import io.oken1.modules.video.dao.RankDao;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class GameController {
     @Autowired
     SongDao songDao;
 
+    @Autowired
+    RankDao rankDao;
+
     /**
      * 获取简要游戏列表
      *
@@ -54,10 +58,12 @@ public class GameController {
         List<LinkedHashMap> difficultyList = gameDetailDao.getDifficultyListByGameId(gameId);
         List<LinkedHashMap> snsList = gameDetailDao.getSnsListByGameId(gameId);
         List<LinkedHashMap> packageList = gameDetailDao.getPackageListByGameId(gameId);
+        List<LinkedHashMap> rankList = rankDao.getUpRankByGameId(new String[]{gameId});
 
         return R.ok().put("gameInfo", gameInfo).put("songList", songList)
                 .put("versionList", versionList).put("difficultyList", difficultyList)
-                .put("snsList", snsList).put("packageList", packageList);
+                .put("snsList", snsList).put("packageList", packageList)
+                .put("rankList", rankList);
     }
 
     @ApiOperation("游戏播放信息")

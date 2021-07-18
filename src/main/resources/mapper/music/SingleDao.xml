@@ -32,15 +32,38 @@
 
     <!--config-->
     <select id="getSingleList" resultType="io.oken1.modules.music.entity.SingleEntity">
-        select *
-        from mug_single
+        select s.single_id,
+               s.single_title_en,
+               s.single_title_jp,
+               s.single_title_cn,
+               s.single_alias,
+               s.single_artist,
+               s.single_length,
+               s.single_style,
+               s.release_date,
+               s.single_bpm,
+               s.single_cast,
+               if(s.single_lyric is null, 0, 1) single_lyric
+        from mug_single s
         limit 100
     </select>
     <select id="searchSingle" resultType="io.oken1.modules.music.entity.SingleEntity">
-        select *
+        select s.single_id,
+               s.single_title_en,
+               s.single_title_jp,
+               s.single_title_cn,
+               s.single_alias,
+               s.single_artist,
+               s.single_length,
+               s.single_style,
+               s.release_date,
+               s.single_bpm,
+               s.single_cast,
+               if(s.single_lyric is null, 0, 1) single_lyric
         from mug_single s
-        where instr(single_title_cn, #{search}) > 0
-           or instr(single_title_en, #{search}) > 0
-           or instr(single_title_jp, #{search}) > 0
+        where instr(s.single_title_cn, #{search}) > 0
+           or instr(s.single_title_en, #{search}) > 0
+           or instr(s.single_title_jp, #{search}) > 0
+           or instr(s.single_artist, #{search}) > 0
     </select>
 </mapper>

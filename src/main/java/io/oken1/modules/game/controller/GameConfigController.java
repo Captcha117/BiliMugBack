@@ -36,21 +36,12 @@ public class GameConfigController {
         return R.ok().put("gameInfo", game);
     }
 
-    @PostMapping("/game/save/{increase}")
-    public R gameSave(@RequestBody GameEntity game, @PathVariable Boolean increase) {
+    @PostMapping("/game/saveOrUpdate/{increase}")
+    public R gameSaveOrUpdate(@RequestBody GameEntity game, @PathVariable Boolean increase) {
         if (increase && game.getFilterIndex() > 0) {
             gameDao.gameFilterIndexIncrease(game.getGameId(), game.getFilterIndex());
         }
-        gameService.save(game);
-        return R.ok();
-    }
-
-    @PostMapping("/game/update/{increase}")
-    public R gameUpdate(@RequestBody GameEntity game, @PathVariable Boolean increase) {
-        if (increase && game.getFilterIndex() > 0) {
-            gameDao.gameFilterIndexIncrease(game.getGameId(), game.getFilterIndex());
-        }
-        gameService.updateById(game);
+        gameService.saveOrUpdate(game);
         return R.ok();
     }
 
@@ -277,15 +268,9 @@ public class GameConfigController {
         return R.ok().put("packageInfo", packageEntity);
     }
 
-    @PostMapping("/package/save")
-    public R packageSave(@RequestBody PackageEntity packageEntity) {
-        packageService.save(packageEntity);
-        return R.ok();
-    }
-
-    @PostMapping("/package/update")
-    public R packageUpdate(@RequestBody PackageEntity packageEntity) {
-        packageService.updateById(packageEntity);
+    @PostMapping("/package/saveOrUpdate")
+    public R packageSaveOrUpdate(@RequestBody PackageEntity packageEntity) {
+        packageService.saveOrUpdate(packageEntity);
         return R.ok();
     }
 

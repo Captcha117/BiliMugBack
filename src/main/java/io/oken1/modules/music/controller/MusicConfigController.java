@@ -49,15 +49,9 @@ public class MusicConfigController {
         return R.ok().put("songInfo", songEntity);
     }
 
-    @PostMapping("/song/save")
-    public R songSave(@RequestBody SongEntity songEntity) {
-        songService.save(songEntity);
-        return R.ok();
-    }
-
-    @PostMapping("/song/update")
-    public R songUpdate(@RequestBody SongEntity songEntity) {
-        songService.updateById(songEntity);
+    @PostMapping("/song/saveOrUpdate")
+    public R songSaveOrUpdate(@RequestBody SongEntity songEntity) {
+        songService.saveOrUpdate(songEntity);
         return R.ok();
     }
 
@@ -88,15 +82,9 @@ public class MusicConfigController {
         return R.ok().put("singleInfo", singleEntity);
     }
 
-    @PostMapping("/single/save")
-    public R singleSave(@RequestBody SingleEntity singleEntity) {
-        singleService.save(singleEntity);
-        return R.ok();
-    }
-
-    @PostMapping("/single/update")
-    public R singleUpdate(@RequestBody SingleEntity singleEntity) {
-        singleService.updateById(singleEntity);
+    @PostMapping("/single/saveOrUpdate")
+    public R singleSaveOrUpdate(@RequestBody SingleEntity singleEntity) {
+        singleService.saveOrUpdate(singleEntity);
         return R.ok();
     }
 

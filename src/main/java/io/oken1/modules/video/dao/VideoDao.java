@@ -25,6 +25,4 @@ public interface VideoDao extends BaseMapper<VideoEntity> {
 
     List<LinkedHashMap> getProcessVideoList(String startDate, String endDate, Integer minPlay,
                                             String gameId, String search, Boolean isClassify, Boolean isDssq);
-
-    List<VideoEntity> getUnclassifiedDssq(String startDate, String endDate, String updateDate, Integer minPlay);
 }

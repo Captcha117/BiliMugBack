@@ -71,6 +71,14 @@ public class BasicController {
                 .put("videoList", videoList);
     }
 
+    /**
+     * 保存图片
+     *
+     * @param file     图片二进制
+     * @param folder   文件夹
+     * @param fileName 文件名
+     * @return 保存结果
+     */
     @PostMapping("/saveImg")
     public R saveImg(MultipartFile file, String folder, String fileName) {
         if (StringUtils.isBlank(folder) || StringUtils.isBlank(fileName)) {

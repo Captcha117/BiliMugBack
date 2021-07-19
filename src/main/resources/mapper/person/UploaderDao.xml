@@ -44,8 +44,7 @@
     </select>
     <select id="getUploaderGameByUid" resultType="map">
         select g.game_id,
-               g.common_name,
-               g.full_name,
+               g.game_name,
                g.other_name,
                g.icon_version,
                g.update_time,
@@ -56,7 +55,7 @@
               where v.uid = #{uid}
               group by c.game_id) z
                  join mug_game g on z.game_id = g.game_id
-        order by z.game_count desc, g.common_name
+        order by z.game_count desc, g.game_name
     </select>
 
     <!--config-->

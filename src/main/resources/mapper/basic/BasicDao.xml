@@ -22,17 +22,17 @@
     <!--search-->
     <select id="searchGame" resultType="map">
         select game_id,
-               common_name,
+               game_name,
                other_name,
                icon_version,
                developer,
                c.company_name
         from mug_game g
                  left join mug_company c on g.developer = c.company_id
-        where instr(g.common_name, #{search}) > 0
+        where instr(g.game_name, #{search}) > 0
            or instr(g.other_name, #{search}) > 0
            or instr(c.company_name, #{search}) > 0
-        order by common_name
+        order by game_name
     </select>
     <select id="searchSingle" resultType="map">
         select single_id,

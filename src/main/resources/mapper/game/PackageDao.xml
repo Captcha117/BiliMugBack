@@ -4,7 +4,7 @@
 <mapper namespace="io.oken1.modules.game.dao.PackageDao">
     <select id="getPackageConfigList" resultType="map">
         select g.game_id,
-               g.common_name game_name,
+               g.game_name,
                z.package_count
         from mug_game g
                  left join (select p.game_id, count(1) package_count from mug_package p group by p.game_id) z

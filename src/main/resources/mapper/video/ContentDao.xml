@@ -20,7 +20,7 @@
                 join (
                 select
                     g.game_id,
-                    g.common_name,
+                    g.game_name,
                     g.filter_index,
                     k.keyword,
                     k.keyword_index

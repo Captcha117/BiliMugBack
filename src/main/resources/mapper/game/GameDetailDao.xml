@@ -12,7 +12,7 @@
                (select count(1)
                 from mug_package_detail d
                 where d.package_id = p.package_id) song_count,
-               g.common_name,
+               g.game_name,
                g.icon_version
         from mug_package p
                  left join mug_game g on p.game_id = g.game_id

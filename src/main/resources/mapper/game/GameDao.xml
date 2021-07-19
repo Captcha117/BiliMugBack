@@ -5,18 +5,18 @@
     <!--游戏列表-->
     <select id="getGameList" resultType="map">
         SELECT g.game_id,
-               g.common_name,
+               g.game_name,
                replace(g.other_name, ',', ', ') other_name,
                g.icon_version,
                g.parent_id
         FROM mug_game g
-        ORDER BY g.common_name
+        ORDER BY g.game_name
     </select>
 
     <!--游戏信息-->
     <select id="getGameInfoByGameId" resultType="java.util.LinkedHashMap">
         SELECT g.game_id,
-               g.common_name,
+               g.game_name,
                LEFT(g.other_name,
                     IF(LOCATE(',', g.other_name) = 0,
                        length(g.other_name),
@@ -68,8 +68,7 @@
     <!--后台配置list-->
     <select id="getGameConfigList" resultType="map">
         SELECT g.game_id,
-               g.common_name,
-               g.full_name,
+               g.game_name,
                g.other_name,
                g.icon_version,
                g.developer,
@@ -80,7 +79,7 @@
                g.game_tag,
                g.video_tag,
                g.parent_id,
-               g2.common_name  parent_name,
+               g2.game_name  parent_name,
                g.similar,
                g.filter_index,
                g.create_user,

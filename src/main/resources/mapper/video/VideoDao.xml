@@ -90,7 +90,7 @@
     <select id="getGameRank" resultType="map">
         SELECT t.game_id,
                sum(t.game_play) play,
-               g.common_name    game
+               g.game_name    game
         FROM (
                  SELECT c.game_id,
                         round(v.play / z.game_count) game_play
@@ -163,7 +163,7 @@
             select c.aid,
                    group_concat(c.keyword) keyword,
                    group_concat(c.game_id) game_id,
-                   group_concat(g.common_name) game_name
+                   group_concat(g.game_name) game_name
             from mug_game_content c
                      left join mug_game g on c.game_id = g.game_id
             group by c.aid) z on v.aid = z.aid

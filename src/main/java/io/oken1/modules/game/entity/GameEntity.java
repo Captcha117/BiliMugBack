@@ -22,14 +22,11 @@ public class GameEntity implements Serializable {
     /**
      * 常用名称
      */
-    private String commonName;
-    /**
-     * 全称
-     */
-    private String fullName;
+    private String gameName;
     /**
      * 图标版本
      */
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private Integer iconVersion;
     /**
      * 其他名称

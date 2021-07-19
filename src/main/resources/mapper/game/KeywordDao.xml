@@ -4,7 +4,7 @@
 <mapper namespace="io.oken1.modules.game.dao.KeywordDao">
     <select id="getKeywordConfigList" resultType="map">
         select g.game_id,
-               g.common_name game_name,
+               g.game_name,
                g.filter_index,
                z.total
         from mug_game g

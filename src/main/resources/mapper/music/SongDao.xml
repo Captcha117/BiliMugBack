@@ -54,7 +54,7 @@
     <select id="getSongInfo" resultType="java.util.LinkedHashMap">
         SELECT s.song_id,
                s.game_id,
-               g.common_name game_name,
+               g.game_name,
                s.song_title_en,
                s.song_title_jp,
                s.song_artist,
@@ -71,7 +71,7 @@
     <!--config-->
     <select id="getSongConfigList" resultType="map">
         select g.game_id,
-               g.common_name game_name,
+               g.game_name,
                z.song_count
         from mug_game g
                  left join (select s.game_id, count(1) song_count from mug_song s group by s.game_id) z

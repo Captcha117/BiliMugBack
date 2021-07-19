@@ -4,7 +4,7 @@
 <mapper namespace="io.oken1.modules.game.dao.DifficultyDao">
     <select id="getDifficultyConfigList" resultType="map">
         select g.game_id,
-               g.common_name game_name,
+               g.game_name,
                z.difficulty
         from mug_game g
                  left join (select d.game_id, GROUP_CONCAT(d.difficulty_name order by d.inx) difficulty

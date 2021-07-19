@@ -4,7 +4,7 @@
 <mapper namespace="io.oken1.modules.person.dao.PersonDao">
     <select id="getPersonGameByPersonId" resultType="map">
         SELECT g.game_id,
-               g.common_name,
+               g.game_name,
                g.other_name,
                g.icon_version,
                g.developer,
@@ -17,12 +17,12 @@
             WHERE instr(s.song_artist, #{personId}) > 0
                or instr(s.chart_designer, #{personId}) > 0
         )
-        order by g.common_name
+        order by g.game_name
     </select>
     <select id="getPersonSongByPersonId" resultType="map">
         SELECT s.song_id,
                s.game_id,
-               g.common_name,
+               g.game_name,
                g.other_name,
                g.icon_version,
                s.single_id,
@@ -41,7 +41,7 @@
                  left join mug_single ms on s.single_id = ms.single_id
         WHERE instr(s.song_artist, #{personId}) > 0
            or instr(s.chart_designer, #{personId}) > 0
-        order by s.song_title_en, g.common_name
+        order by s.song_title_en, g.game_name
     </select>
     <select id="getPersonSingleByPersonId" resultType="map">
         select single_id,

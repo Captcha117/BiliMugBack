@@ -1,9 +1,6 @@
 package io.oken1.modules.game.model;
 
-import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,11 +17,7 @@ public class GameModel implements Serializable {
     /**
      * 常用名称
      */
-    private String commonName;
-    /**
-     * 全称
-     */
-    private String fullName;
+    private String gameName;
     /**
      * 图标版本
      */

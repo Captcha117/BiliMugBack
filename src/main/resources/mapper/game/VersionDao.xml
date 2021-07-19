@@ -4,7 +4,7 @@
 <mapper namespace="io.oken1.modules.game.dao.VersionDao">
     <select id="getVersionConfigList" resultType="map">
         select g.game_id,
-               g.common_name  game_name,
+               g.game_name,
                z.total        version_count,
                z.version_no   latest_version_no,
                z.version_date latest_version_date

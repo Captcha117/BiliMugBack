@@ -62,7 +62,7 @@
                s.song_length,
                s.single_id,
                s.release_date,
-               s.chart_designer
+               s.song_description
         FROM mug_song s
                  left join mug_game g on s.game_id = g.game_id
         where song_id = #{songId}

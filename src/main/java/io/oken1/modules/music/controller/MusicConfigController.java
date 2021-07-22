@@ -11,6 +11,7 @@ import io.oken1.modules.music.service.SingleRelationService;
 import io.oken1.modules.music.service.SingleService;
 import io.oken1.modules.music.service.SongService;
 import io.swagger.annotations.Api;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,6 +86,35 @@ public class MusicConfigController {
     @PostMapping("/single/saveOrUpdate")
     public R singleSaveOrUpdate(@RequestBody SingleEntity singleEntity) {
         singleService.saveOrUpdate(singleEntity);
+        return R.ok();
+    }
+
+    @PostMapping("/single/saveOrUpdateFromSong")
+    public R singleSaveOrUpdateFromSong(@RequestBody SingleEntity singleEntity) {
+        SingleEntity entity = singleService.getById(singleEntity.getSingleId());
+        if (entity != null) {
+            if (StringUtils.isBlank(entity.getSingleTitleEn())) {
+                entity.setSingleTitleEn(singleEntity.getSingleTitleEn());
+            }
+            if (StringUtils.isBlank(entity.getSingleTitleJp())) {
+                entity.setSingleTitleJp(singleEntity.getSingleTitleJp());
+            }
+            if (StringUtils.isBlank(entity.getSingleTitleCn())) {
+                entity.setSingleTitleCn(singleEntity.getSingleTitleCn());
+            }
+            if (StringUtils.isBlank(entity.getSingleLength())) {
+                entity.setSingleLength(singleEntity.getSingleLength());
+            }
+            if (StringUtils.isBlank(entity.getSingleArtist())) {
+                entity.setSingleArtist(singleEntity.getSingleArtist());
+            }
+            if (StringUtils.isBlank(entity.getSingleBpm())) {
+                entity.setSingleBpm(singleEntity.getSingleBpm());
+            }
+            singleService.saveOrUpdate(entity);
+        } else {
+            singleService.saveOrUpdate(singleEntity);
+        }
         return R.ok();
     }
 

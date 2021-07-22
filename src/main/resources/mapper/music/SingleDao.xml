@@ -65,5 +65,6 @@
            or instr(s.single_title_en, #{search}) > 0
            or instr(s.single_title_jp, #{search}) > 0
            or instr(s.single_artist, #{search}) > 0
+           or s.single_id = #{search}
     </select>
 </mapper>

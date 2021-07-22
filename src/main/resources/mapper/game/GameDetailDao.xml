@@ -10,7 +10,7 @@
                p.release_date,
                p.description,
                (select count(1)
-                from mug_package_detail d
+                from mug_package_song d
                 where d.package_id = p.package_id) song_count,
                g.game_name,
                g.icon_version

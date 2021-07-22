@@ -15,7 +15,6 @@
             SELECT DISTINCT (s.game_id)
             FROM mug_song s
             WHERE instr(s.song_artist, #{personId}) > 0
-               or instr(s.chart_designer, #{personId}) > 0
         )
         order by g.game_name
     </select>
@@ -32,7 +31,6 @@
                s.song_title_jp,
                s.song_title_cn,
                s.song_artist,
-               s.chart_designer,
                g.developer,
                c.company_name
         FROM mug_song s
@@ -40,7 +38,6 @@
                  left join mug_company c on g.developer = c.company_id
                  left join mug_single ms on s.single_id = ms.single_id
         WHERE instr(s.song_artist, #{personId}) > 0
-           or instr(s.chart_designer, #{personId}) > 0
         order by s.song_title_en, g.game_name
     </select>
     <select id="getPersonSingleByPersonId" resultType="map">

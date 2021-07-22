@@ -11,5 +11,5 @@ import java.util.List;
 public interface PackageDao extends BaseMapper<PackageEntity> {
     List<LinkedHashMap> getPackageConfigList();
 
-    List<PackageEntity> getPackageConfigListByGameId(String gameId);
+    List<LinkedHashMap> getPackageConfigListByGameId(String gameId);
 }

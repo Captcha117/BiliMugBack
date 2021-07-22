@@ -2,4 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.oken1.modules.game.dao.PackageSongDao">
+    <select id="getPackageSongConfigListByPackageId" resultType="map">
+        select p.pk_id,
+               p.song_id,
+               p.add_time,
+               s.song_title_en
+        from mug_package_song p
+                 left join mug_song s on p.song_id = s.song_id
+        where p.package_id = #{packageId}
+    </select>
+
+    <select id="getExcludedSongListByPackageId" resultType="map">
+        SELECT s.song_id,
+               s.song_title_en,
+               s.song_title_jp,
+               s.song_title_cn,
+               s.song_artist,
+               IF(z.package_id IS NULL, 0, 1) packaged
+        FROM (SELECT s.song_id,
+                     GROUP_CONCAT(ps.package_id) package_id
+              FROM mug_song s
+                       LEFT JOIN mug_package_song ps ON s.song_id = ps.song_id
+              where s.game_id = (select p.game_id from mug_package p where p.package_id = #{package_id})
+                and s.song_id not in (select ps.song_id from mug_package_song ps where ps.package_id = #{package_id})
+              GROUP BY s.song_id
+             ) z
+                 LEFT JOIN mug_song s ON z.song_id = s.song_id
+        ORDER BY s.song_title_en
+    </select>
 </mapper>

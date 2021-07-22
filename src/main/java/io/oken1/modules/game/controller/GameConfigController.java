@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -258,7 +259,7 @@ public class GameConfigController {
     @GetMapping("/package/list/{gameId}")
     //@RequiresPermissions("mug:mug:list")
     public R packageListByGameId(@PathVariable("gameId") String gameId) {
-        List<PackageEntity> result = packageDao.getPackageConfigListByGameId(gameId);
+        List<LinkedHashMap> result = packageDao.getPackageConfigListByGameId(gameId);
         return R.ok().put("result", result);
     }
 
@@ -277,6 +278,45 @@ public class GameConfigController {
     @PostMapping("/package/delete")
     public R packageDelete(@RequestBody String[] packageIds) {
         packageService.removeByIds(Arrays.asList(packageIds));
+
+        return R.ok();
+    }
+    //endregion
+
+    //region mug_package_song
+    @Autowired
+    PackageSongService packageSongService;
+    @Autowired
+    PackageSongDao packageSongDao;
+
+    @GetMapping("/packageSong/list/{packageId}")
+    public R packageSongListByGameId(@PathVariable("packageId") String packageId) {
+        List<PackageSongEntity> result = packageSongDao.getPackageSongConfigListByPackageId(packageId);
+        return R.ok().put("result", result);
+    }
+
+    @GetMapping("/packageSong/list/excluded/{packageId}")
+    public R getExcludedSongListByPackageId(@PathVariable("packageId") String packageId) {
+        List<LinkedHashMap> result = packageSongDao.getExcludedSongListByPackageId(packageId);
+        return R.ok().put("result", result);
+    }
+
+    @PostMapping("/packageSong/save/{packageId}")
+    public R packageSongSaveOrUpdate(@PathVariable("packageId") String packageId, @RequestBody String[] packageSongIds) {
+        List<PackageSongEntity> entities = new ArrayList<>();
+        for (String id : packageSongIds) {
+            PackageSongEntity entity = new PackageSongEntity();
+            entity.setPackageId(packageId);
+            entity.setSongId(id);
+            entities.add(entity);
+        }
+        packageSongService.saveBatch(entities);
+        return R.ok();
+    }
+
+    @PostMapping("/packageSong/delete")
+    public R packageSongDelete(@RequestBody String[] packageSongIds) {
+        packageSongService.removeByIds(Arrays.asList(packageSongIds));
 
         return R.ok();
     }

@@ -11,7 +11,9 @@
                c.difficulty_id,
                d.difficulty_name,
                c.chart_level,
-               c.chart_usable
+               c.chart_usable,
+               c.chart_base,
+               c.chart_designer
         from mug_chart c
                  left join mug_song s on c.song_id = s.song_id
                  left join mug_difficulty d on c.difficulty_id = d.difficulty_id

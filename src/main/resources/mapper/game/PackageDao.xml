@@ -11,8 +11,9 @@
                            on g.game_id = z.game_id
         order by g.filter_index
     </select>
-    <select id="getPackageConfigListByGameId" resultType="io.oken1.modules.game.entity.PackageEntity">
-        select p.*
+    <select id="getPackageConfigListByGameId" resultType="map">
+        select p.*,
+               (select count(1) from mug_package_song s where s.package_id = p.package_id) song_count
         from mug_package p
         where p.game_id = #{gameId}
         order by p.release_date

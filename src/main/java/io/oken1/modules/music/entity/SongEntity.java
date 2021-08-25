@@ -70,4 +70,12 @@ public class SongEntity implements Serializable {
      * 排序
      */
     private String SongInx;
+    /**
+     * 预留字段1
+     */
+    private String songReserve1;
+    /**
+     * 预留字段2
+     */
+    private String songReserve2;
 }
